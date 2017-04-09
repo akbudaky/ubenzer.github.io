@@ -1,0 +1,15 @@
+Windows Registry Editor Version 5.00
+
+;
+; Disable ZIP support in Windows Vista
+;
+; from Windows Vista Annoyances ( http://Annoyances.org/vista )
+;
+; restart Windows after applying this patch
+; for more information, see http://www.annoyances.org/exec/show/article03-202 
+;
+
+[-HKEY_CLASSES_ROOT\CLSID\{E88DCCE0-B7B3-11d1-A9F0-00AA0060FA31}]
+
+[-HKEY_CLASSES_ROOT\CLSID\{0CD7A5C0-9F37-11CE-AE65-08002B2E1262}]
+

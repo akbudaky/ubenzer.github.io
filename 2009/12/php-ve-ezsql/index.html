@@ -1,0 +1,72 @@
+<!doctype html>
+    <html lang="tr">
+      <head>
+        <title>PHP ve ezSQL - UBenzer</title>
+        <meta content="utf-8" name="charset"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="#2196F3" name="theme-color"/>
+        <link href="/template/ui.css" media="screen" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i&amp;amp;subset=latin-ext" media="screen" rel="stylesheet" type="text/css"/><link href="/img/favicon/apple-touch-icon-57x57.png" rel="apple-touch-icon-precomposed" sizes="57x57"/><link href="/img/favicon/apple-touch-icon-60x60.png" rel="apple-touch-icon-precomposed" sizes="60x60"/><link href="/img/favicon/apple-touch-icon-72x72.png" rel="apple-touch-icon-precomposed" sizes="72x72"/><link href="/img/favicon/apple-touch-icon-76x76.png" rel="apple-touch-icon-precomposed" sizes="76x76"/><link href="/img/favicon/apple-touch-icon-114x114.png" rel="apple-touch-icon-precomposed" sizes="114x114"/><link href="/img/favicon/apple-touch-icon-120x120.png" rel="apple-touch-icon-precomposed" sizes="120x120"/><link href="/img/favicon/apple-touch-icon-152x152.png" rel="apple-touch-icon-precomposed" sizes="152x152"/><link href="/img/favicon/favicon-196x196.png" rel="icon" sizes="196x196"/><link href="/img/favicon/favicon-128x128.png" rel="icon" sizes="128x128"/><link href="/img/favicon/favicon-96x96.png" rel="icon" sizes="96x96"/><link href="/img/favicon/favicon-32x32.png" rel="icon" sizes="32x32"/><link href="/img/favicon/favicon-16x16.png" rel="icon" sizes="16x16"/>
+      </head>
+      <body>
+        <div><header class="header"><div class="app-bar"><h1 class="app-bar__title"><a class="app-bar__title-link" href="/">UBenzer</a></h1></div></header><div class="main-container"><div class="main-content"><article class="card main-container__items"><div class="card__contents blog-post"><div class="blog-post__date">23 Aralık 2009</div><h1><a class="blog-post__title" href="/2009/12/php-ve-ezsql">PHP ve ezSQL</a></h1><div class="markdown-content blog-post__body blog-post__content"><p><a href="/2009/12/php-ve-ezsql/php-logo.jpg" target="_blank"><img src="/2009/12/php-ve-ezsql/php-logo.jpg" title="php-logo" alt="php-logo"  width="95" height="60" srcset="/2009/12/php-ve-ezsql/php-logo.jpg 95w"></a>{right}ezSQL, PHP üzerinden veri tabanına erişimi kolaylaştıran hazır bir sınıftır. PHP’nin 4. ve 5. sürümleriyle uyumludur. Justin Vincent tarafından yazılan bu sınıfın kendi sitesine <a href="http://justinvincent.com/ezsql" rel="noopener noreferrer" target="_blank">buradan erişilebilir</a>. Eğer kendi sitesine girmek istemezseniz bu yazının yazıldığı dönemdeki son sürümü olan 2.05'i <a href="/2009/12/php-ve-ezsql/ez_sql_2.05.zip" >buradan indirebilirsiniz</a>.</p>
+<p>Yakuter, ezSQL sınıfının kullanımı ile ilgili <a href="http://www.yakuter.com/ezsql-veritabani-sinifinin-kullanimi/" rel="noopener noreferrer" target="_blank">çok kapsamlı bir yazı hazırladığından</a> bir daha anlatmayı gereksiz buluyorum.</p>
+<p>Bu yazıdaki kod örneğinde ezSQL sınıfı kullanılarak veri tabanına ekleme yapma ve basit sorgularla bilgi çekme örnekleri bulabilirsiniz. Daha önemlisi, veri tabanına erişimde ve web sayfasına çıktı yaparken <em>Türkçe karakterlerde çıkabilecek sorunların</em> nasıl giderilebileceğine dair ipuçları bulabilirsiniz.</p>
+<p>Örnekte karakter kodlaması konusunda birkaç şey yapılmıştır:</p>
+<ol>
+<li>PHP belgesi <em>UTF-8 without Byte Order Mark</em> <em>(BOM)</em> karakter kodlaması ile kaydedilmiştir.</li>
+<li>Asıl çıktıya başlamadan önce HTTP headerında karakter kodlaması ve mime-type doğru olarak belirtilmiştir.</li>
+<li>Doğru bir DOCTYPE belirtilmiştir.</li>
+<li>HTML meta tagları ile sayfanın kodlanmış olduğu kaynak kodlaması olan UTF-8 belirtilmiştir.</li>
+<li>MySQL veri tabanı oluşturulurken karakter seti olarak UTF-8 tercih edilmiştir.</li>
+<li>Veri tabanına bağlandıktan hemen sonra, yapılacak sorgular ile alakalı karakter tipi belirtilmiştir. <em>(SET NAMES UTF-8)</em></li>
+</ol>
+<p>Örnekte yukarıda yazan maddelerin tamamının uygulamalarını görebileceksiniz. Kendi projelerinizde bu adımları uyguladığınız zaman herhangi bir karakter problemi yaşamamanız gerekmektedir.</p>
+<p>Örnekte aynı zamanda <em><a href="http://en.wikipedia.org/wiki/SQL_injection" rel="noopener noreferrer" target="_blank">SQL injection</a></em> güvenlik açıklarına da örnek bulabilirsiniz. Örnekteki güvenlik açığının uygulanabilmesi için <em>php.ini</em> dosyasındaki <em>magic_quotes_runtime</em> değerinin <em>Off</em> olması gerekmektedir. <em>(Dediğim sadece bu örnek için, yoksa magic_quotes_runtime on olunca her şey büyülü bir şekilde güvenli olmuyor.)</em></p>
+<p>Örnek, normalde <em>index.php?id=INTEGERDEGER</em> seklinde bir GET parametresi ile veri tabanından bir bilgi çekmek üzere tasarlanmışken, güvenlik açığından dolayı <em>index.php?id=1' OR 1='1</em> gibi bir değer için de çalışacak ve veri tabanı tablosundaki tüm bilgileri ekrana yazdıracaktır.</p>
+<p><a href="/2009/12/php-ve-ezsql/sql-injection-ornek.jpg" target="_blank"><img src="/2009/12/php-ve-ezsql/sql-injection-ornek.scaled-jpg-200.jpg" title="sql-injection-ornek" alt="sql-injection-ornek"  width="676" height="494" srcset="/2009/12/php-ve-ezsql/sql-injection-ornek.scaled-jpg-200.jpg 200w, /2009/12/php-ve-ezsql/sql-injection-ornek.scaled-jpg-500.jpg 500w, /2009/12/php-ve-ezsql/sql-injection-ornek.jpg 676w"></a></p>
+<p>Gerekli ezSQL dosyaları ile birlikte kodları bilgisayarınıza indirmek için <a href="/2009/12/php-ve-ezsql/ders.zip" >buraya tıklayabilirsiniz</a>. Kodları doğrudan buradan incelemek için yazının devamına bakmanız yeterlidir.</p>
+<h2>Veritabanı Yapısı: localhost.sql</h2>
+<p>[sql] SET SQL_MODE=&quot;NO_AUTO_VALUE_ON_ZERO&quot;;</p>
+<p>/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT <em>/; /</em>!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS <em>/; /</em>!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION <em>/; /</em>!40101 SET NAMES utf8 */;</p>
+<p>-- -- Database: <code>ticaret</code> -- CREATE DATABASE <code>ticaret</code> DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci; USE <code>ticaret</code>;</p>
+<hr>
+<p>-- -- Table structure for table <code>kullanici</code> --</p>
+<p>CREATE TABLE IF NOT EXISTS <code>kullanici</code> ( <code>ad</code> text NOT NULL, <code>soyad</code> text NOT NULL, <code>id</code> int(10) unsigned NOT NULL AUTO_INCREMENT, PRIMARY KEY (<code>id</code>) ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=13 ;</p>
+<p>-- -- Dumping data for table <code>kullanici</code> --</p>
+<p>INSERT INTO <code>kullanici</code> (<code>ad</code>, <code>soyad</code>, <code>id</code>) VALUES ('Umut', 'Benzer', 1), ('Hayrullah', 'Çokbilmiş', 2), ('Sercan', 'Kırbaş', 3), ('Haydar', 'Dümen', 4), ('Müge', 'Çalışkan', 11), ('Şaban', 'Ağzıbozuk', 12);</p>
+<hr>
+<p>-- -- Table structure for table <code>urun</code> --</p>
+<p>CREATE TABLE IF NOT EXISTS <code>urun</code> ( <code>id</code> int(11) NOT NULL AUTO_INCREMENT, <code>urun_adi</code> text NOT NULL, <code>kullanici_id</code> int(11) NOT NULL, PRIMARY KEY (<code>id</code>) ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;</p>
+<p>-- -- Dumping data for table <code>urun</code> --</p>
+<p>INSERT INTO <code>urun</code> (<code>id</code>, <code>urun_adi</code>, <code>kullanici_id</code>) VALUES (1, 'Soba', 1), (2, 'Batarya', 1), (3, 'Batarya', 2), (4, 'Projektör', 2); [/sql]</p>
+<h2>index.php</h2>
+<pre><code class="language-php"> &lt;?php header(&quot;Content-Type: text/html; charset=utf-8&quot;); header('X-Easter-Egg: Abidik Gubidik'); ?&gt; &lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Strict//EN&quot; &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd&quot;&gt; &lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot; dir=&quot;ltr&quot; lang=&quot;tr-TR&quot;&gt; &lt;head profile=&quot;http://gmpg.org/xfn/1&quot;&gt; &lt;!-- EgeBK PHP Kursu Örnek Kaynak Kodları --&gt; &lt;title&gt;Veri Tabanı Deneyi&lt;/title&gt; &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot; /&gt; &lt;meta http-equiv=&quot;author&quot; content=&quot;Umut Benzer&quot; /&gt; &lt;/head&gt; &lt;body&gt; &lt;form action=&quot;index.php&quot; method=&quot;post&quot;&gt; &lt;label for=&quot;name&quot;&gt;Name&lt;/label&gt; &lt;input type=&quot;text&quot; id=&quot;name&quot; name=&quot;name&quot; size=&quot;30&quot; /&gt; &lt;label for=&quot;lastname&quot;&gt;Lastname&lt;/label&gt; &lt;input type=&quot;text&quot; id=&quot;lastname&quot; name=&quot;lastname&quot; size=&quot;30&quot; /&gt; &lt;button type=&quot;submit&quot;&gt;Yallah&lt;/button&gt; &lt;/form&gt; &lt;?php /* İnit */
+
+// ezSQL include_once &quot;ez_sql_core.php&quot;; include_once &quot;ez_sql_mysql.php&quot;; // Veritabanı yapılandırması $vt_kullanici=&quot;root&quot;; $vt_parola=&quot;&quot;; $vt_isim=&quot;ticaret&quot;; $vt_sunucu=&quot;localhost&quot;; // ezSQL sınıfından bir nesne... $db = new ezSQL_mysql($vt_kullanici,$vt_parola,$vt_isim,$vt_sunucu);
+
+// Dil ayarlaması $db-&gt;query(&quot;SET NAMES utf8&quot;);
+
+/* Son Eklenen Kullanıcının Sistemden Çekilmesini Gösteren Bir Örnek */ // $kullanici = $db-&gt;get_row(&quot;SELECT ad,soyad FROM kullanici ORDER BY id DESC LIMIT 1&quot;); // echo &quot;Adı: &quot;. $kullanici-&gt;ad . &quot; Soyadı: &quot; . $kullanici-&gt;soyad . &quot;&lt;br /&gt;\n&quot;;
+
+if(isset($_POST[&quot;name&quot;]) &amp;&amp; isset($_POST[&quot;lastname&quot;])) {
+
+// Güvenlik önlemleri $name = $db-&gt;escape($_POST[&quot;name&quot;]); $lastname = $db-&gt;escape($_POST[&quot;lastname&quot;]); // Aşağıdaki satırlar potansiyel güvenlik açıkları yaratır. // $name = $_POST[&quot;name&quot;]; // $lastname = $_POST[&quot;lastname&quot;]; // Asıl satır $db-&gt;query(&quot;INSERT INTO `kullanici` (`ad`, `soyad`) VALUES ('&quot;.$name.&quot;', '&quot;.$lastname.&quot;');&quot;); echo &quot;Yeni kayıt eklendi.&quot;;
+
+}
+
+/* SORUMLULUK REDDİ: AŞAĞIDAKİ SATIR CİDDİ GÜVENLİK AÇIKLARI İÇERİR. */ if(isset($_GET[&quot;id&quot;])) { ?&gt;&lt;table&gt;&lt;?php $sql = &quot;SELECT * FROM `kullanici` WHERE id='&quot;.$_GET[&quot;id&quot;].&quot;'&quot;; echo &quot;Yaratılan SQL cümleciği: &quot; . $sql . &quot;&lt;br /&gt;\n&quot;; $sonuclar = $db-&gt;get_results($sql); //echo var_dump($sonuclar); if(!is_null($sonuclar)) { foreach($sonuclar as $sonuc) { echo &quot;&lt;tr&gt;&quot;; echo &quot;&lt;td&gt;&quot;.$sonuc-&gt;id.&quot;&lt;/td&gt;&quot;.&quot;&lt;td&gt;&quot;.$sonuc-&gt;ad.&quot;&lt;/td&gt;&quot;.&quot;&lt;td&gt;&quot;.$sonuc-&gt;soyad.&quot;&lt;/td&gt;&quot;; echo &quot;&lt;/tr&gt;&quot;; } } } echo &quot;&lt;/table&gt;&quot;; /* DENEYİN: index.php?id=1' OR 1='1 */ ?&gt; &lt;/body&gt;
+</code></pre>
+</div></div></article><div class="card comments main-container__items"><div class="card__contents" id="disqus_thread"></div></div></div><div class="sidebar main-content__sidebar"><div class="about"><img class="about__image" src="/img/profile.jpg"/><h1 class="about__name">Umut Benzer</h1><h2 class="about__mini-bio">Software Engineer in Berlin</h2></div></div></div><div class="main-container"><div class="footer"><div class="footer__copyright-holder"><p><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license noopener noreferrer" target="_blank"><img alt="Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License" src="/img/cclicense.png"/></a></p><p><span>Bu sitedeki tüm yazı ve görseller </span><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license noopener noreferrer" target="_blank">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a><span> ile lisanslanmıştır.</span></p></div><div class="footer__generator"><span>Bu sayfa </span><span>9 Nisan 2017</span><span> tarihinde </span><a href="https://github.com/ubenzer/fil" target="_blank">Fil</a><span> ile yaratılmıştır.</span></div></div></div></div>
+        <script src="/template/app.js" type="text/javascript"></script><script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = "https://ubenzer.com/2009/12/php-ve-ezsql";
+          this.page.identifier = "post@/2009/12/php-ve-ezsql";
+        };
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = 'https://ubenzer.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+        </script>
+      </body>
+    </html>
+  

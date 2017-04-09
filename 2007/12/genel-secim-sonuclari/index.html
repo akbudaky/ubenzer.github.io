@@ -1,0 +1,87 @@
+<!doctype html>
+    <html lang="tr">
+      <head>
+        <title>Genel Seçim Sonuçları - UBenzer</title>
+        <meta content="utf-8" name="charset"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="#2196F3" name="theme-color"/>
+        <link href="/template/ui.css" media="screen" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i&amp;amp;subset=latin-ext" media="screen" rel="stylesheet" type="text/css"/><link href="/img/favicon/apple-touch-icon-57x57.png" rel="apple-touch-icon-precomposed" sizes="57x57"/><link href="/img/favicon/apple-touch-icon-60x60.png" rel="apple-touch-icon-precomposed" sizes="60x60"/><link href="/img/favicon/apple-touch-icon-72x72.png" rel="apple-touch-icon-precomposed" sizes="72x72"/><link href="/img/favicon/apple-touch-icon-76x76.png" rel="apple-touch-icon-precomposed" sizes="76x76"/><link href="/img/favicon/apple-touch-icon-114x114.png" rel="apple-touch-icon-precomposed" sizes="114x114"/><link href="/img/favicon/apple-touch-icon-120x120.png" rel="apple-touch-icon-precomposed" sizes="120x120"/><link href="/img/favicon/apple-touch-icon-152x152.png" rel="apple-touch-icon-precomposed" sizes="152x152"/><link href="/img/favicon/favicon-196x196.png" rel="icon" sizes="196x196"/><link href="/img/favicon/favicon-128x128.png" rel="icon" sizes="128x128"/><link href="/img/favicon/favicon-96x96.png" rel="icon" sizes="96x96"/><link href="/img/favicon/favicon-32x32.png" rel="icon" sizes="32x32"/><link href="/img/favicon/favicon-16x16.png" rel="icon" sizes="16x16"/>
+      </head>
+      <body>
+        <div><header class="header"><div class="app-bar"><h1 class="app-bar__title"><a class="app-bar__title-link" href="/">UBenzer</a></h1></div></header><div class="main-container"><div class="main-content"><article class="card main-container__items"><div class="card__contents blog-post"><div class="blog-post__date">25 Aralık 2007</div><h1><a class="blog-post__title" href="/2007/12/genel-secim-sonuclari">Genel Seçim Sonuçları</a></h1><div class="markdown-content blog-post__body blog-post__content"><p>Dördüncü algoritma ödevimiz ve benim çözümüm... Bu ödev 90 almış. 10 puan nereden gitti hiç bir fikrim yok ve öğrenmeye de niyetim yok. =)</p>
+<p>Ödevi indirmeden ve incelemeden önce bazı notlar:</p>
+<blockquote>
+<ul>
+<li>Girdi olarak kullanılacak secim.dat dosyası örnek dosyada verilen yapıda olmalıdır. En son satırdan sonra satır sonu karakteri (ASCII:33) olmadığına lütfen dikkat ediniz.</li>
+<li>Bu ödevi uzun uzun kontrol etme şansını bulamadım. Özellikle sağolsun pazartesi sabahı söylenen oyların eşit olması durumunda iktidar partisi seçimi ve birden fazla ana muhalefet partisi olma durumlarını yazdıktan sonra hiç test etmedim. Bu kadar geç söylenmesine sinir oluyor ve yazdığım kodda hata <em>olmamasını umuyorum.</em></li>
+</ul>
+</blockquote>
+<ul>
+<li><a href="/2007/12/genel-secim-sonuclari/algo-odev-3.pdf" >Ödev Açıklaması</a></li>
+<li><a href="/2007/12/genel-secim-sonuclari/7670.txt" >Benim Çözümüm (7670.c)</a></li>
+<li><a href="/2007/12/genel-secim-sonuclari/secim.dat" >Örnek secim.dat dosyası</a></li>
+</ul>
+<p>Kaynak kodunu incelemek ve fikir sahibi olmak amacıyla kullanabilirsiniz. Ama doğrudan kopyala yapıştır yapmak veya kendinize mal etmek yasak. Kopya çekmeyelim =)</p>
+<p>Bu günlerde kendimi bomboş, amaçsız ve hafif tedirgin hissediyorum... Bomboş yaşıyormuşum gibi... Sizin böyle hissetmemeniz dileklerimle. <em>Mutlu</em> olun, <em>nasıl olabiliyorsanız onu yaparak</em>...</p>
+<p>Kaynak kodlarının bir kopyasını aşağıda bulabilirsiniz: ```c
+#include &lt;stdio.h&gt; #include &lt;stdlib.h&gt;</p>
+<p>void sirala(int *sirala, char *karakter) {</p>
+<p>/* Bu foksiyon int girdilerini büyükten küçüğe sıralarken char dizisinde de aynı indise sahip elemanlarınn yerlerini değiştirir. Bu fonksiyonda girdide eşitlik olması durumu gözardı edilmiştir. */</p>
+<p>char sayac1, sayac2; /* Önce karakter dizisinin elemanlarını sıfırlayalım. <em>/ int gecici; /</em> Aslında bu sıfırlama kullanılmasa fonksiyon daha <em>/ /</em> genel olurdu. Ancak sıralama partiler dışında bir <em>/ for (sayac1=0; sayac1&lt;8;sayac1++) { /</em> yerde kullanılmayacağından burada sıfırlamayı daha <em>/ karakter[sayac1] = sayac1; /</em> uygun gördüm. */ }</p>
+<p>for (sayac1=0; sayac1&lt;7;sayac1++) { /* SIRALAMA ALGORITMASI (Selection Sort) <em>/ for (sayac2=sayac1 + 1; sayac2&lt;8;sayac2++) { /</em> Selection Sort algoritması'nın 8 elemanlık diziye <em>/ if (sirala[sayac1] &lt; sirala[sayac2]) { /</em> uyarlanmış versiyonu. */ gecici = sirala[sayac1]; sirala[sayac1] = sirala[sayac2]; sirala[sayac2] = gecici;</p>
+<p>gecici = karakter[sayac1]; // integer'a char atiyorum ama sorun olmuyor. integerin tanim araligi daha büyük nasilsa. karakter[sayac1] = karakter[sayac2]; karakter[sayac2] = gecici; // char'a integer atiyorum ama iki satir ustte integer'e char kadar küçük bir değer atadığımı biliyorum.</p>
+<p>}</p>
+<p>} }</p>
+<p>}</p>
+<p>void mvsay (int *parti_oy, int *mvsay, int kontenjan) {</p>
+<p>/* Bu foksiyon milletvekili sayılarını hesaplayarak mvsay dizisinde geri gönderir. Hangi milletvekili sayısının hangi partiye ait olduğunun sırası parti oy sayılarının geldiği dizi ile aynıdır. */</p>
+<p>int azaltilan_oy[8]; // Asıl parti oy sayısı setinin etkilenmemesi için tüm girdiler bu değişkene kopyalanacak. char sayac;</p>
+<p>for (sayac=0;sayac&lt;8;sayac++) { azaltilan_oy[sayac] = parti_oy[sayac]; // Asıl parti oy sayısı setinin etkilenmemesi için tüm girdiler bu değişkene kopyalanacak. }</p>
+<p>for (sayac=0;sayac&lt;8;sayac++) { mvsay[sayac] = 0; // Değişken sıfırlama }</p>
+<p>/* Milletvekili sayısı hesaplama algoritması BAŞLANGICI <em>/ for (sayac=1;sayac&lt;=kontenjan;sayac++) { mvsay[enbuyuk(azaltilan_oy)]++; azaltilan_oy[enbuyuk(azaltilan_oy)] = azaltilan_oy[enbuyuk(azaltilan_oy)] / 2; } /</em> Milletvekili sayısı hesaplama algoritması SONU */</p>
+<p>}</p>
+<p>int enbuyuk (int *girdi) {</p>
+<p>/* 8 elemanlık girdi[] dizisinin en büyük elemanının kaçıncı eleman olduğunu döndürür. 0 ile 7 arası bir değer döndürür. Bu fonksiyonda girdide eşitlik olması durumu gözardı edilmiştir. */</p>
+<p>char sayac; int enbuyuk=0; // İlk başta en büyük 0. eleman kabul edilir.</p>
+<p>for (sayac=0; sayac&lt;8;sayac++) { if (girdi[enbuyuk] &lt; girdi[sayac]) { // Daha büyüğü varsa değiştirilir. enbuyuk=sayac; } }</p>
+<p>return enbuyuk;</p>
+<p>}</p>
+<p>int main() {</p>
+<p>/* Acilis yazilari BASLANGICI <em>/ printf(&quot;Umut BENZER\n&quot;); printf(&quot;05-06-7670\n&quot;); printf(&quot;Ege Universitesi Bilgisayar Muhendisligi 1. Sinif\n&quot;); printf(&quot;http://www.ubenzer.com\n&quot;); printf(&quot;Genel Secim Sonuclari 1.1\n\n&quot;); /</em> Etkinliği artırılmış ve enbuyuk fonksiyonunda hatalar ayıklanmış ikinci sürüm <em>/ /</em> Acilis yazilari SONU */</p>
+<p>/* Dosyayı bir nedenden dolayı açamama durumunda hata mesajı verme de dahil olmak üzere dosya açma işlemi BASLANGICI */ FILE *fp;</p>
+<p>if((fp=fopen(&quot;secim.dat&quot;,&quot;r&quot;)) == NULL) { printf (&quot;secim.dat dosyasi acilamadi. Umarim nedeni yazilimim degildir ve sifir almam. 😦&quot;); return 0; } /* Dosyayı bir nedenden dolayı açamama durumunda hata mesajı verme de dahil olmak üzere dosya açma işlemi SONU */</p>
+<p>/* Sehir bazinda islem yapilacak olan degiskenler */ int sehirno; int kontenjan; int sehir_oy; int parti_oy[8]; char parti_id[8]; int mvsay_sehir[8];</p>
+<p>/* Ulke bazinda islem yapilacak olan degiskenler */ int kontenjan_ulke=0; int oy_ulke=0; int parti_oy_ulke[8] = {0}; int mvsay_ulke[8] = {0}; int ildebirinci[8] = {0};</p>
+<p>/* Diger degiskenler */ char sayac; // Bellekde integerden daha az yer kapladığı için tüm sayaçları char olarak kullanıyorum. // Alt tarafi 8 eleman dondurecegim, fazla kapasiteye gerek yok.</p>
+<p>/* Şehir bazında hesaplama BAŞANGICI */ while(!feof(fp)) { // Dosya sonu gelmediği (iller bitmediği sürece dön)</p>
+<p>// Önce girdi diskten okunur fscanf(fp,&quot;%d %d %d %d %d %d %d %d %d %d&quot;,&amp;sehirno,&amp;kontenjan,&amp;parti_oy[0],&amp;parti_oy[1],&amp;parti_oy[2],&amp;parti_oy[3],&amp;parti_oy[4],&amp;parti_oy[5],&amp;parti_oy[6],&amp;parti_oy[7]);</p>
+<p>sirala(parti_oy,parti_id); // Oy çokluğuna göre sıralanır. mvsay(parti_oy,mvsay_sehir,kontenjan); // Milletvekili sayıları hesaplanır.</p>
+<p>/* Güncel şehirdeki geçerli oy sayısı hesabının BAŞLANGICI */ sehir_oy = 0; for (sayac=0;sayac&lt;8;sayac++) { sehir_oy += parti_oy[sayac];</p>
+<p>parti_oy_ulke[parti_id[sayac]] += parti_oy[sayac]; mvsay_ulke[parti_id[sayac]] += mvsay_sehir[sayac]; /* Bu iki satır güncel şehirdeki geçerli oy sayısının hesabı ile alakalı <em>/ /</em> değil. Bunlar daha sonra Türkiye genelinde kullanılmak üzere toplanan <em>/ /</em> parti bazında MV ve oy sayıları. <em>/ /</em> indislerin [parti_id[sayac]] olmasının anlamı: doğrudan sayac diye <em>/ /</em> kullanamam, çünkü üstte sıraladığım için sayac ile parti nosu aynı <em>/ /</em> değil. Örneğin sayac = 0 'A' partisine işaret etmiyor olabilir, çünkü <em>/ /</em> sirala(parti_oy,parti_id); ile sıralamayı değiştirdik. <em>/ /</em> Oy sayıları ve MV sayılarını partilere doğru kaydedebilmek için <em>/ /</em> parti_id[sayac] ile sıralarken partinolarını da sıraladığım diziden <em>/ /</em> faydalanıyorum. <em>/ /</em> <em>/ /</em> Böylece Türkiye geneline ait tüm verilerde 0. indis A, 1. B... parti- <em>/ /</em> sine ait olacaktır. <em>/ } /</em> Güncel şehirdeki geçerli oy sayısı hesabının SONU */</p>
+<p>ildebirinci[parti_id[0]]++; // Yukarıdaki uzun açıklama burada da geçerli. Birinci partiye 1 ekler.</p>
+<p>/* Çıktı BAŞLANGICI */ printf(&quot;Il Plaka Kodu : %d\n&quot;,sehirno); printf(&quot;Milletvekili Kontenjani : %d\n&quot;,kontenjan); printf(&quot;Gecerli Oy Sayisi : %d\n&quot;,sehir_oy); printf(&quot;Parti Adi Oy Sayisi Oy Yuzdesi MV Sayisi\n&quot;); printf(&quot;--------- --------- ---------- ---------\n&quot;);</p>
+<p>for (sayac=0;sayac&lt;8;sayac++) { printf(&quot; %c %9d %10.3f %10d\n&quot;,parti_id[sayac] + 65,parti_oy[sayac], parti_oy[sayac] * 100.0 / sehir_oy,mvsay_sehir[sayac]); } /* Çıktı SONU */</p>
+<p>/* Önemli Comment: Program genelindeki +65 'lerin anlamı: <em>/ /</em> --------------- ----------------------------------------------------------------------------------- <em>/ /</em> Program genelinde parti_id[] dizisinde A partisi için 0, B partisi için 1... değerlerini kullandım. <em>/ /</em> A partisi için kullandığım 0'ı rakam olarak alıp yanına 65 eklersem A'nın ASCII kodunu elde ederim. <em>/ /</em> Bu diğer harfler için de değerli. ASCII kodları ardışık olduğu için harf indislerinin 65 fazlası <em>/ /</em> harfi veriyor. <em>/ /</em> Böylece programın herhangi bir yerinde rakamı alıp harf döndüren bir fonksiyon yazmaktan kurtulu- <em>/ /</em> yorum. Programım daha etkin ve kısa oluyor. <em>/ /</em> --------------------------------------------------------------------------------------------------- */</p>
+<p>/* Bir sonraki şehire hazırlık BAŞLANGICI <em>/ printf(&quot;\n\nDevam etmek icin bir tusa basiniz...\n&quot;); getche(); system(&quot;cls&quot;); printf(&quot;\n\n\n\n\n\n&quot;); /</em> Bir sonraki şehire hazırlık SONU <em>/ } /</em> Şehir bazında hesaplama SONU <em>/ /</em> -----------------------------------<em>/ /</em> Türkiye geneli hesaplama BALANGICI <em>/ /</em> Toplam oy ve kontenjan sayılarını hesaplama BAŞLANGICI <em>/ for (sayac=0;sayac&lt;8;sayac++) { oy_ulke += parti_oy_ulke[sayac]; /</em> Bu iki veriyi her şehirde bir defa toplamaktansa burda toplamak daha etkin. <em>/ kontenjan_ulke += mvsay_ulke[sayac]; /</em> Eğer her şehirde toplasaydım şehir sayısı kadar işlem yapardım. Burda ise <em>/ } /</em> 8 işlem yapıyorum. Ülkenin 8'den fazla ile sahip olduğunu kabul ediyorum. <em>/ /</em> Toplam oy ve kontenjan sayılarını hesaplama SONU */</p>
+<p>/* Çıktı BAŞLANGICI */ printf(&quot;Turkiye Geneli\n&quot;); printf(&quot;Milletvekili Kontenjani : %d\n&quot;,kontenjan_ulke); printf(&quot;Gecerli Oy Sayisi : %d\n&quot;,oy_ulke); printf(&quot;Parti Adi Oy Sayisi Oy Yuzdesi MV Sayisi MV Yuzdesi\n&quot;); printf(&quot;--------- --------- ---------- --------- ----------\n&quot;);</p>
+<p>for (sayac=0;sayac&lt;8;sayac++) { printf(&quot; %c %9d %10.3f %9d %10.3f\n&quot;,sayac + 65,parti_oy_ulke[sayac], parti_oy_ulke[sayac] * 100.0 / oy_ulke,mvsay_ulke[sayac],mvsay_ulke[sayac] * 100.0 / kontenjan_ulke); }</p>
+<p>printf(&quot;\n\n&quot;); printf(&quot;Iktidar Partisi : %c\n&quot;, enbuyuk(parti_oy_ulke)+ 65);</p>
+<p>parti_oy_ulke[enbuyuk(parti_oy_ulke)] = 0;</p>
+<p>printf(&quot;Ana Muhalefet Partisi : %c\n\n&quot;, enbuyuk(parti_oy_ulke) + 65); printf(&quot;Partilerin Oy Sayilarina Gore Il Birincilikleri\n&quot;);</p>
+<p>for (sayac=0;sayac&lt;8;sayac++) { if (ildebirinci[sayac] != 0) { // Eğer birinci olamadıysa niye ekranı 0'larla doldurayım? printf(&quot;%c partisi : %d\n&quot;,sayac + 65,ildebirinci[sayac]); } } /* Çıktı SONU */</p>
+<p>/* Kapanış işlemleri BAŞLANGICI <em>/ fclose(fp); //Dosyayı kapat return 0; /</em> Kapanış işlemleri SONU */ }</p>
+<pre><code></code></pre>
+</div></div></article><div class="card comments main-container__items"><div class="card__contents" id="disqus_thread"></div></div></div><div class="sidebar main-content__sidebar"><div class="about"><img class="about__image" src="/img/profile.jpg"/><h1 class="about__name">Umut Benzer</h1><h2 class="about__mini-bio">Software Engineer in Berlin</h2></div></div></div><div class="main-container"><div class="footer"><div class="footer__copyright-holder"><p><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license noopener noreferrer" target="_blank"><img alt="Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License" src="/img/cclicense.png"/></a></p><p><span>Bu sitedeki tüm yazı ve görseller </span><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license noopener noreferrer" target="_blank">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a><span> ile lisanslanmıştır.</span></p></div><div class="footer__generator"><span>Bu sayfa </span><span>9 Nisan 2017</span><span> tarihinde </span><a href="https://github.com/ubenzer/fil" target="_blank">Fil</a><span> ile yaratılmıştır.</span></div></div></div></div>
+        <script src="/template/app.js" type="text/javascript"></script><script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = "https://ubenzer.com/2007/12/genel-secim-sonuclari";
+          this.page.identifier = "post@/2007/12/genel-secim-sonuclari";
+        };
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = 'https://ubenzer.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+        </script>
+      </body>
+    </html>
+  

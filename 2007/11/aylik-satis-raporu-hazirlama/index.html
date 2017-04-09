@@ -1,0 +1,120 @@
+<!doctype html>
+    <html lang="tr">
+      <head>
+        <title>Aylık Satış Raporu Hazırlama - UBenzer</title>
+        <meta content="utf-8" name="charset"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="#2196F3" name="theme-color"/>
+        <link href="/template/ui.css" media="screen" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i&amp;amp;subset=latin-ext" media="screen" rel="stylesheet" type="text/css"/><link href="/img/favicon/apple-touch-icon-57x57.png" rel="apple-touch-icon-precomposed" sizes="57x57"/><link href="/img/favicon/apple-touch-icon-60x60.png" rel="apple-touch-icon-precomposed" sizes="60x60"/><link href="/img/favicon/apple-touch-icon-72x72.png" rel="apple-touch-icon-precomposed" sizes="72x72"/><link href="/img/favicon/apple-touch-icon-76x76.png" rel="apple-touch-icon-precomposed" sizes="76x76"/><link href="/img/favicon/apple-touch-icon-114x114.png" rel="apple-touch-icon-precomposed" sizes="114x114"/><link href="/img/favicon/apple-touch-icon-120x120.png" rel="apple-touch-icon-precomposed" sizes="120x120"/><link href="/img/favicon/apple-touch-icon-152x152.png" rel="apple-touch-icon-precomposed" sizes="152x152"/><link href="/img/favicon/favicon-196x196.png" rel="icon" sizes="196x196"/><link href="/img/favicon/favicon-128x128.png" rel="icon" sizes="128x128"/><link href="/img/favicon/favicon-96x96.png" rel="icon" sizes="96x96"/><link href="/img/favicon/favicon-32x32.png" rel="icon" sizes="32x32"/><link href="/img/favicon/favicon-16x16.png" rel="icon" sizes="16x16"/>
+      </head>
+      <body>
+        <div><header class="header"><div class="app-bar"><h1 class="app-bar__title"><a class="app-bar__title-link" href="/">UBenzer</a></h1></div></header><div class="main-container"><div class="main-content"><article class="card main-container__items"><div class="card__contents blog-post"><div class="blog-post__date">21 Kasım 2007</div><h1><a class="blog-post__title" href="/2007/11/aylik-satis-raporu-hazirlama">Aylık Satış Raporu Hazırlama</a></h1><div class="markdown-content blog-post__body blog-post__content"><p>İkinici algoritma ödevimiz ve benim çözümüm...</p>
+<ul>
+<li><a href="/2007/11/aylik-satis-raporu-hazirlama/algo-odev-2.pdf" >Ödev Açıklaması</a></li>
+<li><a href="/2007/11/aylik-satis-raporu-hazirlama/7670.txt" >Benim Çözümüm (7670.c)</a></li>
+</ul>
+<p>[rawr] ```c
+#include &lt;stdio.h&gt; #include &lt;stdlib.h&gt;</p>
+<p>/* Program genelinde fonksiyonlar -1 HAYIR, 0 EVET degerini dondurur. <em>/ int yil_gecerli_mi(int yil) { if(yil&lt;1) return -1; /</em> Milattan önce desteðimiz bulunmamaktadir. */ return 0; }</p>
+<p>int ay_gecerli_mi(int ay) { if (ay&gt;12 || ay&lt;1) return -1; return 0; }</p>
+<p>int gun_gecerli_mi(int gun, int ay, int yil) { int gunsayisi=31;</p>
+<p>if (gun&lt;1 || gun&gt;aydaki_gun(ay,yil)) return -1;</p>
+<p>return 0;</p>
+<p>}</p>
+<p>int yil_artik_mi(int yil) { /* Bir yýlýn 4'e bölümünden kalan 0 ise o yýl artýktýr. <em>/ /</em> Ancak o yýl 100'e bölünüyorsa artýk deðildir. Ama 400'e de bölünüyorsa artýktýr. */ if ((yil % 4 == 0 &amp;&amp; yil % 100 != 0) || (yil % 400 == 0)) return 0; return -1; }</p>
+<p>int fark_hesapla(int ilkgun, int ilkay, int ilkyil, int songun, int sonay, int sonyil) { int i; int ilk_kacinci_gun=0; int son_kacinci_gun=0;</p>
+<p>for (i=1;i&lt;ilkay;i++) // Ilk girdide kac gun var? { ilk_kacinci_gun = ilk_kacinci_gun + aydaki_gun(i,ilkyil); } ilk_kacinci_gun = ilk_kacinci_gun + ilkgun;</p>
+<p>for(i=1;i&lt;sonay;i++) // Son girdide kac gun var? { son_kacinci_gun = son_kacinci_gun + aydaki_gun(i,sonyil); } son_kacinci_gun = son_kacinci_gun + songun;</p>
+<p>if (ilkyil==sonyil) // OOh kebap, ayný yýldan iki güzel gün. { return son_kacinci_gun - ilk_kacinci_gun; } else { // Bir de yillararasi gun farki var 😦 bööööö ilk_kacinci_gun = 365 + yil_artik_mi(ilkyil) + 1 - ilk_kacinci_gun; for (i=ilkyil+1;i&lt;sonyil;i++) { ilk_kacinci_gun = ilk_kacinci_gun + 365 + yil_artik_mi(i) + 1; } return son_kacinci_gun + ilk_kacinci_gun; }</p>
+<p>}</p>
+<p>int aydaki_gun(int ay, int yil) { switch(ay) { case 2: if (yil_artik_mi(yil) == 0) return 29; else return 28; break; case 4: case 6: case 9: case 11: return 30; } return 31; }</p>
+<p>int hangisi_buyuk(int ilkgun, int ilkay, int ilkyil, int songun, int sonay, int sonyil) { // Bu fonksiyonda etkinlik için else yapýsýna gerek yok. Çüknü if=þartý saðlýyorsa then fonskiyon biter. if (sonyil&gt;ilkyil) return 0; // Sorun yok, devam edelim 😃 if (ilkyil&gt;sonyil) return -1; // Eleman normalde geçmiþ olmasý gereken tarihe gelecek tarihi yazmýþ. // E fonksiyon hala iþliyorsa o zaman demek ki yýllar ayný. // O zaman ne yapýyoruz? Aylara bakýyoruuuuuuuzzz!! if (sonay&gt;ilkay) return 0; if (ilkay&gt;sonay) return -1; //Gýcýklýk. // Hala mý devam... O zaman artýk günlere bakalým. if (songun&gt;ilkgun) return 0; if (ilkgun&gt;songun) return -1; // Ama ayný gün de yazýlmaz ki! Ne yapýyoruz, o zaman da -2 gönderiyoruz ki bir çözüm bulsunlar. return -2; }</p>
+<p>void gun_sonrasi(int gun, int ay, int yil, int eklenecek) {</p>
+<p>gun = gun + eklenecek; while (gun&gt;aydaki_gun(ay,yil)) { gun = gun - aydaki_gun(ay,yil);</p>
+<p>++ay; if (ay&gt;12) { ay=1; ++yil; } }</p>
+<p>printf(&quot;\nTarih %d.%d.%d olacaktir.\n&quot;,gun,ay,yil);</p>
+<p>}</p>
+<p>void gun_oncesi(int gun, int ay, int yil, int cikarilacak) { gun = gun - cikarilacak; while (gun&lt;1) { --ay; if (ay&lt;1) { ay=12; --yil; if (yil&lt;1) { /* Milattan once destegi vermiyorum */ printf(&quot;Uzgunuz ama su an icin milattan oncesi icin destegimiz bulunmamaktadir.\n&quot;); return; } }</p>
+<p>gun = gun + aydaki_gun(ay,yil);</p>
+<p>}</p>
+<p>printf(&quot;\nTarih %d.%d.%d olacaktir.\n&quot;,gun,ay,yil); }</p>
+<p>void beklet() {</p>
+<p>printf(&quot;\nDevam etmek icin bir tusa basin.&quot;); getche();</p>
+<p>}</p>
+<p>int main() { /* Bugünün deðiþkenleri */ int yil=-1; int ay; int gun;</p>
+<p>/* Menü deðiþkenleri */ int sag_serbest=-1; char secenek=0;</p>
+<p>/* Diðer alýnan tarih verileri deðiþkenleri */ int ilkyil=-1, ilkay=-1, ilkgun=-1; int sonyil=-1, sonay=-1, songun=-1; int once_sonra=-1;</p>
+<p>printf(&quot;Umut BENZER\n&quot;); printf(&quot;05-06-7670\n&quot;); printf(&quot;Ege Universitesi Bilgisayar Muhendisligi 1. Sinif\n&quot;); printf(&quot;http://www.ubenzer.com\n&quot;); printf(&quot;Tarih Hesaplama Yazilimi 1.2\n\n&quot;);</p>
+<p>printf(&quot;Baslamadan once sizden bugunun tarihini isteyecegim.\n&quot;);</p>
+<p>while (yil_gecerli_mi(yil) == -1) /* Niye bu tarih_gecerli mi degil de boyle uc tane fonksiyon?? <em>/ { printf(&quot;Yil: &quot;); scanf(&quot;%d&quot;,&amp;yil); /</em> Cunku odevde denildi ki, tarih gecersizse devamini isteme. */ }</p>
+<p>while (ay_gecerli_mi(ay) == -1) { printf(&quot;Ay: &quot;); scanf(&quot;%d&quot;,&amp;ay); }</p>
+<p>while (gun_gecerli_mi(gun,ay,yil) == -1) { printf(&quot;Gun: &quot;); scanf(&quot;%d&quot;,&amp;gun); }</p>
+<p>while (sag_serbest==-1) { system (&quot;cls&quot;); printf(&quot;*** Menu *** (Bugun: %d.%d.%d)\n\n&quot;,gun,ay,yil); printf(&quot;1. Verilen iki tarih arasinda kac gun fark oldugunun bulunmasi \n&quot;); printf(&quot;2. Verilen bir tarihten bugune kadar gecen gun sayisinin bulunmasi \n&quot;); printf(&quot;3. Verilen bir yil icerisinde verilen iki tarih arasinda gecen gun sayisinin bulunmasi \n&quot;); printf(&quot;4. Verilen bir tarihten verilen gun sayisi kadar sonraki tarihin bulunmasi \n&quot;); printf(&quot;5. Bugunden verilen gun sayisi kadar onceki tarihin bulunmasi \n&quot;); printf(&quot;6. Bugunden verilen gun sayisi kadar sonraki tarihin bulunmasi \n&quot;); printf(&quot;7. Cikis \n\n&quot;);</p>
+<p>printf(&quot;Lutfen istediginiz islemin numarasini giriniz. &quot;);</p>
+<p>secenek=getche(); system (&quot;cls&quot;);</p>
+<p>switch(secenek) /* char fonksiyonu girilen karakterin ASCII kodunu verir. <em>/ { /</em> Onun icin secenek degiskenini switche sayi olarak sokabiliyorum.<em>/ case 49: /</em> ve case'lere de ASCII kodlarini yerlestiriyorum. 😃 <em>/ ilkyil=-1; ilkay=-1; ilkgun=-1; /</em> Önce sýfýrlayalým */ sonyil=-1; sonay=-1; songun=-1; printf(&quot;1. Verilen iki tarih arasinda kac gun fark oldugunun bulunmasi \n&quot;);</p>
+<p>while (yil_gecerli_mi(ilkyil) == -1) { printf(&quot;Ilk tarihin yilini giriniz: &quot;); scanf(&quot;%d&quot;,&amp;ilkyil); }</p>
+<p>while (ay_gecerli_mi(ilkay) == -1) { printf(&quot;Ilk tarihin ayini giriniz: &quot;); scanf(&quot;%d&quot;,&amp;ilkay); }</p>
+<p>while (gun_gecerli_mi(ilkgun,ilkay,ilkyil) == -1) { printf(&quot;Ilk tarihin gununu giriniz: &quot;); scanf(&quot;%d&quot;,&amp;ilkgun); }</p>
+<p>while (yil_gecerli_mi(sonyil) == -1) { printf(&quot;Son tarihin yilini giriniz: &quot;); scanf(&quot;%d&quot;,&amp;sonyil); }</p>
+<p>while (ay_gecerli_mi(sonay) == -1) { printf(&quot;Son tarihin ayini giriniz: &quot;); scanf(&quot;%d&quot;,&amp;sonay); }</p>
+<p>while (gun_gecerli_mi(songun,sonay,sonyil) == -1) { printf(&quot;Son tarihin gununu giriniz: &quot;); scanf(&quot;%d&quot;,&amp;songun); }</p>
+<p>switch (hangisi_buyuk(ilkgun,ilkay,ilkyil,songun,sonay,sonyil)) { case -1: // Kullanýcý tarih sýrasýný ters girmiþ. Ama biz hata mesajý vermiyor, bu hatayý düzelterek kullanýcýya yardýmcý oluyoruz. (Yardýmsever program) printf (&quot;\nUYARI: Son tarih, ilk tarihten daha once.\n&quot;); printf(&quot;\nArada %d gun var.&quot;,fark_hesapla(songun, sonay, sonyil, ilkgun, ilkay, ilkyil)); break; case 0: // Sorun yok printf(&quot;\nArada %d gun var.&quot;,fark_hesapla(ilkgun, ilkay, ilkyil, songun, sonay, sonyil)); break; case -2: // Haydaaaaaaaa printf (&quot;\nGirdiginiz tarih degerleri ayni. Demek ki gun gecmemis. 😃\n&quot;); }</p>
+<p>beklet();</p>
+<p>break; case 50: ilkyil=-1; ilkay=-1; /* Önce sýfýrlayalým */ ilkgun=-1;</p>
+<p>printf(&quot;2. Verilen bir tarihten bugune kadar gecen gun sayisinin bulunmasi \n&quot;);</p>
+<p>while (yil_gecerli_mi(ilkyil) == -1) { printf(&quot;Yil: &quot;); scanf(&quot;%d&quot;,&amp;ilkyil); }</p>
+<p>while (ay_gecerli_mi(ilkay) == -1) { printf(&quot;Ay: &quot;); scanf(&quot;%d&quot;,&amp;ilkay); }</p>
+<p>while (gun_gecerli_mi(ilkgun,ilkay,ilkyil) == -1) { printf(&quot;Gun: &quot;); scanf(&quot;%d&quot;,&amp;ilkgun); }</p>
+<p>switch (hangisi_buyuk(ilkgun,ilkay,ilkyil,gun,ay,yil)) { case -1: // Kullanýcý günümüzden daha ileriki bir tarihi girmiþ. Olsun varsýn, onu da söyleriz biz. (Yardýmsever program) printf(&quot;\n Girdiginiz tarih %d gun SONRASININ tarihi.\n&quot;,fark_hesapla(gun, ay, yil, ilkgun, ilkay, ilkyil)); break; case 0: // Sorun yok printf(&quot;\nGirdiniz tarihten bu zamana kadar %d gun gecmis.&quot;,fark_hesapla(ilkgun, ilkay, ilkyil, gun, ay, yil)); break; case -2: // Haydaaaaaaaa printf (&quot;\nBu gunun tarihini girdiginizin farkinda misiniz? Uykulusunuz? 😃)\n&quot;); }</p>
+<p>beklet();</p>
+<p>break; case 51: ilkyil=-1; ilkay=-1; ilkgun=-1; /* Önce sýfýrlayalým */ sonay=-1; songun=-1;</p>
+<p>printf(&quot;3. Verilen bir yil icerisinde verilen iki tarih arasinda gecen gun sayisinin bulunmasi \n&quot;);</p>
+<p>while (yil_gecerli_mi(ilkyil) == -1) { printf(&quot;Olay hangi yil icinde gelisecek? &quot;); scanf(&quot;%d&quot;,&amp;ilkyil); }</p>
+<p>while (ay_gecerli_mi(ilkay) == -1) { printf(&quot;Ilk tarihin ayini giriniz: &quot;); scanf(&quot;%d&quot;,&amp;ilkay); }</p>
+<p>while (gun_gecerli_mi(ilkgun,ilkay,ilkyil) == -1) { printf(&quot;Ilk tarihin gununu giriniz: &quot;); scanf(&quot;%d&quot;,&amp;ilkgun); }</p>
+<p>while (ay_gecerli_mi(sonay) == -1) { printf(&quot;Son tarihin ayini giriniz: &quot;); scanf(&quot;%d&quot;,&amp;sonay); }</p>
+<p>while (gun_gecerli_mi(songun,sonay,ilkyil) == -1) { printf(&quot;Son tarihin gununu giriniz: &quot;); scanf(&quot;%d&quot;,&amp;songun); }</p>
+<p>switch (hangisi_buyuk(ilkgun,ilkay,ilkyil,songun,sonay,ilkyil)) { case -1: // Kullanýcý tarih sýrasýný ters girmiþ. Ama biz hata mesajý vermiyor, bu hatayý düzelterek kullanýcýya yardýmcý oluyoruz. (Yardýmsever program) printf (&quot;\nUYARI: Son tarih, ilk tarihten daha once.\n&quot;); printf(&quot;\nArada %d gun var.&quot;,fark_hesapla(songun, sonay, ilkyil, ilkgun, ilkay, ilkyil)); break; case 0: // Sorun yok printf(&quot;\nArada %d gun var.&quot;,fark_hesapla(ilkgun, ilkay, ilkyil, songun, sonay, ilkyil)); break; case -2: // Haydaaaaaaaa printf (&quot;\nGirdiginiz tarih degerleri ayni. Demek ki gun gecmemis. 😃\n&quot;); }</p>
+<p>beklet();</p>
+<p>break; case 52: ilkyil=-1; ilkay=-1; /* Önce sýfýrlayalým */ ilkgun=-1; once_sonra=-1;</p>
+<p>printf(&quot;4. Verilen bir tarihten verilen gun sayisi kadar sonraki tarihin bulunmasi \n&quot;);</p>
+<p>while (yil_gecerli_mi(ilkyil) == -1) { printf(&quot;Yil: &quot;); scanf(&quot;%d&quot;,&amp;ilkyil); }</p>
+<p>while (ay_gecerli_mi(ilkay) == -1) { printf(&quot;Ay: &quot;); scanf(&quot;%d&quot;,&amp;ilkay); }</p>
+<p>while (gun_gecerli_mi(ilkgun,ilkay,ilkyil) == -1) { printf(&quot;Gun: &quot;); scanf(&quot;%d&quot;,&amp;ilkgun); }</p>
+<p>while (gun_gecerli_mi(ilkgun,ilkay,ilkyil) == -1) { printf(&quot;Gun: &quot;); scanf(&quot;%d&quot;,&amp;ilkgun); }</p>
+<p>while (once_sonra &lt; 0) { printf(&quot;Kac gun sonrasini hesaplamami istersiniz? &quot;); scanf(&quot;%d&quot;,&amp;once_sonra); }</p>
+<p>gun_sonrasi(ilkgun,ilkay,ilkyil,once_sonra);</p>
+<p>beklet();</p>
+<p>break; case 53: printf(&quot;5. Bugunden verilen gun sayisi kadar onceki tarihin bulunmasi \n&quot;);</p>
+<p>once_sonra=-1; /* Önce sýfýrlayalým */</p>
+<p>while (once_sonra &lt; 0) { printf(&quot;Bugunden kac gun oncesini hesaplamami isterdiniz? &quot;); scanf(&quot;%d&quot;,&amp;once_sonra); }</p>
+<p>gun_oncesi(gun,ay,yil,once_sonra);</p>
+<p>beklet();</p>
+<p>break; case 54: printf(&quot;6. Bugunden verilen gun sayisi kadar sonraki tarihin bulunmasi \n&quot;);</p>
+<p>once_sonra=-1; /* Önce sýfýrlayalým */</p>
+<p>while (once_sonra &lt; 0) { printf(&quot;Bugunden kac gun sonrasini hesaplamami isterdiniz? &quot;); scanf(&quot;%d&quot;,&amp;once_sonra); }</p>
+<p>gun_sonrasi(gun,ay,yil,once_sonra);</p>
+<p>beklet();</p>
+<p>break; case 65: printf(&quot;Supriz Yumurta | Easter Egg\n&quot;); printf(&quot;I would love to change the world, but they won't give me the source code.\n&quot;); printf(&quot;http://en.wikiquote.org/wiki/Computers#Programming (Anonim)\n\n\n&quot;); printf(&quot;Tebrikler, bu programin gizli ozelligini buldunuz. 😃\n Devam etmek icin bir tusa basin.\n&quot;); getche(); break; case 55: do { printf (&quot;\nCikmak istediginizden emin misiniz? (E-H)&quot;); secenek = getche(); if (secenek == 'E' || secenek == 'e') { sag_serbest = 0; secenek = 'H'; } } while (secenek != 'H' &amp;&amp; secenek != 'h');</p>
+<p>break; default: printf(&quot;Lutfen 1'den 7'ye kadar bir secim yapin.&quot;,secenek); beklet(); break; } }</p>
+<p>printf(&quot;\n\nProgram sonlandi. 😃&quot;); return 0; }</p>
+<pre><code class="language-[/rawr]">
+Hepimize bol kaynak kodlu günler. =)
+
+Not: Bu ödev 95 aldı. (5 puan değişken isimlerinin uzun olmasından gitmiş, bence sorun yok, ama naaapalım hocaya göre uzunmuş, sorun yok.)
+</code></pre>
+</div></div></article><div class="card comments main-container__items"><div class="card__contents" id="disqus_thread"></div></div></div><div class="sidebar main-content__sidebar"><div class="about"><img class="about__image" src="/img/profile.jpg"/><h1 class="about__name">Umut Benzer</h1><h2 class="about__mini-bio">Software Engineer in Berlin</h2></div></div></div><div class="main-container"><div class="footer"><div class="footer__copyright-holder"><p><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license noopener noreferrer" target="_blank"><img alt="Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License" src="/img/cclicense.png"/></a></p><p><span>Bu sitedeki tüm yazı ve görseller </span><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license noopener noreferrer" target="_blank">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a><span> ile lisanslanmıştır.</span></p></div><div class="footer__generator"><span>Bu sayfa </span><span>9 Nisan 2017</span><span> tarihinde </span><a href="https://github.com/ubenzer/fil" target="_blank">Fil</a><span> ile yaratılmıştır.</span></div></div></div></div>
+        <script src="/template/app.js" type="text/javascript"></script><script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = "https://ubenzer.com/2007/11/aylik-satis-raporu-hazirlama";
+          this.page.identifier = "post@/2007/11/aylik-satis-raporu-hazirlama";
+        };
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = 'https://ubenzer.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+        </script>
+      </body>
+    </html>
+  

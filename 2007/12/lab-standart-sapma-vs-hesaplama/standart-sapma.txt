@@ -1,0 +1,79 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{
+    printf("Umut Benzer!\n");
+	printf("Standart Sapma ve Not Ortalamasi Hesaplama Yazilimi\n");
+	printf("http://www.ubenzer.com\n\n");
+
+	float not_ort[100];
+    int kac_ogr = 0;
+    float not[5];
+
+    int sayac;
+    int sayac2;
+
+    float sinif_ort=0;
+    float ss=0;
+
+    float not_ort_ust=0;
+
+    float en_kucuk_ort=-1;
+    float en_buyuk_ort=-1;
+
+    while (kac_ogr<2 || kac_ogr>100) {
+        printf("Kac ogrencinin notunu hesaplayacagiz? (2 ile 100 arasi lutfen)");
+        scanf("%d",&kac_ogr);
+    }
+
+    for (sayac=0;sayac<kac_ogr;sayac++) {
+
+        for (sayac2=0;sayac2<5;sayac2++) {
+
+            do {
+                printf("(%d/%d) %d. ogrencinin %d. dersinin notunu giriniz: ",sayac + 1,kac_ogr,sayac + 1,sayac2 + 1);
+                scanf("%f",&not[sayac2]);
+            } while (not[sayac2] < 0 || not[sayac2]>100);
+
+        }
+
+        not_ort[sayac] = (not[0] + not[1] + not [2] + not[3] + not [4]) / 5;
+
+        sinif_ort = sinif_ort + not_ort[sayac];
+    }
+
+    sinif_ort = sinif_ort / kac_ogr;
+
+    for (sayac=0;sayac<kac_ogr;sayac++) {
+
+        ss = ss + ((not_ort[sayac] - sinif_ort) * (not_ort[sayac] - sinif_ort));
+
+        if (not_ort[sayac] > sinif_ort) {
+            not_ort_ust++;
+        }
+
+        if (not_ort[sayac] > en_buyuk_ort) {
+            en_buyuk_ort = not_ort[sayac];
+        }
+
+        if (en_kucuk_ort == -1 || not_ort[sayac] < en_kucuk_ort) {
+            en_kucuk_ort = not_ort[sayac];
+        }
+
+    }
+
+    ss = sqrt(ss / (kac_ogr - 1));
+
+    not_ort_ust = (100 * not_ort_ust) / kac_ogr;
+
+    printf("Sinif not ortalamasi                     : %f \n",sinif_ort);
+    printf("Standart sapma                           : %f \n",ss);
+    printf("Notu ortalamadan yuksek olanlarin yuzdesi: %f \n",not_ort_ust);
+    printf("En yuksek not ortalamasi                 : %f \n",en_buyuk_ort);
+    printf("En dusuk not ortalamasi                  : %f \n",en_kucuk_ort);
+
+    printf("\nSaygilar.\n\n");
+
+	return 0;
+}

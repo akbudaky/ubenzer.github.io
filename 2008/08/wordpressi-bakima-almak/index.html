@@ -1,0 +1,77 @@
+<!doctype html>
+    <html lang="tr">
+      <head>
+        <title>Wordpress’i Bakıma Almak - UBenzer</title>
+        <meta content="utf-8" name="charset"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="#2196F3" name="theme-color"/>
+        <link href="/template/ui.css" media="screen" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i&amp;amp;subset=latin-ext" media="screen" rel="stylesheet" type="text/css"/><link href="/img/favicon/apple-touch-icon-57x57.png" rel="apple-touch-icon-precomposed" sizes="57x57"/><link href="/img/favicon/apple-touch-icon-60x60.png" rel="apple-touch-icon-precomposed" sizes="60x60"/><link href="/img/favicon/apple-touch-icon-72x72.png" rel="apple-touch-icon-precomposed" sizes="72x72"/><link href="/img/favicon/apple-touch-icon-76x76.png" rel="apple-touch-icon-precomposed" sizes="76x76"/><link href="/img/favicon/apple-touch-icon-114x114.png" rel="apple-touch-icon-precomposed" sizes="114x114"/><link href="/img/favicon/apple-touch-icon-120x120.png" rel="apple-touch-icon-precomposed" sizes="120x120"/><link href="/img/favicon/apple-touch-icon-152x152.png" rel="apple-touch-icon-precomposed" sizes="152x152"/><link href="/img/favicon/favicon-196x196.png" rel="icon" sizes="196x196"/><link href="/img/favicon/favicon-128x128.png" rel="icon" sizes="128x128"/><link href="/img/favicon/favicon-96x96.png" rel="icon" sizes="96x96"/><link href="/img/favicon/favicon-32x32.png" rel="icon" sizes="32x32"/><link href="/img/favicon/favicon-16x16.png" rel="icon" sizes="16x16"/>
+      </head>
+      <body>
+        <div><header class="header"><div class="app-bar"><h1 class="app-bar__title"><a class="app-bar__title-link" href="/">UBenzer</a></h1></div></header><div class="main-container"><div class="main-content"><article class="card main-container__items"><div class="card__contents blog-post"><div class="blog-post__date">18 Ağustos 2008</div><h1><a class="blog-post__title" href="/2008/08/wordpressi-bakima-almak">Wordpress’i Bakıma Almak</a></h1><div class="markdown-content blog-post__body blog-post__content"><p><a href="/2008/08/wordpressi-bakima-almak/bakimda.png" target="_blank"><img src="/2008/08/wordpressi-bakima-almak/bakimda.scaled-png-200.png" title="Site Bakımda" alt="Site Bakımda"  width="1112" height="493" srcset="/2008/08/wordpressi-bakima-almak/bakimda.scaled-png-200.png 200w, /2008/08/wordpressi-bakima-almak/bakimda.scaled-png-500.png 500w, /2008/08/wordpressi-bakima-almak/bakimda.scaled-png-1000.png 1000w, /2008/08/wordpressi-bakima-almak/bakimda.png 1112w"></a>Ziyaretçiler ekranda <em>Fatal error: Cannot redeclare wp_unregister_globals() hede hödö falan filan....</em> gibi hata mesajları görünce mutsuz olur. Wordpress’inizde sürüm güncellerken, kullandığınız tema üzerinde değişiklik yaparken, eklenti geliştirirken ya da yeni bir şey denerken web sitenizi geçici olarak kapatmanız gerekebilir.</p>
+<p>Wordpress’inizi bakım moduna alabileceğiniz iki eklenti gördüm. Bunlar <a href="http://wordpress.org/extend/plugins/maintenance-mode/" rel="noopener noreferrer" target="_blank">Maintenance Mode</a> ve <a href="http://wordpress.org/extend/plugins/wet-maintenance/" rel="noopener noreferrer" target="_blank">Site Maintenance</a> eklentileri.</p>
+<p>Ancak eklentilerle sorun yaşadıysanız, sitenizi kapatmak için bile eklenti kurmak istemiyorsanız ya da eklentilerle ilgili duygusal problemleriniz varsa saf PHP kodu değişikliklerinden oluşan benim yöntemimi kullanabilirsiniz.</p>
+<p>Anlatacağım yöntem sadece Wordpress için değil, <em>tek bir giriş noktası olan</em> (Wordpress’de index.php) tüm betikler için geçerli.</p>
+<p>Wordpress’de bir sayfa çağırdığınızda ilk <em>index.php</em> çalışır. Kaynak kodunu aşağıda görüyorsunuz.</p>
+<pre><code class="language-php"> &lt;?php /** * Front to the WordPress application. This file doesn't do anything, but loads * wp-blog-header.php which does and tells WordPress to load the theme. * * @package WordPress */
+
+/** * Tells WordPress to load the WordPress theme and output it. * * @var bool */ define('WP_USE_THEMES', true);
+
+/** Loads the WordPress Environment and Template */ require('./wp-blog-header.php'); ?&gt;
+``` Bu basit dosyanın tek amacı, bir sonraki dosyayı çağırmak ve temiz bir başlangıç yapmaktır. Ziyaretçilerin önünü, sisteme tek giriş noktası olan bu dosyada kesebiliriz.
+
+Sitemizi bakım moduna alırken dikkat edeceğimiz bazı önemli noktalar var:
+
+*   Bakım modu tüm siteyi kapsamalı. Örneğin insanlar *http://hödö.com/* adresine girince *“Sitemiz Bakımdadır”* yazısını görürken *http://hödö.com/bir-blog-girdisi/* adresine girince yamulmuş bir site görmemeliler.
+*   Bakım modu sayfası sistem yüklenmeden (yani Wordpress’e dair hiçbir şey yüklenmeden) gelmeli. Böylece veritabanı bağlantısı çökse de wp-includes klasörünü silseniz de bakım modu yazısına bir şey olmayacak, ziyaretçiler arkada ne olup bittiğini bilemeyecekler. (denemedim ama eklenti halinde dağıtılanların bu adımı sağlayacağını hiç sanmıyorum.)
+*   Bakım modu sayfası tarayıcı önbelleğinden etkilenmemeli.  
+    Bakım modu sayfası koymanın en dandik yönetimi şudur: *index.php’*nin yanına bir tane *index.html* atarsınız ve içine bakımda yazarsınız. Ama önbelleğinde sitenin açılış sayfasının index.php olduğunu tutan tarayıcıların *index.html*’den haberi olmayacağı için siz sadece bazı ziyaretçilere bakımda olduğunuzu duyurabilirsiniz.
+*   Bakım modu yazısı devredeyken sisteme erişebilmelisiniz. Bir üstte anlatılan yöntem şöyle geliştirilebilir. *index.php*’yi *index2.php* olarak adlandırır ve *index.php*’nize bakımda yazısını koyarsınız. Böylece insanlar bakımda yazısını görür. Ama sistem sizin için de doğru işlemeyebilir. Hoş değildir.
+*   Bakım modu botlara *200 OK* headeri yerine *503 Service Temporarily Unavailable* headeri göndermelidir. Aksi halde botlar bakımda olduğunuzu anlamayıp içeriğinizin değiştiğini sanabilir, hatalı davranabilir ve başınızı ağrıtabilir.
+
+Yukarıdaki maddelerde anlatılanlara dikkat edilerek oluşturulmuş, kendi sitelerimde bakım yaparken kullandığım kaynak kodu aşağıdadır. Wordpress'in *index.php*'sini aşağıdaki gibi değiştiriyoruz:
+
+```php
+ &lt;?php
+
+$bakim_modu = FALSE; $bakim_ip = &quot;155.223.1.1&quot;; /* Üst satıra kendi IP adresinizi yazmalısınız. */ /* Web sitesi sadece yukarıdaki IP sahibine açılacak. Diğerleri bakım mesajı görecek. Güncel IP adresinizi http://whatismyip.com adresinden öğrenebilirsiniz. */
+
+if (($bakim_modu &amp;&amp; ($bakim_ip == $_SERVER['REMOTE_ADDR'])) || !$bakim_modu) { /* Eğer web sitesi bakımda değilse veya izinli IP sisteme giriş yapıyorsa orijinal wordpress index.php'sindeki kodları çalıştır. Eğer index.php'nizde değişiklik yaptıysanız aşağıya olduğu gibi yansıtın. */
+
+/** * Front to the WordPress application. This file doesn't do anything, but loads * wp-blog-header.php which does and tells WordPress to load the theme. * * @package WordPress */
+
+/** * Tells WordPress to load the WordPress theme and output it. * * @var bool */ define('WP_USE_THEMES', true);
+
+/** Loads the WordPress Environment and Template */ require('./wp-blog-header.php');
+
+} else { /* Eğer web sitesi bakım halindeyse... */ ob_start(); /* Botlara web sitesinin geçici bakımda olduğu bilgisi gönderilir. Bir saat sonra tekrar denemeleri söylenir. */ header('HTTP/1.1 503 Service Temporarily Unavailable'); header('Status: 503 Service Temporarily Unavailable'); header('Retry-After: 3600'); header('Content-Type: text/html; charset=utf-8'); include (&quot;kapali.html&quot;); /* Bakım mesajının yer aldığı kapali.html adlı bir HTML dosyası oluşturun. Bu dosya index.php ile aynı konumda olmalı ve UTF-8 karakter setiyle kodlanmış bir dosya olmalıdır. */ }
+
+?&gt;
+</code></pre>
+<p>Dosyamızı bir defa böyle değiştirdikten sonra bakım zamanı tek yapmamız gereken <code>php $bakim_modu = FALSE;</code> satırını <code>php $bakim_modu = TRUE;</code> olarak değiştirmek ve ```php
+$bakim_ip = &quot;155.223.1.1&quot;;</p>
+<pre><code class="language-satırına">
+Böylece başkaları ve arama motorları sitemizi bakımda olarak görürken biz normal gezmeye devam edebilir ve yapacaklarımızı kapabiliriz.
+
+### Uyarılar
+
+*   Bakım modunda iken web sitesinin hiçbir yerinde 'Dikkat bakımda' yazmadığı için bakım modunu kapatmayı unutabilirsiniz, dikkat edin. :)
+*   *kapali.html*’inizi tasarlayıp sitenize göndermeyi unutmayın, aksi halde hata mesajı alırsınız.
+*   Wordpress’de sürüm güncellerken *index.php*’yi *güncellememeyi* unutmayın.
+
+İyi geceler.
+</code></pre>
+</div></div></article><div class="card comments main-container__items"><div class="card__contents" id="disqus_thread"></div></div></div><div class="sidebar main-content__sidebar"><div class="about"><img class="about__image" src="/img/profile.jpg"/><h1 class="about__name">Umut Benzer</h1><h2 class="about__mini-bio">Software Engineer in Berlin</h2></div></div></div><div class="main-container"><div class="footer"><div class="footer__copyright-holder"><p><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license noopener noreferrer" target="_blank"><img alt="Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License" src="/img/cclicense.png"/></a></p><p><span>Bu sitedeki tüm yazı ve görseller </span><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license noopener noreferrer" target="_blank">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a><span> ile lisanslanmıştır.</span></p></div><div class="footer__generator"><span>Bu sayfa </span><span>9 Nisan 2017</span><span> tarihinde </span><a href="https://github.com/ubenzer/fil" target="_blank">Fil</a><span> ile yaratılmıştır.</span></div></div></div></div>
+        <script src="/template/app.js" type="text/javascript"></script><script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = "https://ubenzer.com/2008/08/wordpressi-bakima-almak";
+          this.page.identifier = "post@/2008/08/wordpressi-bakima-almak";
+        };
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = 'https://ubenzer.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+        </script>
+      </body>
+    </html>
+  

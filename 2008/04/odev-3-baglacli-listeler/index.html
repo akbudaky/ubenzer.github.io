@@ -1,0 +1,393 @@
+<!doctype html>
+    <html lang="tr">
+      <head>
+        <title>Ödev 3: Bağlaçlı Listeler - UBenzer</title>
+        <meta content="utf-8" name="charset"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="#2196F3" name="theme-color"/>
+        <link href="/template/ui.css" media="screen" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i&amp;amp;subset=latin-ext" media="screen" rel="stylesheet" type="text/css"/><link href="/img/favicon/apple-touch-icon-57x57.png" rel="apple-touch-icon-precomposed" sizes="57x57"/><link href="/img/favicon/apple-touch-icon-60x60.png" rel="apple-touch-icon-precomposed" sizes="60x60"/><link href="/img/favicon/apple-touch-icon-72x72.png" rel="apple-touch-icon-precomposed" sizes="72x72"/><link href="/img/favicon/apple-touch-icon-76x76.png" rel="apple-touch-icon-precomposed" sizes="76x76"/><link href="/img/favicon/apple-touch-icon-114x114.png" rel="apple-touch-icon-precomposed" sizes="114x114"/><link href="/img/favicon/apple-touch-icon-120x120.png" rel="apple-touch-icon-precomposed" sizes="120x120"/><link href="/img/favicon/apple-touch-icon-152x152.png" rel="apple-touch-icon-precomposed" sizes="152x152"/><link href="/img/favicon/favicon-196x196.png" rel="icon" sizes="196x196"/><link href="/img/favicon/favicon-128x128.png" rel="icon" sizes="128x128"/><link href="/img/favicon/favicon-96x96.png" rel="icon" sizes="96x96"/><link href="/img/favicon/favicon-32x32.png" rel="icon" sizes="32x32"/><link href="/img/favicon/favicon-16x16.png" rel="icon" sizes="16x16"/>
+      </head>
+      <body>
+        <div><header class="header"><div class="app-bar"><h1 class="app-bar__title"><a class="app-bar__title-link" href="/">UBenzer</a></h1></div></header><div class="main-container"><div class="main-content"><article class="card main-container__items"><div class="card__contents blog-post"><div class="blog-post__date">26 Nisan 2008</div><h1><a class="blog-post__title" href="/2008/04/odev-3-baglacli-listeler">Ödev 3: Bağlaçlı Listeler</a></h1><div class="markdown-content blog-post__body blog-post__content"><p>14 Nisan 2008 tarihinde aldığımız Bağlaçlı Listeler ödevi için teslim ettiğim kaynak kod. Ödevinden isminden de anlaşılabileceği gibi ödevin asıl amacı C# dilinde bağlaçlı liste yönetmeyi başarabilmek. Bu ödevimde (en azından ben hata göremedim ödevi gönderdiğimde) bağlaçlı liste kullanımına örnek bulabileceksiniz.</p>
+<ul>
+<li><a href="/2008/04/odev-3-baglacli-listeler/odev3.zip" >Ödev Açıklaması</a></li>
+<li><a href="/2008/04/odev-3-baglacli-listeler/baglacli_liste_ubenzer.c" >Benim Çözümüm (7670.c)</a></li>
+</ul>
+<p>Kaynak kodunu incelemek ve fikir sahibi olmak amacıyla kullanabilirsiniz. Ama lütfen kaynak kodunu kopyala yapıştır yapmayalım, kendimize mal etmeyelim. Onun yerine nasıl çalıştığını inceleyip kavrama yoluna gidelim.</p>
+<p>Sınav dönemine geldik. Haydi hayırlısı.</p>
+<p><em>Ek:</em> Bu ödev 100 aldı.</p>
+<p>Kaynak kodunu indirmek istemezseniz aşağıda da aynısını bulabilirsiniz.</p>
+<pre><code class="language-c"> #include &lt;stdio.h&gt; #include &lt;stdlib.h&gt;
+
+#define NO 1 #define AD 2 #define STOK_LIMIT_YOK -1
+
+/* Sabitler ve Anlamlari */ /* --------------------- */ /* NO : urun_baglanacak fonksiyonun neye göre geriye veri göndereceğini belirten sa- bitlerden bir tanesi. AD ile aynı olmamak koşuluyla her şey olabilir. AD : urun_baglanacak fonksiyonun neye göre geriye veri göndereceğini belirten sa- bitlerden bir tanesi. NO ile aynı olmamak koşuluyla her şey olabilir. STOK_LIMIT_YOK : İlgili fonksiyonun parametresindeki stok limiti kısmını göz ardı etmesini sağlayan sabit. Negatif herhangi bir sayı ile değiştirilebilir. */
+
+/* Yapılar */ struct URUN_YAPI { int urun_kodu; char urun_adi[20]; float birim_alis_fiyati; int stok_miktari; struct URUN_YAPI *sonraki; struct URUN_YAPI *sonraki_ad; struct SATIS_YAPI *link; };
+
+struct SATIS_YAPI { char fatura_no[6]; char satis_tarihi[6]; int satis_miktari; float birim_satis_fiyati; struct SATIS_YAPI *sonraki; };
+
+/* Kullanıcı tanımlı tipler */ typedef struct URUN_YAPI URUN; typedef struct SATIS_YAPI SATIS;
+
+void beklet() { /* Bu fonksiyonun tek amaci kullaniciyi bir tusa basana kadar bekletmek, ve sonra ekrani silmektir. */ printf(&quot;\nDevam etmek icin bir tusa basin.&quot;); getche(); system (&quot;cls&quot;); }
+
+void urun_baglanacak(URUN *liste_basi, int urun_kodu, char urun_adi[20], int ne, URUN **gonderilecek) {
+
+/* Ne parametresinde aldığı bilgiye göre urun_kodu ya da urun_adi'ne göre guncel listede arama yapar ve ürün kodu/adı'ndan bir küçük koda/ada sahip ürünün bellekteki adresini gönderir. (yoksa listebaşı) */
+
+URUN *guncel;
+
+if (ne == NO) { /* Ürün koduna göre sıralayacak ve bir adres göndereceğiz. */
+
+guncel = liste_basi-&gt;sonraki; /* Güncel en başta 1.kayıt olsun */ *gonderilecek = liste_basi;
+
+/* Dikkat: Yukarıdaki satıra dikkat edilirse, eğer liste boşsa while döngüsüne girilmeyecektir. */
+
+while(guncel != liste_basi) { /* Baştan başla geriye dönene kadar uç */
+
+if (guncel-&gt;urun_kodu &gt;= urun_kodu) { return 0; }
+
+*gonderilecek = guncel; /* Bir öncekini göndereceğimiz için bir yerde tutmak lazım geliyor. */ guncel = guncel-&gt;sonraki; /* Bir sonraki kayıda uçalım. */
+
+}
+
+return 0; /* Eğer buraya geldiyse eşleşme yok demektir. */
+
+} else { /* İsme göre sıralayacak ve bir adres göndereceğiz. */
+
+guncel = liste_basi-&gt;sonraki_ad; /* Güncel en başta 1.kayıt olsun */ *gonderilecek = liste_basi;
+
+/* Dikkat: Yukarıdaki satıra dikkat edilirse, eğer liste boşsa while döngüsüne girilmeyecektir. */
+
+while(guncel != liste_basi) { /* Baştan başla geriye dönene kadar uç */
+
+if (strncmp(guncel-&gt;urun_adi,urun_adi,20) &gt;=0) { return 0; }
+
+*gonderilecek = guncel; /* Bir öncekini göndereceğimiz için bir yerde tutmak lazım geliyor. */ guncel = guncel-&gt;sonraki_ad; /* Bir sonraki kayıda uçalım. */
+
+}
+
+return 0; /* Eğer buraya geldiyse eşleşme yok demektir. */
+
+}
+
+}
+
+void urun_ekle(URUN *liste_basi, int urun_kodu, char urun_adi[20], float birim_alis_fiyati, int stok_miktari) {
+
+URUN *adres; int sayac; URUN *onceki_urun;
+
+adres=malloc(sizeof(URUN)); /* Azıcık bellek tahsis edelim kendimize. */
+
+/* İçine gerekli verileri yazalım. */ adres-&gt;urun_kodu = urun_kodu; for (sayac=0;sayac&lt;20;sayac++) { adres-&gt;urun_adi[sayac] = urun_adi[sayac]; } adres-&gt;birim_alis_fiyati = birim_alis_fiyati; adres-&gt;stok_miktari = stok_miktari; adres-&gt;link = NULL; /* Yazdık. */
+
+/* Şimdi öncesini sonrasını ayarlayalım ki dairesel bir bağlaç oluşsun. */
+
+/* Numaraya göre */ urun_baglanacak(liste_basi,urun_kodu,urun_adi,NO,&amp;onceki_urun);
+
+adres-&gt;sonraki = onceki_urun-&gt;sonraki; onceki_urun-&gt;sonraki = adres; /* Ada göre */
+
+urun_baglanacak(liste_basi,urun_kodu,urun_adi,AD,&amp;onceki_urun);
+
+adres-&gt;sonraki_ad = onceki_urun-&gt;sonraki_ad; onceki_urun-&gt;sonraki_ad = adres;
+
+/* Burada da bağlantılar ayarlanacak ama şimdi diil */
+
+}
+
+int urun_var_mi(URUN *liste_basi, int urun_kodu) {
+
+/* 1: Ürün var 0: Ürün yok */
+
+URUN *guncel;
+
+guncel = liste_basi-&gt;sonraki; /* Güncel en başta 1.kayıt olsun */ /* Dikkat: Yukarıdaki satıra dikkat edilirse, eğer liste boşsa while döngüsüne girilmeyecektir. */
+
+while(guncel != liste_basi || guncel-&gt;urun_kodu &gt; urun_kodu) { /* Baştan başla geriye dönene kadar uç */
+
+if (guncel-&gt;urun_kodu == urun_kodu) { return 1; }
+
+guncel = guncel-&gt;sonraki; /* Bir sonraki kayıda uçalım. */
+
+}
+
+return 0; /* Eğer buraya geldiyse eşleşme yok demektir. */
+
+}
+
+void urun_duzenle(URUN *liste_basi, int urun_kodu, float birim_alis_fiyati, int stok_miktari) {
+
+URUN *guncel;
+
+guncel = liste_basi-&gt;sonraki; /* Güncel en başta 1.kayıt olsun */ /* Dikkat: Yukarıdaki satıra dikkat edilirse, eğer liste boşsa while döngüsüne girilmeyecektir. */
+
+while(guncel != liste_basi) { /* Baştan başla geriye dönene kadar uç */
+
+if (guncel-&gt;urun_kodu == urun_kodu) {
+
+guncel-&gt;birim_alis_fiyati = birim_alis_fiyati; guncel-&gt;stok_miktari = stok_miktari; return 0; }
+
+guncel = guncel-&gt;sonraki; /* Bir sonraki kayıda uçalım. */ } }
+
+void urun_listele(URUN *liste_basi, int stok_miktari,int ne) {
+
+URUN *guncel;
+
+printf(&quot;Urun Kodu Urun Adi Stok Miktari Bilim Alis Fiyati\n&quot;); printf(&quot;--------- -------------------- ------------ -----------------\n&quot;);
+
+if (ne == NO) { /* Liste numaraya göre sıralı gösterilecek */
+
+guncel = liste_basi-&gt;sonraki; /* Güncel en başta 1.kayıt olsun */ /* Dikkat: Yukarıdaki satıra dikkat edilirse, eğer liste boşsa while döngüsüne girilmeyecektir. */
+
+while(guncel != liste_basi) { /* Baştan başla geriye dönene kadar uç */
+
+if (stok_miktari == STOK_LIMIT_YOK || guncel-&gt;stok_miktari &lt;= stok_miktari) { printf(&quot;%9d %20s %12d %17.2f %p %p %p\n&quot;,guncel-&gt;urun_kodu,guncel-&gt;urun_adi,guncel-&gt;stok_miktari,guncel-&gt;birim_alis_fiyati, guncel, guncel-&gt;sonraki, guncel-&gt;sonraki_ad); } guncel = guncel-&gt;sonraki; /* Bir sonraki kayıda uçalım. */ }
+
+} else { /* Liste ada göre sıralı gösterilecek. */
+
+guncel = liste_basi-&gt;sonraki_ad; /* Güncel en başta 1.kayıt olsun */ /* Dikkat: Yukarıdaki satıra dikkat edilirse, eğer liste boşsa while döngüsüne girilmeyecektir. */
+
+while(guncel != liste_basi) { /* Baştan başla geriye dönene kadar uç */
+
+if (stok_miktari == STOK_LIMIT_YOK || guncel-&gt;stok_miktari &lt;= stok_miktari) { printf(&quot;%9d %20s %12d %17.2f\n&quot;,guncel-&gt;urun_kodu,guncel-&gt;urun_adi,guncel-&gt;stok_miktari,guncel-&gt;birim_alis_fiyati); } guncel = guncel-&gt;sonraki_ad; /* Bir sonraki kayıda uçalım. */ }
+
+} }
+
+void urun_sil(URUN *liste_basi, int urun_kodu) {
+
+URUN *guncel; URUN *onceki_urun; SATIS *sil_konum;
+
+guncel = liste_basi-&gt;sonraki; /* Güncel en başta 1.kayıt olsun */ /* Dikkat: Yukarıdaki satıra dikkat edilirse, eğer liste boşsa while döngüsüne girilmeyecektir. */
+
+while(guncel != liste_basi) { /* Baştan başla silenecek öğeyi bulana kadar uç */
+
+if (guncel-&gt;urun_kodu == urun_kodu) { /* İşe silinecek öğe! Sileceğim seni nhahahaha! */
+
+/* Ürüne bağlı satışları silelim */
+
+sil_konum = guncel-&gt;link; while(sil_konum!=NULL) { sil_konum = sil_konum-&gt;sonraki; free(sil_konum); }
+
+/* Silmeden önce önceki kaydın bağını sonrakine almalıyız.*/
+
+/* Numaraya göre bir önceki ürünü bul*/ urun_baglanacak(liste_basi,urun_kodu,guncel-&gt;urun_adi,NO,&amp;onceki_urun); onceki_urun-&gt;sonraki = guncel-&gt;sonraki;
+
+/* Ada göre bir önceki ürünü bul */ urun_baglanacak(liste_basi,urun_kodu,guncel-&gt;urun_adi,AD,&amp;onceki_urun); onceki_urun-&gt;sonraki_ad = guncel-&gt;sonraki_ad;
+
+/* Sil gitsin */ free(guncel);
+
+return 0; }
+
+guncel = guncel-&gt;sonraki; /* Bir sonraki kayıda uçalım. */
+
+}
+
+}
+
+void satis_ekle(URUN *liste_basi, int urun_kodu, char fatura_no[6], char satis_tarihi[6], int satis_miktari, float birim_satis_fiyati) {
+
+URUN *guncel; SATIS *gezinti; SATIS *adres; SATIS *onceki; int sayac; adres=malloc(sizeof(SATIS)); /* Azıcık bellek tahsis edelim kendimize. */
+
+/* İçine gerekli verileri yazalım. */ for (sayac=0;sayac&lt;6;sayac++) { adres-&gt;fatura_no[sayac] = fatura_no[sayac]; }
+
+for (sayac=0;sayac&lt;6;sayac++) { adres-&gt;satis_tarihi[sayac] = satis_tarihi[sayac]; } adres-&gt;satis_miktari = satis_miktari; adres-&gt;birim_satis_fiyati = birim_satis_fiyati; /* Yazdık. */
+
+guncel = liste_basi-&gt;sonraki; /* Güncel en başta 1.kayıt olsun */ /* Dikkat: Yukarıdaki satıra dikkat edilirse, eğer liste boşsa while döngüsüne girilmeyecektir. */
+
+while(guncel != liste_basi || guncel-&gt;urun_kodu &gt; urun_kodu) {
+
+if (guncel-&gt;urun_kodu == urun_kodu) { /* Ürünü bulduk, hadi neymiş inceleyelim. */
+
+/* Durum 1: Daha önce satış eklenmemiş olabilir. */
+
+if (guncel-&gt;link == NULL) { /* daha önce ürün eklemesi yapılmamış. hemen ekliyoruz. */ adres-&gt;sonraki = NULL; guncel-&gt;link = adres; } else {
+
+/* Durum 2: Yeni eklenen satış şimdiye kadarkilerin en büyüğü olabilir ki ürünler kısmında değişiklik gerekir. */ if(strncmp(satis_tarihi,(guncel-&gt;link)-&gt;satis_tarihi,6)&gt;0) { /* Bu satirda hata yoksa hiçbir satırda yoktur artık :) */ adres-&gt;sonraki = guncel-&gt;link; guncel-&gt;link = adres; } else { /* Durum 3: Yeni eklenen herhangi bir arada ya da en sonra olabilir. */ gezinti = guncel-&gt;link; /* Gezintiye ilk kaydın adresini ata */
+
+do { /* Son kayda kadar */
+
+if(strncmp(satis_tarihi,gezinti-&gt;satis_tarihi,6) &gt; 0) {
+
+adres-&gt;sonraki = gezinti; onceki-&gt;sonraki = adres; return 0; }
+
+onceki = gezinti; gezinti = gezinti-&gt;sonraki;
+
+} while (gezinti != NULL);
+
+adres-&gt;sonraki = gezinti; onceki-&gt;sonraki = adres; } } } guncel = guncel-&gt;sonraki; /* Bir sonraki kayıda uçalım. */ } }
+
+void satis_listele(URUN *liste_basi, int urun_kodu) {
+
+URUN *guncel; SATIS *gezinti;
+
+printf(&quot;%d numarali urunun satis listesi\n&quot;,urun_kodu); printf(&quot;\n&quot;); printf(&quot;FATURA NO SATIS TARIHI SATIS MIKTARI BIRIM SATIS FIYATI\n&quot;); printf(&quot;--------- ------------ ------------- ------------------\n&quot;);
+
+guncel = liste_basi-&gt;sonraki; /* Güncel en başta 1.kayıt olsun */ /* Dikkat: Yukarıdaki satıra dikkat edilirse, eğer liste boşsa while döngüsüne girilmeyecektir. */
+
+while(guncel != liste_basi) {
+
+if (guncel-&gt;urun_kodu == urun_kodu) { /* Ürünü bulduk, hadi ekrana satışları yazalım. */
+
+if (guncel-&gt;link == NULL) { /* heheee çökertemezsiniz */
+
+printf(&quot;(satis kaydi yok)\n&quot;); return 0;
+
+} else {
+
+gezinti = guncel-&gt;link; while (gezinti != NULL) { printf(&quot; %c%c%c%c%c%c %c%c%c%c%c%c %13d %18.4f \n&quot;,gezinti-&gt;fatura_no[0],gezinti-&gt;fatura_no[1],gezinti-&gt;fatura_no[2],gezinti-&gt;fatura_no[3],gezinti-&gt;fatura_no[4],gezinti-&gt;fatura_no[5],gezinti-&gt;satis_tarihi[0],gezinti-&gt;satis_tarihi[1],gezinti-&gt;satis_tarihi[2],gezinti-&gt;satis_tarihi[3],gezinti-&gt;satis_tarihi[4],gezinti-&gt;satis_tarihi[5],gezinti-&gt;satis_miktari,gezinti-&gt;birim_satis_fiyati); gezinti = gezinti-&gt;sonraki; } } return 0; } guncel = guncel-&gt;sonraki; /* Bir sonraki kayıda uçalım. */ }
+
+}
+
+void tum_urun_top_satis(URUN *liste_basi) {
+
+URUN *guncel; SATIS *gezinti;
+
+int satis_urun; int satis_top=0; float ciro_urun; float ciro_top=0L;
+
+printf(&quot;Urun Kodu Urun Adi Toplam Satis Miktari Toplam Ciro\n&quot;); printf(&quot;--------- -------------------- -------------------- -----------\n&quot;);
+
+guncel = liste_basi-&gt;sonraki; /* Güncel en başta 1.kayıt olsun */ /* Dikkat: Yukarıdaki satıra dikkat edilirse, eğer liste boşsa while döngüsüne girilmeyecektir. */
+
+while(guncel != liste_basi) { /* Baştan başla geriye dönene kadar uç */
+
+/* Satışlarla ilgili gerekli hesaplamaları yapalım */ satis_urun = 0; ciro_urun = 0L; if (guncel-&gt;link != NULL) { /* heheee çökertemezsiniz */ gezinti = guncel-&gt;link; while (gezinti != NULL) { satis_urun += gezinti-&gt;satis_miktari; ciro_urun += gezinti-&gt;satis_miktari * gezinti-&gt;birim_satis_fiyati;
+
+gezinti = gezinti-&gt;sonraki; } }
+
+printf(&quot;%9d %20s %20d %11.4f\n&quot;,guncel-&gt;urun_kodu,guncel-&gt;urun_adi,satis_urun,ciro_urun);
+
+ciro_top += ciro_urun; satis_top += satis_urun;
+
+guncel = guncel-&gt;sonraki; /* Bir sonraki kayıda uçalım. */ }
+
+printf(&quot;---------------------------------------------------------------\n&quot;); printf(&quot;Toplam: %22d %11.4f\n&quot;,satis_top,ciro_top);
+
+}
+
+int main() {
+
+/* Acilis yazilari BASLANGICI */ printf(&quot;Umut BENZER\n&quot;); printf(&quot;05-06-7670\n&quot;); printf(&quot;Ege Universitesi Bilgisayar Muhendisligi 1\. Sinif\n&quot;); printf(&quot;http://www.ubenzer.com\n&quot;); printf(&quot;Odev 3\n\n&quot;); /* Acilis yazilari SONU */
+
+/* Verilerin tutalacağı YAPILAR */
+
+URUN liste_basi;
+
+/* Verilerin tutulacağı YAPILAR SONU */
+
+int sag_serbest=-1; int sayac; int girdi; char girdi2[20]; float girdi3; int girdi4; char girdi5[6]; char girdi6[6]; char secenek; /* Girdi degiskenleri main fonksiyonun her bir yerinde farkli farkli bir sürü amaçla kullanıldığı için özel isimler vermedim. */
+
+liste_basi.urun_kodu = -1; for (sayac=0;sayac&lt;20;sayac++) { liste_basi.urun_adi[sayac] = '_'; } liste_basi.birim_alis_fiyati = 0.0; liste_basi.stok_miktari = 0; liste_basi.sonraki = &amp;liste_basi; liste_basi.sonraki_ad = &amp;liste_basi; liste_basi.link = NULL;
+
+/* Ana döngü */ while (sag_serbest==-1) {
+
+/* menu BASLANGICI */ printf(&quot;*** Menu *** \n\n&quot;); printf(&quot;1\. Yeni bir urunun eklenmesi \n&quot;); printf(&quot;2\. Bir urunun birim alis fiyatinin ve stok miktarinin guncellenmesi \n&quot;); printf(&quot;3\. Bir urune iliskin satis eklenmesi \n&quot;); printf(&quot;4\. Bir urunun silinmesi \n&quot;); printf(&quot;5\. Bir urunden yapilan tum satislarin listelenmesi \n&quot;); printf(&quot;6\. Tum urunlerin koda gore sirali olarak listelenmesi \n&quot;); printf(&quot;7\. Tum urunlerin ada gore sirali olarak listelenmesi \n&quot;); printf(&quot;8\. Belirli bir stok miktarinin altinda urunlerin listelenmesi \n&quot;); printf(&quot;9\. Tum urunlerden yapilan toplam satislarin listelenmesi \n&quot;); printf(&quot;C. Cikis \n&quot;);
+
+printf(&quot;Lutfen istediginiz islemin numarasini giriniz.\n&quot;); /*menu BITIMI */
+
+secenek=getche(); system (&quot;cls&quot;);
+
+/* secenek getche ile alındığı için ASCII koduna göre switch yapısına sokulabilir. */
+
+/* Her CASE için aşağıdaki not geçerlidir. */
+
+/* Gerekli saçma sapan veri kontrolleri ve doğru girdi için ilgili fonksiyonların çağırılması, fonksiyon- lardan cevap alınması ve bunların işlenmesi.
+
+Ayrıntılı bilgi için her fonksiyona ayrı ayrı baka- bilirsiniz. */
+
+switch(secenek) { case 49: //1
+
+system (&quot;cls&quot;); printf(&quot;Yeni bir urun kodu giriniz: \n&quot;); scanf(&quot;%d&quot;,&amp;girdi); system (&quot;cls&quot;);
+
+switch (urun_var_mi(&amp;liste_basi,girdi)) {
+
+case 0: /* Yaşasın doğru girmişler. */
+
+for (sayac=0;sayac&lt;20;sayac++) { girdi2[sayac] = NULL; }
+
+while (girdi2[0] == NULL) { fflush(stdin); printf(&quot;Yeni urunun adini giriniz: &quot;); gets(girdi2); }
+
+printf(&quot;Urunun alis fiyatini giriniz: &quot;); scanf(&quot;%f&quot;,&amp;girdi3);
+
+printf(&quot;Urunun stok durumunu giriniz: &quot;); scanf(&quot;%d&quot;,&amp;girdi4);
+
+urun_ekle(&amp;liste_basi, girdi, girdi2, girdi3, girdi4); printf(&quot;Islem tamam. ;)\n&quot;); break;
+
+case 1: printf(&quot;Girdiginiz urun kodu daha once alinmis.\n&quot;); break; } beklet(); break; case 50: //2 system (&quot;cls&quot;); printf(&quot;Duzenlenecek urun kodunu giriniz: \n&quot;); scanf(&quot;%d&quot;,&amp;girdi); system (&quot;cls&quot;);
+
+switch (urun_var_mi(&amp;liste_basi,girdi)) {
+
+case 1: /* Yaşasın doğru girmişler. */
+
+printf(&quot;Urunun yeni alis fiyatini giriniz: &quot;); scanf(&quot;%f&quot;,&amp;girdi3);
+
+printf(&quot;Urunun yeni stok durumunu giriniz: &quot;); scanf(&quot;%d&quot;,&amp;girdi4);
+
+urun_duzenle(&amp;liste_basi, girdi, girdi3, girdi4); printf(&quot;Islem tamam. ;)\n&quot;); break;
+
+case 0: printf(&quot;Boyle bir urun yok. Bohuuu...\n&quot;); break; } beklet(); break; case 51: //3
+
+system (&quot;cls&quot;); printf(&quot;Satis eklenecek urun kodunu giriniz: \n&quot;); scanf(&quot;%d&quot;,&amp;girdi); system (&quot;cls&quot;);
+
+switch (urun_var_mi(&amp;liste_basi,girdi)) {
+
+case 1: /* Evet var. */
+
+for (sayac=0;sayac&lt;6;sayac++) { girdi5[sayac] = NULL; }
+
+while (girdi5[0] == NULL) { fflush(stdin); printf(&quot;Fatura kodunu giriniz (6 karakter): &quot;); gets(girdi5); }
+
+for (sayac=0;sayac&lt;6;sayac++) { girdi6[sayac] = NULL; }
+
+while (girdi6[0] == NULL) { fflush(stdin); /* Ödevin asıl amacının tarihlerle değil de bellekle uğraşmak olduğu bilindiğinden 2000 öncesi yıllar için sıralama sorunu ihmal edildi. */ printf(&quot;Satis tarihini giriniz (YYAAGG): &quot;); gets(girdi6); }
+
+printf(&quot;Urunun satis miktarini giriniz: &quot;); scanf(&quot;%d&quot;,&amp;girdi4);
+
+printf(&quot;Birim satis fiyatini giriniz: &quot;); scanf(&quot;%f&quot;,&amp;girdi3);
+
+satis_ekle(&amp;liste_basi, girdi, girdi5, girdi6, girdi4, girdi3); printf(&quot;Islem tamam.&quot;); break;
+
+case 0: /* Hayır, yok */ printf(&quot;Boyle bir urun yok.&quot;); break; } beklet(); break; case 52: //4
+
+system (&quot;cls&quot;); printf(&quot;Silinecek urun kodunu giriniz: \n&quot;); scanf(&quot;%d&quot;,&amp;girdi); system (&quot;cls&quot;);
+
+switch (urun_var_mi(&amp;liste_basi,girdi)) {
+
+case 1: /* Yaşasın doğru girmişler. */ urun_sil(&amp;liste_basi, girdi); printf(&quot;Sildim bile.&quot;); break; case 0: printf(&quot;Boyle bir urun zaten yok ki. :)\n&quot;); break; }
+
+beklet(); break; case 53: //5 system (&quot;cls&quot;); printf(&quot;Satislari listelenecek urun kodunu giriniz: \n&quot;); scanf(&quot;%d&quot;,&amp;girdi); system (&quot;cls&quot;);
+
+switch (urun_var_mi(&amp;liste_basi,girdi)) {
+
+case 1: /* Yaşasın doğru girmişler. */
+
+satis_listele(&amp;liste_basi, girdi); break;
+
+case 0: printf(&quot;Boyle bir urun yok. Bohuuu...\n&quot;); break; } beklet(); break; case 54: //6 urun_listele(&amp;liste_basi, STOK_LIMIT_YOK, NO); beklet(); break; case 55: //7 urun_listele(&amp;liste_basi, STOK_LIMIT_YOK, AD); beklet(); break;
+
+case 56: //8 girdi = STOK_LIMIT_YOK; while(girdi == STOK_LIMIT_YOK) { system(&quot;cls&quot;); printf(&quot;Kactan kucuk olsun istiyorsunuz? &quot;); scanf(&quot;%d&quot;,&amp;girdi); }
+
+/* Dikkat: Ödevde istenmeyen ek özelliktir. */
+
+system(&quot;cls&quot;); printf(&quot;Neye gore sirali istersiniz? (%d urun koduna gore, %d ada gore)&quot;,NO,AD); scanf(&quot;%d&quot;,&amp;girdi4);
+
+urun_listele(&amp;liste_basi, girdi, girdi4); beklet(); break;
+
+case 57: //9
+
+tum_urun_top_satis(&amp;liste_basi); beklet(); break; case 99: //c case 67: //C /* E e H h ve disinda girdi kabul etmeyen cikmak istiyor musunuz sorusu BASLANGICI */ do { printf (&quot;\nCidden cikmak istiyor musunuz? (E/H) &quot;); secenek = getche(); if (secenek == 'E' || secenek == 'e') { sag_serbest = 0; secenek = 'H'; } } while (secenek != 'H' &amp;&amp; secenek != 'h'); /* E e H h ve disinda girdi kabul etmeyen cikmak istiyor musunuz sorusu SONU */ system (&quot;cls&quot;); break; case 65: printf(&quot;There are no choices. Nothing but a straight line. The illusion\n&quot;); printf(&quot;comes afterwards, when you ask 'Why me?' and 'What if?'. When you\n&quot;); printf(&quot;look back and see the branches, like a pruned bonsai tree, or\n&quot;); printf(&quot;forked lightning. If you had done something differently, it\n&quot;); printf(&quot;wouldn't be you. It would be someone else looking back, asking a\n&quot;); printf(&quot;different set of questions. (a quote from Max Payne)\n&quot;); printf(&quot;\n\n&quot;); printf(&quot;Press any key to continue...&quot;); getche(); system(&quot;cls&quot;); printf(&quot;Supriz Yumurta | Easter Egg\n&quot;); printf(&quot;Tebrikler, bu programin gizli ozelligini buldunuz. :)\n&quot;); printf(&quot;\n&quot;); printf(&quot;http://www.imdb.com/title/tt0366758/quotes\n&quot;); beklet(); break; default: /* Elleri yanlis tusa basan kullanicilar icin yazilan bolum BASLANGICI */ printf(&quot;Bir zahmet 1'den 9'a kadar bir secim yapin.&quot;); beklet(); /* Elleri yanlis tusa basan kullanicilar icin yazilan bolum SONU */ break; } }
+
+printf(&quot;O halde hoscakalin. :)\n\n\n&quot;); return 0; }
+</code></pre>
+</div></div></article><div class="card comments main-container__items"><div class="card__contents" id="disqus_thread"></div></div></div><div class="sidebar main-content__sidebar"><div class="about"><img class="about__image" src="/img/profile.jpg"/><h1 class="about__name">Umut Benzer</h1><h2 class="about__mini-bio">Software Engineer in Berlin</h2></div></div></div><div class="main-container"><div class="footer"><div class="footer__copyright-holder"><p><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license noopener noreferrer" target="_blank"><img alt="Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License" src="/img/cclicense.png"/></a></p><p><span>Bu sitedeki tüm yazı ve görseller </span><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license noopener noreferrer" target="_blank">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a><span> ile lisanslanmıştır.</span></p></div><div class="footer__generator"><span>Bu sayfa </span><span>9 Nisan 2017</span><span> tarihinde </span><a href="https://github.com/ubenzer/fil" target="_blank">Fil</a><span> ile yaratılmıştır.</span></div></div></div></div>
+        <script src="/template/app.js" type="text/javascript"></script><script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = "https://ubenzer.com/2008/04/odev-3-baglacli-listeler";
+          this.page.identifier = "post@/2008/04/odev-3-baglacli-listeler";
+        };
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = 'https://ubenzer.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+        </script>
+      </body>
+    </html>
+  

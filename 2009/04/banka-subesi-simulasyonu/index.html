@@ -1,0 +1,70 @@
+<!doctype html>
+    <html lang="tr">
+      <head>
+        <title>Banka Şubesi Simülasyonu - UBenzer</title>
+        <meta content="utf-8" name="charset"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="#2196F3" name="theme-color"/>
+        <link href="/template/ui.css" media="screen" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i&amp;amp;subset=latin-ext" media="screen" rel="stylesheet" type="text/css"/><link href="/img/favicon/apple-touch-icon-57x57.png" rel="apple-touch-icon-precomposed" sizes="57x57"/><link href="/img/favicon/apple-touch-icon-60x60.png" rel="apple-touch-icon-precomposed" sizes="60x60"/><link href="/img/favicon/apple-touch-icon-72x72.png" rel="apple-touch-icon-precomposed" sizes="72x72"/><link href="/img/favicon/apple-touch-icon-76x76.png" rel="apple-touch-icon-precomposed" sizes="76x76"/><link href="/img/favicon/apple-touch-icon-114x114.png" rel="apple-touch-icon-precomposed" sizes="114x114"/><link href="/img/favicon/apple-touch-icon-120x120.png" rel="apple-touch-icon-precomposed" sizes="120x120"/><link href="/img/favicon/apple-touch-icon-152x152.png" rel="apple-touch-icon-precomposed" sizes="152x152"/><link href="/img/favicon/favicon-196x196.png" rel="icon" sizes="196x196"/><link href="/img/favicon/favicon-128x128.png" rel="icon" sizes="128x128"/><link href="/img/favicon/favicon-96x96.png" rel="icon" sizes="96x96"/><link href="/img/favicon/favicon-32x32.png" rel="icon" sizes="32x32"/><link href="/img/favicon/favicon-16x16.png" rel="icon" sizes="16x16"/>
+      </head>
+      <body>
+        <div><header class="header"><div class="app-bar"><h1 class="app-bar__title"><a class="app-bar__title-link" href="/">UBenzer</a></h1></div></header><div class="main-container"><div class="main-content"><article class="card main-container__items"><div class="card__contents blog-post"><div class="blog-post__date">10 Nisan 2009</div><h1><a class="blog-post__title" href="/2009/04/banka-subesi-simulasyonu">Banka Şubesi Simülasyonu</a></h1><div class="markdown-content blog-post__body blog-post__content"><p>Bu sene Algoritma ve Programlama dersi almamama rağmen hem birinci sınıflara yardımcı olsun, hem sitemin trafiği artsın 😄, hem de internetteki C kaynak kodu örnekleri artsın diye ödev çözümlerini arkadaşlardan toplayıp paylaşıyorum. =)</p>
+<p>Şaka bir yana, kodunu paylaştığı için Özlem'e çok teşekkür ediyorum. Umuyorum burada paylaşılanlar birinin işine yarar.</p>
+<ul>
+<li><a href="/2009/04/banka-subesi-simulasyonu/algo-3.pdf" >Algoritma ve Programlama 2 Dersi Ödev 3 Açıklaması</a></li>
+<li><a href="/2009/04/banka-subesi-simulasyonu/08496.c" >Özlem'in Çözümü (08496.c)</a></li>
+</ul>
+<p>Eğer kaynak kodunu indirmek istemezseniz bir kopyasını aşağıda bulabilirsiniz.</p>
+<p>Herkese iyi vizeler.</p>
+<pre><code class="language-c"> #include &lt;stdio.h&gt; #include &lt;stdlib.h&gt; #define MAX 100
+
+struct musteri { int no;// Müşteri numarası. int gelis;//Müşterinin bankaya geldiği dakika. int bekleme_suresi; };
+
+struct gise { int bos_mu;// Gişenin boş olup olmadığını belirtir. int hizmet_sure;//Gişenin müşteriye vereceği hizmetin süresi struct musteri g_musteri;//Gişede hizmet gören müşteri. int top_musteri;//Gişeden hizmet almış toplam müşteri sayısı. int top_sure;// Gişeden verilen hizmetlerin toplam süresi. };
+
+int bos_mu(int on) {//kuyruk islemi if(on==-1) return 1; else return 0; }
+
+void dairesel_ekle(struct musteri *kuyruk,int *on, int *arka, struct musteri yeni) {//kuyruk islemi if((*arka+1)%MAX==*on) { printf(&quot;Kuyruk doludur..\n&quot;); return; } *arka=(*arka+1)%MAX; kuyruk[*arka]=yeni; if(*on==-1) { *on=0; } }
+
+struct musteri dairesel_sil(struct musteri *kuyruk,int *on,int *arka) {//kuyruk islemi struct musteri temp; temp=kuyruk[*on]; if(*on==*arka) { *on=-1; *arka=-1; return temp; } if(*on==MAX-1) { *on=0; } else { *on=*on+1; } return temp; }
+
+int main() {
+
+struct musteri kuyruk[MAX]; struct gise giseler[3]; int ilk_gelen,musteri_say=1,sonraki_gelen,gise_sure,zaman,i; int max_bekleme_sure=0,cekirdek,toplam_sure,finito=0,uzunluk,max_uzunluk=0,toplam_bekleme=0; struct musteri bir_musteri,any_musteri; int on=-1; int arka=-1;
+
+printf(&quot;Sayi uretici icin cekirdegi giriniz..\n&quot;); scanf(&quot;%d&quot;,&amp;cekirdek); srand(cekirdek); printf(&quot;Toplam simulasyon suresini giriniz..\n\n&quot;); scanf(&quot;%d&quot;,&amp;toplam_sure); printf(&quot;Musteriler geliyor..\n\n&quot;);
+
+for(i=0;i&lt;3;i++) { giseler[i].bos_mu=-1; giseler[i].top_musteri=0; giseler[i].top_sure=0; }
+
+ilk_gelen=rand()%6; zaman=ilk_gelen;
+
+do { bir_musteri.gelis=ilk_gelen; bir_musteri.no=musteri_say; musteri_say++; bir_musteri.bekleme_suresi=0; dairesel_ekle(kuyruk,&amp;on,&amp;arka,bir_musteri); sonraki_gelen=zaman+rand()%6; printf(&quot;%d.dakikada Musteri#%d bankaya geldi.\n&quot;,zaman,musteri_say-1); } while(sonraki_gelen==ilk_gelen);
+
+for(i=0;i&lt;3;i++) { if(bos_mu(on)==0) { gise_sure=rand()%8+3; any_musteri=dairesel_sil(kuyruk,&amp;on,&amp;arka); giseler[i].hizmet_sure=gise_sure; giseler[i].g_musteri=any_musteri; giseler[i].bos_mu=1; giseler[i].top_musteri++; giseler[i].top_sure+=gise_sure; toplam_bekleme+=any_musteri.bekleme_suresi; printf(&quot;%d.dakikada Musteri#%d Gise#%d'de hizmet almaya baslamistir.\n&quot;,zaman,any_musteri.no,i+1); } }
+
+for(zaman++;zaman&lt;toplam_sure;zaman++) { while(sonraki_gelen==zaman) { bir_musteri.no=musteri_say; musteri_say++; bir_musteri.gelis=sonraki_gelen; bir_musteri.bekleme_suresi=0; dairesel_ekle(kuyruk,&amp;on,&amp;arka,bir_musteri); sonraki_gelen=zaman+rand()%6; printf(&quot;%d.dakikada Musteri#%d bankaya geldi.\n&quot;,zaman,musteri_say-1); } for(i=0;i&lt;3;i++) { if(giseler[i].bos_mu==1) { giseler[i].hizmet_sure--; } if(giseler[i].bos_mu==1 &amp;&amp; giseler[i].hizmet_sure==0) { giseler[i].bos_mu=-1; printf(&quot;%d.dakikada Musteri#%d Gise#%d'yi terk etti.\n&quot;,zaman,giseler[i].g_musteri.no,i+1); } } for(i=0;i&lt;3;i++) { if(bos_mu(on)==0 &amp;&amp; giseler[i].bos_mu==-1) { bir_musteri=dairesel_sil(kuyruk,&amp;on,&amp;arka); gise_sure=rand()%8+3; bir_musteri.bekleme_suresi=zaman-bir_musteri.gelis; if(bir_musteri.bekleme_suresi&gt;max_bekleme_sure) max_bekleme_sure=bir_musteri.bekleme_suresi; giseler[i].hizmet_sure=gise_sure; giseler[i].g_musteri=bir_musteri; giseler[i].bos_mu=1; giseler[i].top_musteri++; giseler[i].top_sure+=giseler[i].hizmet_sure; toplam_bekleme+=bir_musteri.bekleme_suresi; printf(&quot;%d.dakikada Musteri#%d Gise#%d'de hizmet almaya baslamistir.\n&quot;,zaman,bir_musteri.no,i+1); } } uzunluk=(arka-on+2+MAX)%MAX; if(uzunluk&gt;max_uzunluk){ max_uzunluk=uzunluk; } }
+
+while(finito==0) { /*Simulasyon süresi sona erdiğinde aynı dakika içerisinde önce eğer varsa gişelerde olan müşterilerin hizmet süreleri birer dakika azaltılır. Daha sonra eğer varsa gişelerde hizmeti biten müşteriler gönderilir. Eğer varsa kuyrukta bekleyen müşteriler eğer boşalmışsa boşalan gişelere gönderilir. Hem kuyruk hem de gişeler boşsa döngüden çıkılır.*/
+
+for(i=0;i&lt;3;i++) { if(giseler[i].bos_mu==1) { giseler[i].hizmet_sure--; } if(giseler[i].bos_mu==1 &amp;&amp; giseler[i].hizmet_sure==0) { giseler[i].bos_mu=-1; printf(&quot;%d.dakikada Musteri#%d Gise#%d'yi terk etti.\n&quot;,zaman,giseler[i].g_musteri.no,i+1); } }
+
+for(i=0;i&lt;3;i++) { if(giseler[i].bos_mu==-1 &amp;&amp; bos_mu(on)==0) { bir_musteri=dairesel_sil(kuyruk,&amp;on,&amp;arka); gise_sure=rand()%8+3; bir_musteri.bekleme_suresi=zaman-bir_musteri.gelis; if(bir_musteri.bekleme_suresi&gt;max_bekleme_sure) max_bekleme_sure=bir_musteri.bekleme_suresi; giseler[i].hizmet_sure=gise_sure; giseler[i].g_musteri=bir_musteri; giseler[i].bos_mu=1; giseler[i].top_musteri++; giseler[i].top_sure+=giseler[i].hizmet_sure; toplam_bekleme+=bir_musteri.bekleme_suresi; printf(&quot;%d.dakikada Musteri#%d Gise#%d'de hizmet almaya baslamistir.\n&quot;,zaman,bir_musteri.no,i+1); } } finito=1; for(i=0;i&lt;3;i++){ if(giseler[i].bos_mu==1){ finito=0; } } if(bos_mu(on)==0) { finito=0; } zaman++; } printf(&quot;\nSimulasyon bitti, sonuclar:\n&quot;); printf(&quot;Herhangi bir zamanda kuyrukta bulunan max kisi sayisi:%d\n&quot;,max_uzunluk); printf(&quot;Kuyrukta en uzun sure bekleyen musterinin bekleme suresi:%d\n&quot;,max_bekleme_sure); printf(&quot;Bir musterinin kuyrukta ortalama bekleme suresi:%.2f\n&quot;,(float)toplam_bekleme/(musteri_say-1));
+
+printf(&quot;Gise No\tToplam Musteri Sayisi\tOrtalama Hizmet Verme Suresi\n&quot;); printf(&quot;-------\t---------------------\t----------------------------\n&quot;); for(i=0;i&lt;3;i++){ printf(&quot; %d\t\t%d\t\t \t%.2f\n&quot;,i+1,giseler[i].top_musteri,(float)giseler[i].top_sure/giseler[i].top_musteri); }
+
+return 0; }
+</code></pre>
+</div></div></article><div class="card comments main-container__items"><div class="card__contents" id="disqus_thread"></div></div></div><div class="sidebar main-content__sidebar"><div class="about"><img class="about__image" src="/img/profile.jpg"/><h1 class="about__name">Umut Benzer</h1><h2 class="about__mini-bio">Software Engineer in Berlin</h2></div></div></div><div class="main-container"><div class="footer"><div class="footer__copyright-holder"><p><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license noopener noreferrer" target="_blank"><img alt="Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License" src="/img/cclicense.png"/></a></p><p><span>Bu sitedeki tüm yazı ve görseller </span><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license noopener noreferrer" target="_blank">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a><span> ile lisanslanmıştır.</span></p></div><div class="footer__generator"><span>Bu sayfa </span><span>9 Nisan 2017</span><span> tarihinde </span><a href="https://github.com/ubenzer/fil" target="_blank">Fil</a><span> ile yaratılmıştır.</span></div></div></div></div>
+        <script src="/template/app.js" type="text/javascript"></script><script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = "https://ubenzer.com/2009/04/banka-subesi-simulasyonu";
+          this.page.identifier = "post@/2009/04/banka-subesi-simulasyonu";
+        };
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = 'https://ubenzer.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+        </script>
+      </body>
+    </html>
+  

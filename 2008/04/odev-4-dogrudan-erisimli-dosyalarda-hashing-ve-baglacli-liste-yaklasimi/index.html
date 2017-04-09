@@ -1,0 +1,419 @@
+<!doctype html>
+    <html lang="tr">
+      <head>
+        <title>Ödev 4: Doğrudan Erişimli Dosyalarda Hashing ve Bağlaçlı Liste Yaklaşımı - UBenzer</title>
+        <meta content="utf-8" name="charset"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="#2196F3" name="theme-color"/>
+        <link href="/template/ui.css" media="screen" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i&amp;amp;subset=latin-ext" media="screen" rel="stylesheet" type="text/css"/><link href="/img/favicon/apple-touch-icon-57x57.png" rel="apple-touch-icon-precomposed" sizes="57x57"/><link href="/img/favicon/apple-touch-icon-60x60.png" rel="apple-touch-icon-precomposed" sizes="60x60"/><link href="/img/favicon/apple-touch-icon-72x72.png" rel="apple-touch-icon-precomposed" sizes="72x72"/><link href="/img/favicon/apple-touch-icon-76x76.png" rel="apple-touch-icon-precomposed" sizes="76x76"/><link href="/img/favicon/apple-touch-icon-114x114.png" rel="apple-touch-icon-precomposed" sizes="114x114"/><link href="/img/favicon/apple-touch-icon-120x120.png" rel="apple-touch-icon-precomposed" sizes="120x120"/><link href="/img/favicon/apple-touch-icon-152x152.png" rel="apple-touch-icon-precomposed" sizes="152x152"/><link href="/img/favicon/favicon-196x196.png" rel="icon" sizes="196x196"/><link href="/img/favicon/favicon-128x128.png" rel="icon" sizes="128x128"/><link href="/img/favicon/favicon-96x96.png" rel="icon" sizes="96x96"/><link href="/img/favicon/favicon-32x32.png" rel="icon" sizes="32x32"/><link href="/img/favicon/favicon-16x16.png" rel="icon" sizes="16x16"/>
+      </head>
+      <body>
+        <div><header class="header"><div class="app-bar"><h1 class="app-bar__title"><a class="app-bar__title-link" href="/">UBenzer</a></h1></div></header><div class="main-container"><div class="main-content"><article class="card main-container__items"><div class="card__contents blog-post"><div class="blog-post__date">26 Nisan 2008</div><h1><a class="blog-post__title" href="/2008/04/odev-4-dogrudan-erisimli-dosyalarda-hashing-ve-baglacli-liste-yaklasimi">Ödev 4: Doğrudan Erişimli Dosyalarda Hashing ve Bağlaçlı Liste Yaklaşımı</a></h1><div class="markdown-content blog-post__body blog-post__content"><p>14 Nisan 2008 tarihinde aldığımız, daha adından acılı bir ödev olacağı belli olan <em>Doğrudan Erişimli Dosyalarda Hashing ve Bağlaçlı Liste Yaklaşımı</em> ödevi için teslim ettiğim kaynak kod. Ödevde <em>Vecdi Hoca</em>’nın <em>Ayrık</em>’ta anlattığı <em>Recursive</em> (kendini çağıran fonksiyon) <em>Algorithm</em> kullanmayı denedim. Ödev zaten karışıktı, iyice karıştı ve ben programın yazarı olarak bile neyin ne işe yaradığını bazen anlayamıyorum. Ama buna rağmen programda hata göremedim, sorunsuz gibi gibi geldi bana.</p>
+<p><em>Not:</em> Ödevim içinde kaç tane fseek, fwrite fread var ben bile sayamadım. =) <em>Not 2:</em> Ne zaman algoritma ödev kağıtlarındaki</p>
+<blockquote>
+<p>“Ödevin değerlendirmesinde; programın doğru ve eksiksiz çalışmasının yanında etkinlik, yapısal ve modüler programlama ilkelerine uygunluk <em>ta</em> dikkate alınacaktır. Global değişken kullanılmaması ve fonksiyon kullanımı özellikle önemlidir.”</p>
+</blockquote>
+<p><em>ta</em> kelimesi (?) fark edilip düzeltilecek bir buçuk dönemdir heyecanla beklemekteyim.</p>
+<ul>
+<li><a href="/2008/04/odev-4-dogrudan-erisimli-dosyalarda-hashing-ve-baglacli-liste-yaklasimi/odev-4.zip" >Ödev Açıklaması</a></li>
+<li><a href="/2008/04/odev-4-dogrudan-erisimli-dosyalarda-hashing-ve-baglacli-liste-yaklasimi/76701.c" >Benim Çözümüm (7670.c)</a></li>
+</ul>
+<p>Kaynak kodunu incelemek ve fikir sahibi olmak amacıyla kullanabilirsiniz. Ama lütfen kaynak kodunu kopyala yapıştır yapmayalım, kendimize mal etmeyelim. Onun yerine nasıl çalıştığını inceleyip kavrama yoluna gidelim.</p>
+<p>Sınav dönemine geldik. Haydi hayırlısı.</p>
+<p>Kaynak kodunu indirmek istemezseniz, bir kopyasına aşağıdan ulaşabilisiniz.</p>
+<pre><code class="language-c"> #include &lt;stdio.h&gt;#include&lt;stdlib.h&gt;&lt;/stdlib.h&gt;&lt;/stdio.h&gt;
+
+#define URUN_NO_MIN 1 #define KAYIT_SAY 100 #define STOK_LIMIT_MIN 0 #define ALIS_FIYAT_MIN 0 #define LINK_AYNI -2 #define LINK_GONDER -3
+
+/* Sabitler ve Anlamlari */ /* --------------------- */ /* URUN_NO_MIN : Ürün numarasının alabileceği en düşük değer. (negatif değeler özel parametre- lere karşılık gelebileceği için tercih edilmemelidir.) KAYIT_SAY : Hash fonksiyonu ile gidilecek, ilk başta yaratılan kısım. Bu değer oynanarak ilk başta ne kadar boş kayıt olacağı değiştirilebilir. DİKKAT: Dosyalar yaratıldıktan sonra bunu değiştirmeniz sorun çıkartır. STOK_LIMIT_MIN : Stok değerinin alabileceği minimum değerdir. Programda depoda olmayan bir ürünün satılamayacağı düşünülerek bu sabit 0 alınmıştır. Ancak stok değerinin - değer- lere de düşmesi isteniyorsa bu değer değiştirilebilir. ALIS_FIYAT_MIN : Birim alış/satış fiyatlarının alabileceği minimum değeri belirler. Bir ürünün en fazla bedava satılacağı (o da nedense) düşünülmüş ve programda 0 ayarlanmıştır. Ama eğer ürünü satıp üstüne de para verilmesi isteniyorsa bu değişken her türlü sayı yapılabilir. LINK_AYNI : urun_duzenle fonksiyonuna değiştirilen girdideki link değerinin değiştirilmemesi gerektiğini söyleyen sembolik sabittir. LINK_GONDER : urun_duzenle fonksiyonuna gönderildiğinde fonksyinonun urun_kodu ile gönderilen ürüne ait link değerini geri döndürmesini sağlar.
+
+*/
+
+/* Yapılar */ struct URUN_YAPI { int urun_kodu; char urun_adi[20]; float birim_alis_fiyati; int stok_miktari; int sonraki; int link; };
+
+struct SATIS_YAPI { char fatura_no[6]; char satis_tarihi[6]; int satis_miktari; float birim_satis_fiyati; int sonraki; };
+
+/* Kullanıcı tanımlı tipler */ typedef struct URUN_YAPI URUN; typedef struct SATIS_YAPI SATIS;
+
+void beklet() { /* Bu fonksiyonun tek amaci kullaniciyi bir tusa basana kadar bekletmek, ve sonra ekrani silmektir. */ printf(&quot;\nDevam etmek icin bir tusa basin.&quot;); getche(); system (&quot;cls&quot;); }
+
+int hash(int urun_kodu) { return (urun_kodu % KAYIT_SAY) + 1; }
+
+int urun_var_mi(int urun_kodu,int kayit_no, int link_yolla) {
+
+/* Ürünün olup olmadığını kontrol eder. Aşağıdaki değerlerden birini dönüdürür. */
+
+/* 0: Urun yok. */ /* -1: Dosya açılamadı. */ /* -2: Urun var. */
+
+FILE *fp; URUN oku;
+
+if ((fp=fopen (&quot;urunler.dat&quot;,&quot;rb+&quot;))== NULL) { printf(&quot;Urunler.dat acilamadi. Gidiyorum ben.&quot;); return -1; }
+
+if (kayit_no == -1) { /* Eğer fonksiyona ilk defa geldiysek hash ile asıl kaydı kontrol etmeliyiz. */ fseek(fp,(hash(urun_kodu) - 1) * sizeof(URUN),0); } else { fseek(fp,(kayit_no) * sizeof(URUN),0); /* Eğer fonksiyon kendini çağırdıysa dosya sonuna gidip bağlayacağız. */ }
+
+fread(&amp;oku,sizeof(URUN),1,fp);
+
+if (oku.urun_kodu == urun_kodu) {
+
+fclose(fp); if (link_yolla == 0) { /* Eğer link numarasını gönderme parametresiyse çağrıldıysa */ return oku.link; } else { return -2; } }
+
+if (oku.urun_kodu == -1) { fclose(fp); return 0; } else { if (oku.sonraki == -1) { fclose(fp); return 0; } else { fclose(fp); return urun_var_mi(urun_kodu, oku.sonraki, link_yolla); } } }
+
+int urun_ekle(int urun_kodu, char urun_adi[20], float birim_alis_fiyati, int stok_miktari, int kayit_no) {
+
+/* Adı üstünde: Ürün ekler */ /* 0: Başarılı. */ /* -1: Dosya açılamadı. */
+
+FILE *fp; URUN oku; int sayac; int gecici_konum;
+
+if ((fp=fopen (&quot;urunler.dat&quot;,&quot;rb+&quot;))== NULL) { printf(&quot;Urunler.dat acilamadi. Gidiyorum ben.&quot;); return -1; }
+
+if (kayit_no == -1) { /* Eğer fonksiyona ilk defa geliysek hash ile asıl kaydı kontrol etmeliyiz. */ fseek(fp,(hash(urun_kodu) - 1) * sizeof(URUN),0); } else { fseek(fp,kayit_no * sizeof(URUN),0); /* Eğer fonksiyon kendini çağırdıysa dosya sonuna gidip bağlayacağız. */ }
+
+fread(&amp;oku,sizeof(URUN),1,fp);
+
+if (oku.urun_kodu == -1) { /* Burası boş, yazabiliriz. */
+
+/* Gerekli atamalar */ oku.urun_kodu = urun_kodu;
+
+for (sayac=0;sayac&lt;20;sayac++) { oku.urun_adi[sayac] = urun_adi[sayac]; }
+
+oku.birim_alis_fiyati = birim_alis_fiyati; oku.stok_miktari = stok_miktari; oku.sonraki = -1; oku.link = -1;
+
+fseek(fp,-sizeof(URUN),1); // Denetlemek için ileri gitmiştik, dön geri. fwrite(&amp;oku,sizeof(URUN),1,fp); // ve büyülü satır... fclose(fp);
+
+} else { /* Bu kayıt dolu, hadi başka bulalım. */
+
+/* Eğer bu kayıt bağlı listenin son kaydıysa bu kaydı sonraki kısmını değiştirerek yeniden yaz. */ if (oku.sonraki == -1) { gecici_konum = ftell(fp); fseek(fp,0,2); oku.sonraki = ftell(fp)/sizeof(URUN); fseek(fp,gecici_konum,0);
+
+fseek(fp,-sizeof(URUN),1); fwrite(&amp;oku,sizeof(URUN),1,fp);
+
+/* Sonra yeni ekleneceği ekleyelim. */ fseek(fp,0,2); oku.sonraki = -1; oku.link = -1; oku.birim_alis_fiyati = birim_alis_fiyati; oku.stok_miktari = stok_miktari; oku.urun_kodu = urun_kodu; for (sayac=0;sayac&lt;20;sayac++) { oku.urun_adi[sayac] = urun_adi[sayac]; }
+
+fwrite(&amp;oku,sizeof(URUN),1,fp); fclose(fp);
+
+} else { /* eğer bağlı listenin son elemanı değilse onu bulana kadar aynı algoritmayı tekrarla */ fclose(fp); return urun_ekle(urun_kodu, urun_adi[20], birim_alis_fiyati, stok_miktari, oku.sonraki); } }
+
+return 0; }
+
+int urun_guncelle(int urun_kodu, float birim_alis_fiyati, int stok_miktari, int kayit_no, int link) {
+
+/* 0: Başarılı. */ /* -1: Dosya açılamadı. */
+
+FILE *fp; URUN oku;
+
+if ((fp=fopen (&quot;urunler.dat&quot;,&quot;rb+&quot;))== NULL) { printf(&quot;Urunler.dat acilamadi. Gidiyorum ben.&quot;); return -1; }
+
+if (kayit_no == -1) { /* Eğer fonksiyona ilk defa geliysek hash ile asıl kaydı kontrol etmeliyiz. */ fseek(fp,(hash(urun_kodu) - 1) * sizeof(URUN),0); } else { fseek(fp,kayit_no * sizeof(URUN),0); /* Eğer fonksiyon kendini çağırdıysa dosya sonuna gidip bağlayacağız. */ }
+
+fread(&amp;oku,sizeof(URUN),1,fp);
+
+if (oku.urun_kodu == urun_kodu) { /* İşte düzenlenecek ürünümüzü bulduk, mutluyuz biz. :) */
+
+if (link == LINK_GONDER) {
+
+fclose(fp); return oku.link;
+
+} else {
+
+if (birim_alis_fiyati != ALIS_FIYAT_MIN - 1) { oku.birim_alis_fiyati = birim_alis_fiyati; }
+
+if (stok_miktari != STOK_LIMIT_MIN - 1) { oku.stok_miktari = stok_miktari; }
+
+if (link != LINK_AYNI) { oku.link = link; }
+
+fseek(fp,-sizeof(URUN),1); // Denetlemek için ileri gitmiştik, dön geri. fwrite(&amp;oku,sizeof(URUN),1,fp); // ve büyülü satır... fclose(fp);
+
+}
+
+} else { /* Bu kayıt dolu, hadi başka bulalım. */ fclose(fp); return urun_guncelle(urun_kodu, birim_alis_fiyati, stok_miktari, oku.sonraki, link); }
+
+return 0; }
+
+int satis_ekle(int urun_kodu, char fatura_no[6], char satis_tarihi[6], int satis_miktari, float birim_satis_fiyati, int sonraki, int simdiki) {
+
+/* 0: Sorunsuz tamam */ /* -1: Dosya hatası */
+
+FILE *fp; SATIS oku; int link_konum; int sayac;
+
+/* Önce urune bakalım... Eğer üründeki link -1 ise bu ürüne daha önce satış eklenmemiştir ki, ilk olduğu için işimiz çoooook basit olur. */
+
+if (sonraki == -2) { /* Eğer fonksiyon kendini çağırmadıysa */
+
+link_konum = urun_var_mi(urun_kodu,-1,0); if (link_konum == -1) { /* O zaman linki yaratacağız. */
+
+if ((fp=fopen (&quot;satislar.dat&quot;,&quot;rb+&quot;))== NULL) { return -1; }
+
+fseek(fp,0,2); /* Dosya sonuna uç, ciiiik */ link_konum = (ftell(fp) / sizeof(SATIS)) + 1;
+
+for (sayac=0;sayac&lt;6;sayac++) { oku.fatura_no[sayac] = fatura_no[sayac]; }
+
+for (sayac=0;sayac&lt;6;sayac++) { oku.satis_tarihi[sayac] = satis_tarihi[sayac]; }
+
+oku.satis_miktari = satis_miktari; oku.birim_satis_fiyati = birim_satis_fiyati; oku.sonraki = -1;
+
+fwrite(&amp;oku,sizeof(SATIS),1,fp); // ve büyülü satır... fclose(fp);
+
+urun_guncelle(urun_kodu, ALIS_FIYAT_MIN - 1, STOK_LIMIT_MIN - 1, -2, link_konum); /* Şu hayatta zaten ne oluyorsa iletişimsizlikten kaynaklanıyor. Bağlantıyı koparmamak lazım. urunler.dat ile satislar.dat da yukarıdaki satırla birbirine bağlanacak. */ } else {
+
+/* Eğer o ürüne dair daha önceden bir satış kaydı varsa bu biraz uğraştırıcı... Tüm kayıtları sıradan gezmeye başlayalım, uygun olan bağı bulalım ve hooop yeni satış bilgilerini yazalım. */ return satis_ekle(urun_kodu, fatura_no, satis_tarihi, satis_miktari, birim_satis_fiyati, link_konum, simdiki);
+
+}
+
+} else {
+
+if ((fp=fopen (&quot;satislar.dat&quot;,&quot;rb+&quot;))== NULL) { return -1; }
+
+fseek(fp,(sonraki-1) * sizeof(SATIS),0); fread(&amp;oku, sizeof(SATIS),1,fp);
+
+if (sonraki == -1 || strncmp(oku.satis_tarihi,satis_tarihi,6) &lt; 0) { /* Eğer girilen kayıt dosyadakinden daha büyükse işlem yapılacak */
+
+/* Eğer sonraki != 0 AMA simdiki == -1 ise o zaman urunler.dat'dan ulaşılan ilk satışdayız demektir. Eğer yeni kaydedeceğimiz satış bu satıştan önce gelecekse o zaman urunler.dat'daki bağ da değişicek demektir ki işte bunun için bu özel şartı yerine getiren bir kod parçası yazacağım şimdi. */
+
+for (sayac=0;sayac&lt;6;sayac++) { oku.fatura_no[sayac] = fatura_no[sayac]; }
+
+for (sayac=0;sayac&lt;6;sayac++) { oku.satis_tarihi[sayac] = satis_tarihi[sayac]; }
+
+oku.satis_miktari = satis_miktari; oku.birim_satis_fiyati = birim_satis_fiyati; oku.sonraki = sonraki;
+
+fseek(fp,0,2); /* Dosya sonuna ışınlan */ link_konum = (ftell(fp) / sizeof(SATIS)) + 1; fwrite(&amp;oku,sizeof(SATIS),1,fp);
+
+if (simdiki == -1) { /* Önceki bağ düzelt */
+
+fclose(fp); urun_guncelle(urun_kodu, ALIS_FIYAT_MIN - 1, STOK_LIMIT_MIN - 1, -2, link_konum);
+
+} else {
+
+fseek(fp,(simdiki-1) * sizeof(SATIS),0); fread(&amp;oku, sizeof(SATIS),1,fp); fseek(fp,-sizeof(SATIS),1); oku.sonraki = link_konum; fwrite(&amp;oku,sizeof(SATIS),1,fp);
+
+fclose(fp); }
+
+} else { /* Yok girilen kayıt dosyadakinden daha büyük değilse bir sıkıntı yok, taramaya devam... */
+
+return satis_ekle(urun_kodu, fatura_no, satis_tarihi, satis_miktari, birim_satis_fiyati, oku.sonraki, sonraki); } }
+
+return 0; }
+
+int satis_listele(int urun_kodu, char ust_limit[6], char alt_limit[6]) {
+
+/* 0: Başarılı. */ /* -1: Dosya açılamadı. */
+
+FILE *fp; SATIS oku; int sayac=0; int konum;
+
+printf(&quot;%d numarali urunun satis listesi\n&quot;,urun_kodu); printf(&quot;\n&quot;); printf(&quot; NO FATURA NO SATIS TARIHI SATIS MIKTARI BIRIM SATIS FIYATI\n&quot;); printf(&quot;---- --------- ------------ ------------- ------------------\n&quot;);
+
+konum = urun_guncelle(urun_kodu, ALIS_FIYAT_MIN-1,STOK_LIMIT_MIN-1,-1,LINK_GONDER); if (konum == -1) { printf(&quot;(hic satis kaydi yok.)\n&quot;); return 0; }
+
+if ((fp=fopen (&quot;satislar.dat&quot;,&quot;rb+&quot;))== NULL) { return -1; }
+
+while (konum != -1) { fseek(fp,(konum-1) * sizeof(SATIS),0); fread(&amp;oku,sizeof(SATIS),1,fp); konum = oku.sonraki;
+
+if (strncmp(oku.satis_tarihi,alt_limit,6) &gt;= 0 &amp;&amp; strncmp(oku.satis_tarihi,ust_limit,6) &lt;= 0 &amp;&amp; oku.fatura_no[0] != '|') { sayac++; printf(&quot;%4d %c%c%c%c%c%c %c%c%c%c%c%c %13d %18.4f \n&quot;,sayac,oku.fatura_no[0],oku.fatura_no[1],oku.fatura_no[2],oku.fatura_no[3],oku.fatura_no[4],oku.fatura_no[5],oku.satis_tarihi[0],oku.satis_tarihi[1],oku.satis_tarihi[2],oku.satis_tarihi[3],oku.satis_tarihi[4],oku.satis_tarihi[5],oku.satis_miktari,oku.birim_satis_fiyati); } }
+
+fclose(fp);
+
+}
+
+int satis_sil(int urun_kodu, char fatura_no[6]) {
+
+/* 1: Öyle bir fatura no yok */ /* 0: Başarılı. */ /* -1: Dosya açılamadı. */
+
+FILE *fp; SATIS oku; int konum;
+
+konum = urun_guncelle(urun_kodu, ALIS_FIYAT_MIN-1,STOK_LIMIT_MIN-1,-1,LINK_GONDER); if (konum == -1) { return 1; }
+
+if ((fp=fopen (&quot;satislar.dat&quot;,&quot;rb+&quot;))== NULL) { return -1; }
+
+while (konum != -1) { fseek(fp,(konum-1) * sizeof(SATIS),0); fread(&amp;oku,sizeof(SATIS),1,fp); konum = oku.sonraki;
+
+if (strncmp(oku.fatura_no,fatura_no,6) == 0) { /* EVET! Silinecek faturayı bulduk!!!!! */ fseek(fp,-sizeof(SATIS),1); oku.fatura_no[0] = '|'; fwrite(&amp;oku,sizeof(SATIS),1,fp); fclose(fp); return 0; } }
+
+fclose(fp); return 1; }
+
+void listele() {
+
+/* Bu fonksiyon kontrol için, asıl programda işe yaramaz. */ FILE *fp; URUN urun; int sayac=0; int gecici; if ((fp=fopen (&quot;urunler.dat&quot;,&quot;rb+&quot;))== NULL) { printf(&quot;Urunler.dat acilamadi. Gidiyorum ben.&quot;); return -1; }
+
+fseek(fp,0,2); gecici = ftell(fp)/sizeof(URUN); printf(&quot;Kayit sayisi: %d\n\n&quot;, gecici); fseek(fp,0,0);
+
+for (sayac=1;sayac&lt;=gecici;sayac++) { fread(&amp;urun,sizeof(URUN),1,fp); printf(&quot;%3d %4d %20s %6.2f %2d %4d %2d\n&quot;,sayac,urun.urun_kodu,urun.urun_adi,urun.birim_alis_fiyati,urun.stok_miktari, urun.sonraki, urun.link); }
+
+fclose(fp); }
+
+void listele2() {
+
+/* Bu fonksiyon kontrol için, asıl programda işe yaramaz. */
+
+FILE *fp; SATIS urun; int sayac=0; int gecici; if ((fp=fopen (&quot;satislar.dat&quot;,&quot;rb+&quot;))== NULL) { printf(&quot;satislar.dat acilamadi.&quot;); return -1; }
+
+fseek(fp,0,2); gecici = ftell(fp)/sizeof(SATIS); printf(&quot;Kayit sayisi: %d\n\n&quot;, gecici); fseek(fp,0,0);
+
+for (sayac=1;sayac&lt;=gecici;sayac++) { fread(&amp;urun,sizeof(SATIS),1,fp); printf(&quot;%3d %c%c%c%c%c%c %c%c%c%c%c%c %5d %6.2f %2d\n&quot;,sayac,urun.fatura_no[0],urun.fatura_no[1],urun.fatura_no[2],urun.fatura_no[3],urun.fatura_no[4],urun.fatura_no[5],urun.satis_tarihi[0],urun.satis_tarihi[1],urun.satis_tarihi[2],urun.satis_tarihi[3],urun.satis_tarihi[4],urun.satis_tarihi[5],urun.satis_miktari,urun.birim_satis_fiyati,urun.sonraki); }
+
+fclose(fp); }
+
+int main() {
+
+/* Acilis yazilari BASLANGICI */ printf(&quot;Umut BENZER\n&quot;); printf(&quot;05-06-7670\n&quot;); printf(&quot;Ege Universitesi Bilgisayar Muhendisligi 1\. Sinif\n&quot;); printf(&quot;http://www.ubenzer.com\n&quot;); printf(&quot;Odev 4 (0.1)\n\n&quot;); /* Acilis yazilari SONU */
+
+int sag_serbest=-1; int sayac; int girdi; char girdi2[20]; float girdi3; int girdi4; char girdi5[6]; char girdi6[6]; char secenek; /* Girdi degiskenleri main fonksiyonun her bir yerinde farkli farkli bir sürü amaçla kullanıldığı için özel isimler vermedim. */
+
+/* Dosyayi sifirdan yaratalim */ /* Odev kontrolunde kolaylik saglamasi acisindan dosyanin her acilista silinmesi ve tekrar yaratilmasi istendi. Programin gerceginde bunun iptal edilmesini saglamak icin asagidaki satirlar comment yapilabilir. */
+
+FILE *fp; URUN yaz={-1,&quot;&quot;,0,0,-1,-1};
+
+remove (&quot;urunler.dat&quot;); // Eğer dosyalar varsa silinir. remove (&quot;satislar.dat&quot;); // Eğer dosyalar varsa silinir.
+
+if ((fp=fopen (&quot;urunler.dat&quot;,&quot;w+b&quot;))== NULL) { printf(&quot;Urunler.dat yaratilamadi. Gidiyorum ben.&quot;); return 0; }
+
+for (sayac=0;sayac&lt;kayit_say;sayac++) {=&quot;&quot; fwrite(&amp;yaz,sizeof(urun),1,fp);=&quot;&quot; }&lt;=&quot;&quot; p=&quot;&quot;&gt;&lt;/kayit_say;sayac++)&gt;
+
+fclose(fp);
+
+if ((fp=fopen (&quot;satislar.dat&quot;,&quot;w+b&quot;))== NULL) { printf(&quot;Satislar.dat yaratilamadi. Gidiyorum ben.&quot;); return 0; }
+
+fclose(fp);
+
+/* Dosyayi sifirdan yaratalim kısmınnın SONU */
+
+/* Ana döngü */ while (sag_serbest==-1) {
+
+// Eğer her başlangıçta ürüner.dat'ın içerğini görmek istiyorsanız commenti kaldırın.
+
+/* listele(); beklet(); listele2(); beklet();
+
+/* menu BASLANGICI */ printf(&quot;*** Menu *** \n\n&quot;); printf(&quot;1\. Yeni bir urunun eklenmesi \n&quot;); printf(&quot;2\. Bir urunun birim alis fiyatinin ve stok miktarinin guncellenmesi \n&quot;); printf(&quot;3\. Bir urune iliskin satis eklenmesi \n&quot;); printf(&quot;4\. Bir urune iliskin satisin silinmesi \n&quot;); printf(&quot;5\. Bir urunden yapilan tum satislarin listelenmesi \n&quot;); printf(&quot;6\. Bir urunden iki tarih arasinda yapilen tum satislarin listelenmesi \n&quot;); printf(&quot;7\. Cikis \n&quot;);
+
+printf(&quot;Lutfen istediginiz islemin numarasini giriniz.\n&quot;); /*menu BITIMI */
+
+secenek=getche(); system (&quot;cls&quot;);
+
+/* secenek getche ile alındığı için ASCII koduna göre switch yapısına sokulabilir. */
+
+/* Her CASE için aşağıdaki not geçerlidir. */
+
+/* Gerekli saçma sapan veri kontrolleri ve doğru girdi için ilgili fonksiyonların çağırılması, fonksiyon- lardan cevap alınması ve bunların işlenmesi.
+
+Ayrıntılı bilgi için her fonksiyona ayrı ayrı baka- bilirsiniz. */
+
+switch(secenek) { case 49: //1
+
+girdi = -1; while (girdi &lt; URUN_NO_MIN) { system (&quot;cls&quot;); printf(&quot;Yeni bir urun kodu giriniz: \n&quot;); printf(&quot;Zaten var olan bir urunun ustune\n&quot;); printf(&quot;yazmaya calisirsaniz uyarilacaksiniz.)\n&quot;); scanf(&quot;%d&quot;,&amp;girdi); } system (&quot;cls&quot;);
+
+switch (urun_var_mi(girdi,-1,-1)) {
+
+case 0: /* Hayır, yok. */
+
+for (sayac=0;sayac&lt;20;sayac++) { girdi2[sayac] = NULL; }
+
+while (girdi2[0] == NULL) { fflush(stdin); printf(&quot;Yeni urunun adini giriniz: &quot;); gets(girdi2); }
+
+girdi3 = ALIS_FIYAT_MIN - 1; while (girdi3 &lt; ALIS_FIYAT_MIN) { printf(&quot;Urunun alis fiyatini giriniz: &quot;); scanf(&quot;%f&quot;,&amp;girdi3); }
+
+girdi4 = STOK_LIMIT_MIN-1; while (girdi4 &lt; STOK_LIMIT_MIN) { printf(&quot;Urunun stok durumunu giriniz: &quot;); scanf(&quot;%d&quot;,&amp;girdi4); }
+
+switch (urun_ekle(girdi,girdi2,girdi3,girdi4,-1)) { case -1: printf(&quot;Dosya acilamadi. :(&quot;); break; case 0: printf(&quot;Ekleme basarili. Tebrik ederim. :)&quot;); break; } break;
+
+case -1: printf(&quot;Dosya acilamadi. :(&quot;); break;
+
+case -2: printf(&quot;Girdiginiz urun kodu daha once alinmis.&quot;); break; }
+
+beklet(); break; case 50: //2
+
+girdi = -1; while (girdi &lt; URUN_NO_MIN) { system (&quot;cls&quot;); printf(&quot;Duzenlenecek urun kodunu giriniz: \n&quot;); scanf(&quot;%d&quot;,&amp;girdi); } system (&quot;cls&quot;);
+
+switch (urun_var_mi(girdi,-1,-1)) {
+
+case -2: /* Evet var. */
+
+girdi3 = ALIS_FIYAT_MIN - 1; while (girdi3 &lt; ALIS_FIYAT_MIN) { printf(&quot;Urunun yeni alis fiyatini giriniz: &quot;); scanf(&quot;%f&quot;,&amp;girdi3); }
+
+girdi4 = STOK_LIMIT_MIN-1; while (girdi4 &lt; STOK_LIMIT_MIN) { printf(&quot;Urunun yeni stok durumunu giriniz: &quot;); scanf(&quot;%d&quot;,&amp;girdi4); }
+
+switch (urun_guncelle(girdi,girdi3,girdi4,-1,LINK_AYNI)) { case -1: printf(&quot;Dosya acilamadi. :(&quot;); break; case 0: printf(&quot;Duzenleme basarili. Tebrik ederim. :)&quot;); break; } break;
+
+case -1: printf(&quot;Dosya acilamadi. :(&quot;); break;
+
+case 0: /* Hayır, yok */ printf(&quot;Boyle bir urun yok.&quot;); break; } beklet(); break;
+
+case 51: //3
+
+girdi = -1; while (girdi &lt; URUN_NO_MIN) { system (&quot;cls&quot;); printf(&quot;Satis eklenecek urun kodunu giriniz: \n&quot;); scanf(&quot;%d&quot;,&amp;girdi); } system (&quot;cls&quot;);
+
+switch (urun_var_mi(girdi,-1,-1)) {
+
+case -2: /* Evet var. */
+
+for (sayac=0;sayac&lt;6;sayac++) { girdi5[sayac] = NULL; }
+
+while (girdi5[0] == NULL) { fflush(stdin); printf(&quot;Fatura kodunu giriniz (6 karakter): &quot;); gets(girdi5); }
+
+for (sayac=0;sayac&lt;6;sayac++) { girdi6[sayac] = NULL; }
+
+while (girdi6[0] == NULL) { fflush(stdin); /* Ödevin asıl amacının tarihlerle değil de dosyalamayla uğraşmak olduğu bilindiğinden 2000 öncesi yıllar için sıralama sorunu ihmal edildi. */ printf(&quot;Satis tarihini giriniz (YYAAGG): &quot;); gets(girdi6); }
+
+girdi4 = STOK_LIMIT_MIN-1; while (girdi4 &lt; STOK_LIMIT_MIN) { printf(&quot;Urunun satis miktarini giriniz: &quot;); scanf(&quot;%d&quot;,&amp;girdi4); }
+
+girdi3 = ALIS_FIYAT_MIN - 1; while (girdi3 &lt; ALIS_FIYAT_MIN) { printf(&quot;Birim satis fiyatini giriniz: &quot;); scanf(&quot;%f&quot;,&amp;girdi3); }
+
+switch (satis_ekle(girdi, girdi5, girdi6, girdi4, girdi3,-2,-1)) { case -1: printf(&quot;Dosya acilamadi. :(&quot;); break; case 0: printf(&quot;Satis eklendi. Oleeey!&quot;); break; }
+
+break; case -1: printf(&quot;Dosya acilamadi. :(&quot;); break;
+
+case 0: /* Hayır, yok */ printf(&quot;Boyle bir urun yok.&quot;); break; } beklet(); break; case 52: //4
+
+girdi = -1; while (girdi &lt; URUN_NO_MIN) { system (&quot;cls&quot;); printf(&quot;Ilgili urun kodunu giriniz: \n&quot;); scanf(&quot;%d&quot;,&amp;girdi); } system (&quot;cls&quot;);
+
+switch (urun_var_mi(girdi,-1,-1)) {
+
+case -2: /* Evet var. */
+
+for (sayac=0;sayac&lt;6;sayac++) { girdi5[sayac] = NULL; }
+
+while (girdi5[0] == NULL) { fflush(stdin); printf(&quot;Silinecek fatura kodunu giriniz (6 karakter): &quot;); gets(girdi5); }
+
+switch (satis_sil(girdi, girdi5)) { case -1: printf(&quot;Dosya acilamadi. :(&quot;); break; case 0: printf(&quot;Satis bilgisi silindi.&quot;); break; case 1: printf(&quot;Boyle bir fatura yok. Silinemedi.&quot;); break; }
+
+break; case -1: printf(&quot;Dosya acilamadi. :(&quot;); break;
+
+case 0: /* Hayır, yok */ printf(&quot;Boyle bir urun yok.&quot;); break; } beklet(); break; case 53: //5 girdi = -1; while (girdi &lt; URUN_NO_MIN) { system (&quot;cls&quot;); printf(&quot;Satis listesi gosterilecek urun kodunu giriniz: \n&quot;); scanf(&quot;%d&quot;,&amp;girdi); } system (&quot;cls&quot;);
+
+switch (urun_var_mi(girdi,-1,-1)) {
+
+case -2: /* Evet var. */ satis_listele(girdi, &quot;999999&quot;, &quot;000000&quot;); break; case -1: printf(&quot;Dosya acilamadi. :(&quot;); break;
+
+case 0: /* Hayır, yok */ printf(&quot;Boyle bir urun yok.&quot;); break; } beklet(); break; case 54: //6
+
+girdi = -1; while (girdi &lt; URUN_NO_MIN) { system (&quot;cls&quot;); printf(&quot;Satis listesi gosterilecek urun kodunu giriniz: \n&quot;); scanf(&quot;%d&quot;,&amp;girdi); } system (&quot;cls&quot;);
+
+switch (urun_var_mi(girdi,-1,-1)) {
+
+case -2: /* Evet var. */
+
+for (sayac=0;sayac&lt;6;sayac++) { girdi5[sayac] = NULL; }
+
+while (girdi5[0] == NULL) { fflush(stdin); printf(&quot;Ust limiti girin (yyaagg): &quot;); gets(girdi5); } system (&quot;cls&quot;);
+
+for (sayac=0;sayac&lt;6;sayac++) { girdi6[sayac] = NULL; }
+
+while (girdi6[0] == NULL) { fflush(stdin); printf(&quot;Alt limiti girin (yyaagg): &quot;); gets(girdi6); } system (&quot;cls&quot;);
+
+satis_listele(girdi, girdi5, girdi6); break; case -1: printf(&quot;Dosya acilamadi. :(&quot;); break;
+
+case 0: /* Hayır, yok */ printf(&quot;Boyle bir urun yok.&quot;); break; } beklet(); break; case 55: //7 /* E e H h ve disinda girdi kabul etmeyen cikmak istiyor musunuz sorusu BASLANGICI */ do { printf (&quot;\nCidden cikmak istiyor musunuz? (E/H) &quot;); secenek = getche(); if (secenek == 'E' || secenek == 'e') { sag_serbest = 0; secenek = 'H'; } } while (secenek != 'H' &amp;&amp; secenek != 'h'); /* E e H h ve disinda girdi kabul etmeyen cikmak istiyor musunuz sorusu SONU */ system (&quot;cls&quot;); break; default: /* Elleri yanlis tusa basan kullanicilar icin yazilan bolum BASLANGICI */ printf(&quot;Bir zahmet 1'den 7'ye kadar bir secim yapin.&quot;); beklet(); /* Elleri yanlis tusa basan kullanicilar icin yazilan bolum SONU */ break; } }
+
+printf(&quot;O halde hoscakalin. :)\n\n\n&quot;); return 0; }
+</code></pre>
+</div></div></article><div class="card comments main-container__items"><div class="card__contents" id="disqus_thread"></div></div></div><div class="sidebar main-content__sidebar"><div class="about"><img class="about__image" src="/img/profile.jpg"/><h1 class="about__name">Umut Benzer</h1><h2 class="about__mini-bio">Software Engineer in Berlin</h2></div></div></div><div class="main-container"><div class="footer"><div class="footer__copyright-holder"><p><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license noopener noreferrer" target="_blank"><img alt="Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License" src="/img/cclicense.png"/></a></p><p><span>Bu sitedeki tüm yazı ve görseller </span><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license noopener noreferrer" target="_blank">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a><span> ile lisanslanmıştır.</span></p></div><div class="footer__generator"><span>Bu sayfa </span><span>9 Nisan 2017</span><span> tarihinde </span><a href="https://github.com/ubenzer/fil" target="_blank">Fil</a><span> ile yaratılmıştır.</span></div></div></div></div>
+        <script src="/template/app.js" type="text/javascript"></script><script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = "https://ubenzer.com/2008/04/odev-4-dogrudan-erisimli-dosyalarda-hashing-ve-baglacli-liste-yaklasimi";
+          this.page.identifier = "post@/2008/04/odev-4-dogrudan-erisimli-dosyalarda-hashing-ve-baglacli-liste-yaklasimi";
+        };
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = 'https://ubenzer.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+        </script>
+      </body>
+    </html>
+  

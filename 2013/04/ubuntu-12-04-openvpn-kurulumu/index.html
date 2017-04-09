@@ -1,0 +1,117 @@
+<!doctype html>
+    <html lang="tr">
+      <head>
+        <title>Ubuntu 12.04 OpenVPN Kurulumu - UBenzer</title>
+        <meta content="utf-8" name="charset"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="#2196F3" name="theme-color"/>
+        <link href="/template/ui.css" media="screen" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i&amp;amp;subset=latin-ext" media="screen" rel="stylesheet" type="text/css"/><link href="/img/favicon/apple-touch-icon-57x57.png" rel="apple-touch-icon-precomposed" sizes="57x57"/><link href="/img/favicon/apple-touch-icon-60x60.png" rel="apple-touch-icon-precomposed" sizes="60x60"/><link href="/img/favicon/apple-touch-icon-72x72.png" rel="apple-touch-icon-precomposed" sizes="72x72"/><link href="/img/favicon/apple-touch-icon-76x76.png" rel="apple-touch-icon-precomposed" sizes="76x76"/><link href="/img/favicon/apple-touch-icon-114x114.png" rel="apple-touch-icon-precomposed" sizes="114x114"/><link href="/img/favicon/apple-touch-icon-120x120.png" rel="apple-touch-icon-precomposed" sizes="120x120"/><link href="/img/favicon/apple-touch-icon-152x152.png" rel="apple-touch-icon-precomposed" sizes="152x152"/><link href="/img/favicon/favicon-196x196.png" rel="icon" sizes="196x196"/><link href="/img/favicon/favicon-128x128.png" rel="icon" sizes="128x128"/><link href="/img/favicon/favicon-96x96.png" rel="icon" sizes="96x96"/><link href="/img/favicon/favicon-32x32.png" rel="icon" sizes="32x32"/><link href="/img/favicon/favicon-16x16.png" rel="icon" sizes="16x16"/>
+      </head>
+      <body>
+        <div><header class="header"><div class="app-bar"><h1 class="app-bar__title"><a class="app-bar__title-link" href="/">UBenzer</a></h1></div></header><div class="main-container"><div class="main-content"><article class="card main-container__items"><div class="card__contents blog-post"><div class="blog-post__date">19 Nisan 2013</div><h1><a class="blog-post__title" href="/2013/04/ubuntu-12-04-openvpn-kurulumu">Ubuntu 12.04 OpenVPN Kurulumu</a></h1><div class="markdown-content blog-post__body blog-post__content"><p><a href="/2013/04/ubuntu-12-04-openvpn-kurulumu/tunnelblick-vpn.png" target="_blank"><img src="/2013/04/ubuntu-12-04-openvpn-kurulumu/tunnelblick-vpn.png" title="tunnelblick-vpn" alt="tunnelblick-vpn"  width="253" height="191" srcset="/2013/04/ubuntu-12-04-openvpn-kurulumu/tunnelblick-vpn.scaled-png-200.png 200w, /2013/04/ubuntu-12-04-openvpn-kurulumu/tunnelblick-vpn.png 253w"></a>{right}Eğer okulunuzdaki/işyerinizdeki ve maalesef ülkenizdeki sansürleri aşmak istiyorsanız, servis sağlayıcınızın İnternette yaptığınız tüm hareketleri kaydetmesini istemiyorsanız VPN kullanabilirsiniz.</p>
+<p>Bunun için parasını vererek bir VPN hizmeti alabileceğiniz gibi, eğer bir sunucunuz varsa buraya VPN kurarak bunu kendi başınıza da halledebilirsiniz.</p>
+<p>UBenzer.com bir VPS’de çalışıyor. Ben de bu fırsatı değerlendirdim ve kendime bir OpenVPN yapılandırması kurdum.</p>
+<p>Nasıl mı?</p>
+<p>[alert type=&quot;warning&quot;]</p>
+<p><em>Uyarı!</em></p>
+<p>Bu yazıda anlatılan yöntem karışıktır ve en azından temel Linux bilgisine sahip olmanızı gerektirir.</p>
+<p>Bu yazıda anlatılanlar yöntem hakkında herhangi bir garanti verilmemektedir. <em>Sunucunuzun çalışmaz hale gelmesi, bozulması, güvenlik açığı oluşması veya herhangi bir problem oluşması sizin sorumluluğunuz altındadır!</em> Burada yazanları dikkatle kullanın! Her zaman yedek alın!</p>
+<p>[/alert]</p>
+<p>[toggle title=&quot;Gerekli Araçlar&quot;]</p>
+<p>İşlem boyunca bazı dosyaları değiştirmeniz gerekecek. Bunun için <code>vim</code>, <code>nano</code> gibi istediğiniz bir metin editörünü kullanabilirsiniz. Eğer favori bir editörünüz yoksa, kullanımı kolay olduğundan dolayı <code>nano</code> ile başlayabilirsiniz. Nano’yu yüklemek için kullanılacak komut:</p>
+<p>&lt;pre&gt;apt-get install nano&lt;/pre&gt;</p>
+<p>Herhangi bir dosyayı düzenlemek için <code>nano dosyaadi</code> veya <code>pico dosyaadi</code> kullanılabilir.</p>
+<p>[/toggle]</p>
+<h2>1. Sunucunuzun desteklediğinden emin olun</h2>
+<p>UBenzer OpenVZ sanallaştırma teknolojisi kullanan bir VPS’te yer alıyor. OpenVZ’lerde genellikle <code>TUN/TAP</code> kullanılamadığından genellikle VPN kurmak mümkün olmuyor. Ancak ben şanslıyım ve VPS’imde bu desteği kullanabiliyorum!</p>
+<p><a href="/2013/04/ubuntu-12-04-openvpn-kurulumu/tun-tap-support-on-openvz-vps.png" target="_blank"><img src="/2013/04/ubuntu-12-04-openvpn-kurulumu/tun-tap-support-on-openvz-vps.scaled-png-200.png" title="tun-tap-support-on-openvz-vps" alt="tun-tap-support-on-openvz-vps"  width="575" height="153" srcset="/2013/04/ubuntu-12-04-openvpn-kurulumu/tun-tap-support-on-openvz-vps.scaled-png-200.png 200w, /2013/04/ubuntu-12-04-openvpn-kurulumu/tun-tap-support-on-openvz-vps.scaled-png-500.png 500w, /2013/04/ubuntu-12-04-openvpn-kurulumu/tun-tap-support-on-openvz-vps.png 575w"></a></p>
+<h2>2. Gerekli paketleri kurun</h2>
+<p>Neredeyse tüm işlemler sudo olarak yapılmalıdır. Eğer <code>root</code> olarak giriş yapmıyorsanız tüm komutların başına <code>sudo</code> ekleyin.</p>
+<p>&lt;pre&gt;apt-get update
+apt-get install openvpn openssl&lt;/pre&gt;</p>
+<h2>3. Kimliklendirme için Private/Public Key yaratımı</h2>
+<p>[alert type=&quot;info&quot;]Eğer daha önce openssl kullandıysanız ve “key yaratmak” nedir biliyorsanız aşağıdaki yöntemi kullanmak zorunda değilsiniz.[/alert]</p>
+<p>OpenVPN ile gelen <code>easy-rsa</code>’yı kullanalım. Aşağıdaki komutları sırayla çağırın.</p>
+<p>&lt;pre&gt;cd /etc/openvpn
+cp -r /usr/share/doc/openvpn/examples/easy-rsa/2.0 ./easy-rsa
+nano easy-rsa/vars&lt;/pre&gt;</p>
+<p><code>vars</code> dosyası içindeki</p>
+<p>&lt;pre&gt;export EASY_RSA=&quot;<code>pwd</code>&quot;&lt;/pre&gt;</p>
+<p>satırını</p>
+<p>&lt;pre&gt;export EASY_RSA=&quot;/etc/openvpn/easy-rsa&quot;&lt;/pre&gt;</p>
+<p>ile değiştirin.</p>
+<p>Daha sonra aşağıdaki komutları çalıştırarak devam edin:</p>
+<p>&lt;pre&gt;. ./easy-rsa/vars
+./easy-rsa/clean-all
+cd easy-rsa
+ln -s openssl-1.0.0.cnf openssl.cnf
+cd ..
+./easy-rsa/build-ca OpenVPN
+./easy-rsa/build-key-server server
+./easy-rsa/build-key client1
+./easy-rsa/build-dh&lt;/pre&gt;</p>
+<p>Son adımlarda sizden sertifika yaratmak için gerekli bazı bilgiler istenecektir.</p>
+<p>VPN’i kullanmasını istediğiniz her makine için ayrı bir sertifikaya ihtiyaç duyarsınız.  <code>./easy-rsa/build-key client1</code> adımında <code>client1</code> yerine farklı istemci adları vererek her makine için farklı key yaratabilirsiniz.</p>
+<p>[accordion] [acc title=&quot;Örnek&quot;]</p>
+<p>&lt;pre&gt;./easy-rsa/build-key myandroid
+./easy-rsa/build-key mymac
+./easy-rsa/build-key mywin7
+./easy-rsa/build-key seyda-mac&lt;/pre&gt;</p>
+<p>vs. [/acc] [/accordion]</p>
+<p>Yaratılan sertifikalar <code>/etc/openvpn/easy-rsa/keys/</code> içerisinde bulunabilir. İsteğe bağlı olarak  buradaki dosyaları <code>/etc/openvpn/keys/</code> klasörüne taşıyıp <code>/etc/openvpn/easy-rsa/</code> klasörünü silebilirsiniz.</p>
+<h2>4. Yaratılan sertifikaların sunucu ayarlarına eklenmesi</h2>
+<p>&lt;pre&gt;cd /etc/openvpn
+nano server.conf&lt;/pre&gt;</p>
+<p>Yukarıdaki komutlar ile sunucu ayarlarını açın.</p>
+<p>&lt;pre&gt;ca easy-rsa/keys/ca.crt
+cert easy-rsa/keys/server.crt
+key easy-rsa/keys/server.key  # This file should be kept secret
+dh easy-rsa/keys/dh1024.pem&lt;/pre&gt;</p>
+<p>Yukarıdaki satırların doğru dosyaları gösterdiğine emin olun.</p>
+<p>[highlight]<code>server.key</code> dosyasını kesinlikle başkasıyla paylaşmayın![/highlight]</p>
+<h2>5. Yönlendirme ayarları</h2>
+<p>Sunucunuzun yönlendirmeyi doğru bir şekilde yapabilmesi için aşağıdaki işlemleri gerçekleştirin:</p>
+<p>&lt;pre&gt;echo 1 &gt; /proc/sys/net/ipv4/ip_forward
+iptables -t nat -A POSTROUTING -s 10.8.0.0/24 -o venet0 -j SNAT --to BURAYA_VPSINIZIN_IP_ADRESINI_YAZIN
+cd /etc
+nano sysctl.conf&lt;/pre&gt;</p>
+<p><code>#net.ipv4.ip_forward=1</code> satırının başındaki <code>#</code> işaretini kaldırın ve dosyayı kaydedin.</p>
+<p>&lt;pre&gt;net.ipv4.ip_forward=1&lt;/pre&gt;</p>
+<h2>6. Open VPN’i başlatma</h2>
+<p>Aşağıdaki komutu çalıştırın:</p>
+<p>&lt;pre&gt;/etc/init.d/openvpn start&lt;/pre&gt;</p>
+<h2>7. İstemci ayarları</h2>
+<p>OpenVPN istemcileri neredeyse her platform için bulunmaktadır. Ben Mac ile <em><a href="http://code.google.com/p/tunnelblick/" rel="noopener noreferrer" target="_blank">TunnelBlick</a></em> kullanıyorum.</p>
+<p>Yapılacak olan istemci ayarları uygulamadan uygulamaya değişir ve bu yazının konusu değildir. Ancak genel olarak aşağıdaki gibi bir ayar dosyasına ihtiyacınız olacaktır:</p>
+<p>&lt;pre&gt;dev tun
+client
+proto udp
+remote VPSINIZIN_ADRESI 1194
+resolv-retry infinite
+nobind
+persist-key
+persist-tun
+ca ca.crt
+cert client1.crt
+key client1.key
+comp-lzo
+verb 3
+redirect-gateway def1&lt;/pre&gt;</p>
+<p>Her istemci için ayar dosyasının yanı sıra, <code>ca.crt</code> ve o istemci için yaratılmış sertifikaların (<code>crt</code> ve <code>key</code> dosyaları) da bulunması gerekir. <em>(örn: <code>client1.crt</code> ve <code>client1.key</code>)</em></p>
+<p>[alert type=&quot;warning&quot;]<em>Dikkat!</em> <code>server.key</code> asla paylaşılmamalıdır. Her istemci için o istemci ile ilgili crt ve key dosyalarının paylaşılması yeterli olacaktır.[/alert]</p>
+<h2>Sorun Giderme</h2>
+<p>[list type=&quot;cross&quot;] [li]Eğer bağlanmayı başaramıyorsanız, yönlendirme ayarları çalışmıyor olabilir. VPS’i yeniden başlatıp tekrar deneyin.[/li] [li]Eğer bağlanmayı başaramıyorsanız, istemci ayarları ile ilgili bir sıkıntı olabilir. Yapılandırma ayarlarınızı gözden geçirin.[/li] [li]Sorun giderme süresince hem istemci hem de sunucudaki LOG dosyaları en büyük yardımcınızı olacaktır. Sürekli gözden geçirin![/li] [li]Eğer bir türlü çalışmıyorsa, VPS’iniz TUN/TAP desteklemiyor olabilir. Hosting firmanıza danışın.[/li] [/list]</p>
+</div></div></article><div class="card comments main-container__items"><div class="card__contents" id="disqus_thread"></div></div></div><div class="sidebar main-content__sidebar"><div class="about"><img class="about__image" src="/img/profile.jpg"/><h1 class="about__name">Umut Benzer</h1><h2 class="about__mini-bio">Software Engineer in Berlin</h2></div></div></div><div class="main-container"><div class="footer"><div class="footer__copyright-holder"><p><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license noopener noreferrer" target="_blank"><img alt="Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License" src="/img/cclicense.png"/></a></p><p><span>Bu sitedeki tüm yazı ve görseller </span><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license noopener noreferrer" target="_blank">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a><span> ile lisanslanmıştır.</span></p></div><div class="footer__generator"><span>Bu sayfa </span><span>9 Nisan 2017</span><span> tarihinde </span><a href="https://github.com/ubenzer/fil" target="_blank">Fil</a><span> ile yaratılmıştır.</span></div></div></div></div>
+        <script src="/template/app.js" type="text/javascript"></script><script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = "https://ubenzer.com/2013/04/ubuntu-12-04-openvpn-kurulumu";
+          this.page.identifier = "post@/2013/04/ubuntu-12-04-openvpn-kurulumu";
+        };
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = 'https://ubenzer.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+        </script>
+      </body>
+    </html>
+  

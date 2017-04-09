@@ -1,0 +1,170 @@
+<!doctype html>
+    <html lang="tr">
+      <head>
+        <title>Ödev: Dosyalar - UBenzer</title>
+        <meta content="utf-8" name="charset"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="#2196F3" name="theme-color"/>
+        <link href="/template/ui.css" media="screen" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i&amp;amp;subset=latin-ext" media="screen" rel="stylesheet" type="text/css"/><link href="/img/favicon/apple-touch-icon-57x57.png" rel="apple-touch-icon-precomposed" sizes="57x57"/><link href="/img/favicon/apple-touch-icon-60x60.png" rel="apple-touch-icon-precomposed" sizes="60x60"/><link href="/img/favicon/apple-touch-icon-72x72.png" rel="apple-touch-icon-precomposed" sizes="72x72"/><link href="/img/favicon/apple-touch-icon-76x76.png" rel="apple-touch-icon-precomposed" sizes="76x76"/><link href="/img/favicon/apple-touch-icon-114x114.png" rel="apple-touch-icon-precomposed" sizes="114x114"/><link href="/img/favicon/apple-touch-icon-120x120.png" rel="apple-touch-icon-precomposed" sizes="120x120"/><link href="/img/favicon/apple-touch-icon-152x152.png" rel="apple-touch-icon-precomposed" sizes="152x152"/><link href="/img/favicon/favicon-196x196.png" rel="icon" sizes="196x196"/><link href="/img/favicon/favicon-128x128.png" rel="icon" sizes="128x128"/><link href="/img/favicon/favicon-96x96.png" rel="icon" sizes="96x96"/><link href="/img/favicon/favicon-32x32.png" rel="icon" sizes="32x32"/><link href="/img/favicon/favicon-16x16.png" rel="icon" sizes="16x16"/>
+      </head>
+      <body>
+        <div><header class="header"><div class="app-bar"><h1 class="app-bar__title"><a class="app-bar__title-link" href="/">UBenzer</a></h1></div></header><div class="main-container"><div class="main-content"><article class="card main-container__items"><div class="card__contents blog-post"><div class="blog-post__date">23 Mart 2008</div><h1><a class="blog-post__title" href="/2008/03/odev-dosyalar">Ödev: Dosyalar</a></h1><div class="markdown-content blog-post__body blog-post__content"><p>11 Mart 2008 tarihinde verilen &quot;Dosyalar&quot; ödevi için teslim ettiğim çözüm. Eğer farklı bir çözüm yöntemi merak ediyorsanız, kaynak kodumu inceleyebilirsiniz.</p>
+<ul>
+<li><a href="/2008/03/odev-dosyalar/odev-1.pdf" >Ödev Açıklaması</a></li>
+<li><a href="/2008/03/odev-dosyalar/dosyalar.txt" >Benim Çözümüm (7670.c)</a></li>
+<li><a href="/2008/03/odev-dosyalar/sau.7z" >Örnek urunler.dat ve satislar.dat dosyası</a></li>
+</ul>
+<p>Kaynak kodunu incelemek ve fikir sahibi olmak amacıyla kullanabilirsiniz. Ama lütfen kaynak kodunu kopyala yapıştır yapmayalım, kendimize mal etmeyelim. Onun yerine nasıl çalıştığını inceleyip kavrama yoluna gidelim.</p>
+<p><em>Not:</em> Ödevimde hatalar çıkabilir, bu kaynak kodunun amfinin en etkin ya da hatasız kaynak kodu olduğunu iddia ediyor değilim.</p>
+<p><em>Sonradan eklenen bir kısım:</em> Ödev 100 aldı.</p>
+<p>Hepimize bol kaynak kodlu ama daha önemlisi eğlenceli ve mutlu günler. =)</p>
+<p>Kaynak kodunun bir kopyası aşağıdadır: ```c
+#include &lt;stdio.h&gt; #include &lt;stdlib.h&gt;</p>
+<p>#define URUN_NO_MIN 1 #define URUN_NO_MAX 100 #define TUM_URUNLER -1 #define URUN_ADI -2 #define STOK_LIMIT_YOK -1 #define STOK_LIMIT_MIN 0 #define BIRIM_FIYAT_MIN 0 #define SIL 0 #define SILME 1</p>
+<p>/* Sabitler ve Anlamlari <em>/ /</em> --------------------- <em>/ /</em> URUN_NO_MIN : Ürün numarasının alabileceği en düşük değer. (negatif değeler özel parametre- lere karşılık gelebileceği için tercih edilmemelidir.) URUN_NO_MAX : Ürün numarasının alabileceği en yüksek değer. TUM_URUNLER : urun_goster fonksiyonuna ürün numarası olarak gönderildiğinde fonksiyonun tüm ürünleri göstermesini sağlayan özel sabit. Bu sabit URUN_NO_MIN'den küçük veya URUN_NO_MAX'dan büyük olmalıdır. URUN_ADI sabitiyle aynı değeri almamalıdır. URUN_ADI : urun_goster fonksiyonuna ürün numarası olarak gönderildiğinde fonksiyonun ürün adına göre listeleme yapmasını sağlar. Bu sabit URUN_NO_MIN'den küçük veya URUN_NO_MAX'dan büyük olmalıdır. TUM_URUNLER sabitiyle aynı değeri almamalıdır. STOK_LIMIT_YOK : urun_goster fonksiyonuna stok limit alt ya da stok limit üst olarak gönderidi- ğinde bu stok limitinin dikkate alınmamasını sağlayan özel bir değer. Söz geli- mi, tüm ürünleri listelemek istendiğinde stok limit değerlerine bu sabit gönde- rilir. Bu sabit STOK_LIMIT_MIN'den daha küçük olmalıdır. STOK_LIMIT_MIN : Stok değerinin alabileceği minimum değerdir. Programda depoda olmayan bir ürünün satılamayacağı düşünülerek bu sabit 0 alınmıştır. Ancak stok değerinin - değer- lere de düşmesi isteniyorsa bu değer değiştirilebilir. Dikkat edilmesi gereken STOK_LIMIT_MIN bu değerden hep daha küçük olmalıdır. BIRIM_FIYAT_MIN : Birim fiyatın alabileceği minimum değeri belirler. Bir ürünün en fazla bedava sa- tılacağı (o da nedense) düşünülmüş ve programda 0 ayarlanmıştır. Ama eğer ürünü satıp üstüne de para verilmesi isteniyorsa bu değişken her türlü sayı yapılabilir. SIL : urun_ekle fonksiyonunun sil parametresine gönderilirse, ürün numarası verilen kay- dı siler. SILME : urun_ekle fonksiyonunun sil parametresine gönderilirse, ürün numarası verilen ka- yıt güncellenir/eklenir. */</p>
+<p>/* Yapılar */ struct URUN_YAPI { int urun_kodu; char urun_adi[20]; float birim_fiyati; int stok_miktari; };</p>
+<p>struct SATIS_YAPI { int urun_kodu; char satis_tarihi[6]; int satis_miktari; };</p>
+<p>/* Kullanıcı tanımlı tipler */ typedef struct URUN_YAPI URUN; typedef struct SATIS_YAPI SATIS;</p>
+<p>void beklet() { /* Bu fonksiyonun tek amaci kullaniciyi bir tusa basana kadar bekletmek, ve sonra ekrani silmektir. */ printf(&quot;\nDevam etmek icin bir tusa basin.&quot;); getche(); system (&quot;cls&quot;); }</p>
+<p>int urun_bilgisi(int urun_kodu, char urun_adi[20]) { /* Numarası ya da adı verilen ürünün olup olmadığını kontrol eden fonksiyondur. Eğer böyle bir ürün yoksa -1, varsa urun kodunu gönderir. <em>/ /</em> Bir nedenden dolayı dosya açılamazsa -2 gönderilir. */</p>
+<p>FILE *fp; URUN cevap;</p>
+<p>if((fp=fopen(&quot;urunler.dat&quot;,&quot;r+b&quot;)) == NULL) { return -2; }</p>
+<p>if (urun_kodu == URUN_ADI) { /* Ürün adına göre kontrol yapılacak.<em>/ while (!feof(fp)) { fread(&amp;cevap, sizeof(URUN),1,fp); if (strncmp(urun_adi,cevap.urun_adi,20) == 0) { fclose(fp); return cevap.urun_kodu; } } } else { /</em> Ürün koduna göre kontrol yapylacak. */ fseek(fp, sizeof(URUN) * (urun_kodu - 1),0); fread(&amp;cevap, sizeof(URUN),1,fp); if (cevap.urun_kodu != 0) { fclose(fp); return cevap.urun_kodu; } else { fclose(fp); return -1; } } fclose(fp); return -1; }</p>
+<p>int urun_goster(int urun_kodu, int stok_limit_ust, int stok_limit_alt, char urun_adi[20]) {</p>
+<p>/* Kriterlere uyan ürünleri toplu bir şekilde ekrana yazar. */</p>
+<p>FILE *fp; FILE *fp2; SATIS satislar; URUN data; int sayac;</p>
+<p>if((fp=fopen(&quot;urunler.dat&quot;,&quot;r+b&quot;)) == NULL) { return -1; }</p>
+<p>printf(&quot;Urun Kodu Urun Adi Birim Fiyati Stok Miktari\n&quot;); printf(&quot;--------- -------------------- ------------ ------------\n&quot;);</p>
+<p>if (urun_kodu == TUM_URUNLER) {</p>
+<p>for (sayac=0;sayac&lt;100;sayac++) {</p>
+<p>fread(&amp;data,sizeof(URUN),1,fp);</p>
+<p>if (data.urun_kodu != 0) { if ((data.stok_miktari &lt;= stok_limit_ust || stok_limit_ust == STOK_LIMIT_YOK) &amp;&amp; (data.stok_miktari &gt;= stok_limit_alt || stok_limit_alt == STOK_LIMIT_YOK)) { printf(&quot;%9d %20s %12.2f %12d\n&quot;,data.urun_kodu,data.urun_adi,data.birim_fiyati,data.stok_miktari); } } } } else {</p>
+<p>if (urun_kodu == URUN_ADI) { /* Tüm ürünler listeleniyor ya da Ürün Adyna göre listeleniyor */</p>
+<p>for (sayac=0;sayac&lt;100;sayac++) {</p>
+<p>fread(&amp;data,sizeof(URUN),1,fp);</p>
+<p>if (data.urun_kodu != 0) { if (urun_kodu = URUN_ADI &amp;&amp; strncmp(urun_adi,data.urun_adi,20) == 0) { printf(&quot;%9d %20s %12.2f %12d\n&quot;,data.urun_kodu,data.urun_adi,data.birim_fiyati,data.stok_miktari); break; } } }</p>
+<p>} else { /* Doğurudan ürün numarası ile listeleniyor. */</p>
+<p>fseek(fp, sizeof(URUN) * (urun_kodu - 1),0); fread(&amp;data, sizeof(URUN),1,fp); printf(&quot;%9d %20s %12.2f %12d\n\n&quot;,data.urun_kodu,data.urun_adi,data.birim_fiyati,data.stok_miktari); printf(&quot;Satis kayitlari:\n&quot;); printf(&quot; Tarih Satis Miktari\n&quot;); printf(&quot;-------- -------------\n&quot;);</p>
+<p>if((fp2=fopen(&quot;satislar.dat&quot;,&quot;r&quot;)) == NULL) { return -2; }</p>
+<p>while(!feof(fp2)) { fscanf(fp2,&quot;%d %s %d\n&quot;,&amp;satislar.urun_kodu, satislar.satis_tarihi, &amp;satislar.satis_miktari); if (satislar.urun_kodu == urun_kodu) { printf(&quot;%c%c.%c%c.%c%c %d\n&quot;,satislar.satis_tarihi[0],satislar.satis_tarihi[1],satislar.satis_tarihi[2],satislar.satis_tarihi[3],satislar.satis_tarihi[4],satislar.satis_tarihi[5],satislar.satis_miktari); } } fclose(fp2); printf(&quot;\n&quot;); } } fclose(fp); return 0; }</p>
+<p>int urun_ekle(int urun_kodu, char urun_adi[20], float birim_fiyati, int stok_miktari, int sil) { /* Bu fonksiyon urun_kodu numarali kayida verilen diger bilgilerde urun ekler. */</p>
+<p>FILE *fp; FILE *fp2; FILE *gecici; URUN yaz; SATIS satislar; int sayac;</p>
+<p>if((fp=fopen(&quot;urunler.dat&quot;,&quot;r+b&quot;)) == NULL) { return -1; }</p>
+<p>if (sil == SIL) { yaz.urun_kodu = 0; for (sayac=0;sayac&lt;20;sayac++) { yaz.urun_adi[sayac] = NULL; } yaz.birim_fiyati = 0; yaz.stok_miktari = 0;</p>
+<p>if((fp2=fopen(&quot;satislar.dat&quot;,&quot;r&quot;)) == NULL) { return -2; }</p>
+<p>if((gecici=fopen(&quot;~satislar.dat&quot;,&quot;w&quot;)) == NULL) { return -3; }</p>
+<p>while(!feof(fp2)) { fscanf(fp2,&quot;%d %s %d\n&quot;,&amp;satislar.urun_kodu, satislar.satis_tarihi, &amp;satislar.satis_miktari); if (satislar.urun_kodu != urun_kodu) { fprintf(gecici,&quot;%d %s %d\n&quot;,satislar.urun_kodu, satislar.satis_tarihi, satislar.satis_miktari); } }</p>
+<p>fclose(fp2); fclose(gecici);</p>
+<p>remove(&quot;satislar.dat&quot;); rename(&quot;~satislar.dat&quot;,&quot;satislar.dat&quot;);</p>
+<p>} else { yaz.urun_kodu = urun_kodu; for (sayac=0;sayac&lt;20;sayac++) { yaz.urun_adi[sayac] = urun_adi[sayac]; } yaz.birim_fiyati = birim_fiyati; yaz.stok_miktari = stok_miktari; }</p>
+<p>fseek(fp, sizeof(URUN) * (urun_kodu - 1),0); fwrite(&amp;yaz, sizeof(URUN),1,fp);</p>
+<p>fclose(fp);</p>
+<p>return 0;</p>
+<p>}</p>
+<p>int fiyat_guncelle(int urun_kodu, float birim_fiyati) { /* Urunun kodu kullanylarak fiyaty dy?yndaki bilgiler de alynarak urun_ekle fonksiyonuna gönderilir. */</p>
+<p>FILE *fp; URUN bilgi;</p>
+<p>if((fp=fopen(&quot;urunler.dat&quot;,&quot;r+b&quot;)) == NULL) { return -1; }</p>
+<p>fseek(fp, sizeof(URUN) * (urun_kodu - 1),0); fread(&amp;bilgi, sizeof(URUN),1,fp); fclose(fp);</p>
+<p>return urun_ekle(urun_kodu, bilgi.urun_adi, birim_fiyati, bilgi.stok_miktari, SILME);</p>
+<p>}</p>
+<p>int stok_guncelle(int urun_kodu,int eklenecek_stok_miktari) { /* Urunun kodu kullanylarak gerekli bilgiler elde edilir. Stok miktari guncellestirilerek urun_ekle fonksiyonuna gönderilir. */</p>
+<p>FILE *fp; URUN bilgi;</p>
+<p>if((fp=fopen(&quot;urunler.dat&quot;,&quot;r+b&quot;)) == NULL) { return -1; }</p>
+<p>fseek(fp, sizeof(URUN) * (urun_kodu - 1),0); fread(&amp;bilgi, sizeof(URUN),1,fp); fclose(fp);</p>
+<p>return urun_ekle(urun_kodu, bilgi.urun_adi, bilgi.birim_fiyati, bilgi.stok_miktari + eklenecek_stok_miktari, SILME);</p>
+<p>}</p>
+<p>int satis_gir(int urun_kodu, char satis_tarihi[6], int satis_miktari) {</p>
+<p>FILE *fp; FILE *fp2; URUN bilgi;</p>
+<p>/* Acaba olmayan urunu mu satiyoruz? Stok -'ye dü?er mi kontrolü BA?LANGICI */ if((fp=fopen(&quot;urunler.dat&quot;,&quot;r+b&quot;)) == NULL) { return -1; }</p>
+<p>fseek(fp, sizeof(URUN) * (urun_kodu - 1),0); fread(&amp;bilgi, sizeof(URUN),1,fp); fclose(fp);</p>
+<p>if (bilgi.stok_miktari - satis_miktari &lt; 0) { return -3; } /* Acaba olmayan urunu mu satiyoruz? Stok -'ye dü?er mi kontrolü SONU */</p>
+<p>if((fp2=fopen(&quot;satislar.dat&quot;,&quot;a+&quot;)) == NULL) { return -2; }</p>
+<p>fprintf(fp2,&quot;%d %s %d\n&quot;,urun_kodu, satis_tarihi, satis_miktari); fclose(fp2);</p>
+<p>return stok_guncelle(urun_kodu, (-1) * satis_miktari);</p>
+<p>}</p>
+<p>int istatistik_goster() {</p>
+<p>struct ISTATISTIK { int urun_kodu; int satis_sayisi; float birim_fiyati; };</p>
+<p>struct ISTATISTIK veri[URUN_NO_MAX-URUN_NO_MIN+1];</p>
+<p>FILE *fp; FILE *fp2; SATIS data; URUN data2; int sayac;</p>
+<p>for (sayac=URUN_NO_MIN-1;sayac&lt;URUN_NO_MAX;sayac++) { veri[sayac].urun_kodu = 0; veri[sayac].satis_sayisi = 0; veri[sayac].birim_fiyati = 0; }</p>
+<p>if((fp=fopen(&quot;urunler.dat&quot;,&quot;r+b&quot;)) == NULL) { return -1; }</p>
+<p>if((fp2=fopen(&quot;satislar.dat&quot;,&quot;r&quot;)) == NULL) { return -2; }</p>
+<p>/* Satis sayilari bellege atilir. <em>/ /</em> DIKKAT: Grupta belirtildiği üzere satislar.dat dosyasinin bos olma durumu goz onune alinmadi */ while(!feof(fp2)) { fscanf(fp2,&quot;%d %s %d\n&quot;,&amp;data.urun_kodu, data.satis_tarihi, &amp;data.satis_miktari); veri[data.urun_kodu-1].satis_sayisi += data.satis_miktari; }</p>
+<p>for (sayac=0;sayac&lt;100;sayac++) { fread(&amp;data2, sizeof(URUN),1,fp); veri[sayac].birim_fiyati = data2.birim_fiyati; veri[sayac].urun_kodu = data2.urun_kodu; }</p>
+<p>fclose(fp); fclose(fp2);</p>
+<p>printf(&quot; Urun Kodu Birim Fiyati Toplam Satis Adedi Toplam Ciro\n&quot;); printf(&quot; --------- ------------ ------------------ -----------\n&quot;);</p>
+<p>float max_ciro = -1; int max_ciro_indis = -1;</p>
+<p>float min_ciro = -1; int min_ciro_indis = -1;</p>
+<p>int max_satis = -1; int max_satis_indis = -1;</p>
+<p>int min_satis = -1; int min_satis_indis = -1;</p>
+<p>/* Adet satilan ve ciro degerlerinde iki farkli urunun MAX veya MIN olma durumu ihtmal edilir. */</p>
+<p>for(sayac=0;sayac&lt;100;sayac++) { if(veri[sayac].urun_kodu != 0) {</p>
+<p>if(veri[sayac].birim_fiyati * veri[sayac].satis_sayisi &gt; max_ciro) { max_ciro = veri[sayac].birim_fiyati * veri[sayac].satis_sayisi; max_ciro_indis = sayac; }</p>
+<p>if(veri[sayac].satis_sayisi &gt; max_satis){ max_satis = veri[sayac].satis_sayisi; max_satis_indis = sayac; }</p>
+<p>if((veri[sayac].birim_fiyati * veri[sayac].satis_sayisi &lt; min_ciro) || min_ciro == -1) { min_ciro = veri[sayac].birim_fiyati * veri[sayac].satis_sayisi; min_ciro_indis = sayac; }</p>
+<p>if((veri[sayac].satis_sayisi &lt; min_satis) || min_satis == -1) { min_satis = veri[sayac].satis_sayisi; min_satis_indis = sayac; } } }</p>
+<p>if (max_satis_indis != -1) { printf(&quot;Max Adet Satilan %9d %12.2f %18d %11.2f\n&quot;,max_satis_indis + 1, veri[max_satis_indis].birim_fiyati, veri[max_satis_indis].satis_sayisi,veri[max_satis_indis].birim_fiyati * veri[max_satis_indis].satis_sayisi); } else { printf(&quot;Max Adet Satilan (yok)\n&quot;); }</p>
+<p>if (min_satis_indis != -1) { printf(&quot;Min Adet Satilan %9d %12.2f %18d %11.2f\n&quot;,min_satis_indis + 1, veri[min_satis_indis].birim_fiyati, veri[min_satis_indis].satis_sayisi,veri[min_satis_indis].birim_fiyati * veri[min_satis_indis].satis_sayisi); } else { printf(&quot;Min Adet Satilan (yok)\n&quot;); }</p>
+<p>if (max_ciro_indis != -1) { printf(&quot;Max Ciro Getiren %9d %12.2f %18d %11.2f\n&quot;,max_ciro_indis + 1, veri[max_ciro_indis].birim_fiyati, veri[max_ciro_indis].satis_sayisi,veri[max_ciro_indis].birim_fiyati * veri[max_ciro_indis].satis_sayisi); } else { printf(&quot;Max Ciro Getiren (yok)\n&quot;); }</p>
+<p>if (min_ciro_indis != -1) { printf(&quot;Min Ciro Getiren %9d %12.2f %18d %11.2f\n&quot;,min_ciro_indis + 1, veri[min_ciro_indis].birim_fiyati, veri[min_ciro_indis].satis_sayisi,veri[min_ciro_indis].birim_fiyati * veri[min_ciro_indis].satis_sayisi); } else { printf(&quot;Min Ciro Getiren (yok)\n&quot;); }</p>
+<p>return 0; }</p>
+<p>int main() { /* Acilis yazilari BASLANGICI <em>/ printf(&quot;Umut BENZER\n&quot;); printf(&quot;05-06-7670\n&quot;); printf(&quot;Ege Universitesi Bilgisayar Muhendisligi 1. Sinif\n&quot;); printf(&quot;http://www.ubenzer.com\n&quot;); printf(&quot;Dosyalar 1.0\n\n&quot;); /</em> Acilis yazilari SONU */</p>
+<p>/* iki genel döngü yönetimi için değişkenler */ int sag_serbest=-1; int sag_serbest2=-1;</p>
+<p>/* Kullanıcıdan veri almak ve işlemek için gerekli girdi değişkenleri */ int girdi; int girdi2; char girdi3[20]; float girdi4; char girdi5[6];</p>
+<p>char secenek; char secenek2;</p>
+<p>/* Ana döngü */ while (sag_serbest==-1) {</p>
+<p>/* menu BASLANGICI <em>/ printf(&quot;</em>** Menu *** \n\n&quot;); printf(&quot;1. Yeni bir urunun eklenmesi \n&quot;); printf(&quot;2. Bir urunun fiyatinin guncellenmesi \n&quot;); printf(&quot;3. Stoka urun girisi yapilmasi \n&quot;); printf(&quot;4. Yapilan satislarin sisteme girilmesi \n&quot;); printf(&quot;5. Bir urunun silinmesi \n&quot;); printf(&quot;6. Bir urunun bilgilerinin ve satis kayitlarinin listelenmesi \n&quot;); printf(&quot;7. Bir urunun bilgilerinin listelenmesi \n&quot;); printf(&quot;8. Tum urunlerin listelenmesi \n&quot;); printf(&quot;9. Belirli bir stok miktarinin altindaki urunlerin listelenmesi \n&quot;); printf(&quot;0. En cok ve en az satilan ve ciro getiren urunlerin bulunmasi \n&quot;); printf(&quot;C. Cikis \n\n&quot;);</p>
+<p>printf(&quot;Lutfen istediginiz islemin numarasini giriniz.\n&quot;); printf(&quot;(0-9 arasi rakamlar ve C harfi)\n&quot;); /*menu BITIMI */</p>
+<p>secenek=getche(); system (&quot;cls&quot;);</p>
+<p>/* secenek getche ile alındığı için ASCII koduna göre switch yapısına sokulabilir. */</p>
+<p>/* Her CASE için aşağıdaki not geçerlidir. */</p>
+<p>/* Gerekli saçma sapan veri kontrolleri ve doğru girdi için ilgili fonksiyonların çağırılması, fonksiyon- lardan cevap alınması ve bunların işlenmesi.</p>
+<p>Ayrıntılı bilgi için her fonksiyona ayrı ayrı baka- bilirsiniz. */</p>
+<p>switch(secenek) { case 49: //1 girdi = URUN_NO_MIN - 1; while (girdi &lt; URUN_NO_MIN || girdi &gt; URUN_NO_MAX) { system (&quot;cls&quot;); printf(&quot;Yeni bir urun kodu giriniz: \n&quot;); printf(&quot;(Urun kodu %d ile %d arasinda olmalidir.\n&quot;,URUN_NO_MIN,URUN_NO_MAX); printf(&quot;Zaten var olan bir urunun ustune yazmaya\n&quot;); printf(&quot;calisirsaniz uyarilacaksiniz.)\n&quot;); scanf(&quot;%d&quot;,&amp;girdi); } system (&quot;cls&quot;);</p>
+<p>switch (urun_bilgisi(girdi,girdi3)) { case -1: for (girdi2=0;girdi2&lt;20;girdi2++) { girdi3[girdi2] = NULL; }</p>
+<p>while (girdi3[0] == NULL) { fflush(stdin); printf(&quot;Yeni urunun adini giriniz: &quot;); gets(girdi3); }</p>
+<p>/* Bu program eğer girilen ürünün aynısının adı başka bir ürün numarasında geçiyorsa, çift kayıt kabul etmez ve ana menüye gönder. Bunu engellemek için aşağıdaki sa- tırları comment haline getirebilirsiniz. */</p>
+<p>/* Aynı isim kontrol BASLANGICI <em>/ /</em> COMMENT YAPILACAK KISIM: 1 <em>/ system (&quot;cls&quot;); switch (urun_bilgisi(URUN_ADI,girdi3)) { case -1: /</em> COMMENT YAPILACAK KISIM SONU: 1*/ girdi4 = BIRIM_FIYAT_MIN - 1; while (girdi4 &lt; BIRIM_FIYAT_MIN) { printf(&quot;Urunun birim fiyatini giriniz: &quot;); scanf(&quot;%f&quot;,&amp;girdi4); }</p>
+<p>girdi2 = STOK_LIMIT_MIN-1; while (girdi2 &lt; STOK_LIMIT_MIN) { printf(&quot;Urunun stok durumunu giriniz: &quot;); scanf(&quot;%d&quot;,&amp;girdi2); }</p>
+<p>if (urun_ekle(girdi, girdi3, girdi4, girdi2, SILME) == -1) { printf (&quot;urunler.dat dosyasina yazilamiyor. Bir sakatlik oldu.\n&quot;); printf (&quot;Program ana menuye donecek.\n&quot;); break; }</p>
+<p>printf(&quot;Urun eklendi. 😃\n&quot;); /* COMMENT YAPILACAK KISIM: 2 <em>/ break; case -2: printf (&quot;urunler.dat acilamadi.\n&quot;); printf (&quot;Program ana menuye donecek.\n&quot;); break; default: printf(&quot;%s isimli bir urun zaten mevcut.\n&quot;,girdi3); printf(&quot;Neden yeni ekleme yapmak yerine onu duzenlemiyorsunuz?\n\n&quot;); printf(&quot;Program ana menuye donecek.\n&quot;); break; } /</em> COMMENT YAPILACAK KISIM SONU: 2 <em>/ /</em> Ayni isim kontrol SONU */ break; case -2: printf (&quot;urunler.dat acilamadi.\n&quot;); printf (&quot;Program ana menuye donecek.\n&quot;); break; default: printf (&quot;%d kodlu urun zaten var.\n&quot;,girdi); printf (&quot;Program ana menuye donecek.\n&quot;); break; } beklet(); break; case 50: //2 girdi = URUN_NO_MIN - 1; while (girdi &lt; URUN_NO_MIN || girdi &gt; URUN_NO_MAX) { system (&quot;cls&quot;); printf(&quot;Duzenlenecek urun kodunu giriniz: \n&quot;); printf(&quot;(Urun kodu %d ile %d arasinda olmalidir.\n&quot;,URUN_NO_MIN,URUN_NO_MAX); printf(&quot;Kayitli olmayan bir urun kodu\n&quot;); printf(&quot;yazarsaniz uyarilacaksiniz.)\n&quot;); scanf(&quot;%d&quot;,&amp;girdi); } system (&quot;cls&quot;);</p>
+<p>switch (urun_bilgisi(girdi,girdi3)) { case -1: printf (&quot;%d kodlu bir urun yok.\n&quot;,girdi); printf (&quot;Eklemek istiyorsaniz ana menuden 1'i secin.\n&quot;); printf (&quot;Program ana menuye donecek.\n&quot;); break; case -2: printf (&quot;urunler.dat acilamadi.\n&quot;); printf (&quot;Program ana menuye donecek.\n&quot;); break; default: system (&quot;cls&quot;); girdi4 = BIRIM_FIYAT_MIN - 1; while (girdi4 &lt; BIRIM_FIYAT_MIN) { printf(&quot;Urunun yeni birim fiyatini giriniz: &quot;); scanf(&quot;%f&quot;,&amp;girdi4); }</p>
+<p>if (fiyat_guncelle(girdi, girdi4) == -1) { printf (&quot;urunler.dat dosyasina yazilamiyor. Bir sakatlik oldu.\n&quot;); printf (&quot;Program ana menuye donecek.\n&quot;); break; }</p>
+<p>printf(&quot;Urun guncellendi. 😃\n&quot;); break; } beklet(); break; case 51: //3 sag_serbest2 = -1; while (sag_serbest2==-1) {</p>
+<p>girdi = URUN_NO_MIN - 1; while (girdi &lt; URUN_NO_MIN || girdi &gt; URUN_NO_MAX) { system (&quot;cls&quot;); printf(&quot;Stok girisi yapilacak urun kodunu giriniz: \n&quot;); printf(&quot;(Urun kodu %d ile %d arasinda olmalidir.\n&quot;,URUN_NO_MIN,URUN_NO_MAX); printf(&quot;Kayitli olmayan bir urun kodu\n&quot;); printf(&quot;yazarsaniz uyarilacaksiniz.)\n&quot;); scanf(&quot;%d&quot;,&amp;girdi); } system (&quot;cls&quot;);</p>
+<p>switch (urun_bilgisi(girdi,girdi3)) { case -1: printf (&quot;%d kodlu bir urun yok.\n&quot;,girdi); printf (&quot;Program ana menuye donecek.\n&quot;); beklet(); sag_serbest2 = 0; break; case -2: printf (&quot;urunler.dat acilamadi.\n&quot;); printf (&quot;Program ana menuye donecek.\n&quot;); beklet(); sag_serbest2 = 0; break; default: system (&quot;cls&quot;); girdi2 = STOK_LIMIT_MIN - 1; while (girdi2 &lt; STOK_LIMIT_MIN) { printf(&quot;Ne kadarlik alim yapildi?\n&quot;); scanf(&quot;%d&quot;,&amp;girdi2); }</p>
+<p>if (stok_guncelle(girdi, girdi2) == -1) { printf (&quot;urunler.dat dosyasina yazilamiyor. Bir sakatlik oldu.\n&quot;); printf (&quot;Program ana menuye donecek.\n&quot;); beklet(); sag_serbest2 = 0; break; }</p>
+<p>printf(&quot;Stok miktari guncellendi. 😃\n&quot;);</p>
+<p>/* E e H h ve disinda girdi kabul etmeyen TAMAM MI DEVAM MI BASLANGICI <em>/ do { printf (&quot;\nTamam mi devam mi? (T/D) &quot;); secenek2 = getche(); if (secenek2 == 'T' || secenek2 == 't') { sag_serbest2 = 0; secenek2 = 'D'; } } while (secenek2 != 'D' &amp;&amp; secenek2 != 'd'); /</em> E e H h ve disinda girdi kabul etmeyen TAMAM MI DEVAM MI SONU */ break; }</p>
+<p>}</p>
+<p>system (&quot;cls&quot;); break; case 52: //4 girdi = URUN_NO_MIN - 1; while (girdi &lt; URUN_NO_MIN || girdi &gt; URUN_NO_MAX) { system (&quot;cls&quot;); printf(&quot;Satisa ait urun kodu nedir? \n&quot;); scanf(&quot;%d&quot;,&amp;girdi); }</p>
+<p>system (&quot;cls&quot;); switch (urun_bilgisi(girdi,girdi3)) { case -1: printf (&quot;%d kodlu bir urun yok.\n&quot;,girdi); printf (&quot;Olmayan bir urune satis bilgisi ekleyemezsiniz.\n&quot;); printf (&quot;Program ana menuye donecek.\n&quot;); break; case -2: printf (&quot;urunler.dat acilamadi.\n&quot;); printf (&quot;Program ana menuye donecek.\n&quot;); break; default: for (girdi2=0;girdi2&lt;6;girdi2++) { girdi5[girdi2] = NULL; }</p>
+<p>while (girdi5[0] == NULL) { system (&quot;cls&quot;); fflush(stdin); printf(&quot;Satis tarihini giriniz:\n&quot;); printf(&quot;(format: ggaayy, bosluksuz)\n&quot;); gets(girdi5); }</p>
+<p>girdi2 = 0;</p>
+<p>while (girdi2 &lt; 1) { printf(&quot;Satis miktarini giriniz: &quot;); scanf(&quot;%d&quot;,&amp;girdi2); }</p>
+<p>switch (satis_gir(girdi, girdi5, girdi2)) { case -1: printf (&quot;urunler.dat dosyasina yazilamiyor. Bir sakatlik oldu.\n&quot;); printf (&quot;Program ana menuye donecek.\n&quot;); break; case -2: printf (&quot;satislar.dat dosyasina yazilamiyor. Bir sakatlik oldu.\n&quot;); printf (&quot;Program ana menuye donecek.\n&quot;); break; case -3: printf (&quot;Satis yapilamiyor. Stoklarda yeterli urun yok! 😦\n&quot;); break; default: printf(&quot;Satis kaydi eklendi. Stoklar ayarlandi. 😃\n&quot;); break; } break; } beklet(); break; case 53: //5 girdi = URUN_NO_MIN - 1; while (girdi &lt; URUN_NO_MIN || girdi &gt; URUN_NO_MAX) { system (&quot;cls&quot;); printf(&quot;Silinecek urun kodunu giriniz: \n&quot;); scanf(&quot;%d&quot;,&amp;girdi); }</p>
+<p>switch (urun_bilgisi(girdi,girdi3)) { case -1: printf (&quot;%d kodlu bir urun yok.\n&quot;,girdi); printf (&quot;Program ana menuye donecek.\n&quot;); break; case -2: printf (&quot;urunler.dat acilamadi.\n&quot;); printf (&quot;Program ana menuye donecek.\n&quot;); break; default: system (&quot;cls&quot;); switch (urun_ekle(girdi, girdi3, girdi4, girdi2, SIL)) { case -1: printf (&quot;urunler.dat dosyasina yazilamiyor. Bir sakatlik oldu.\n&quot;); printf (&quot;Program ana menuye donecek.\n&quot;); break; case -2: printf (&quot;satislar.dat dosyasi acilamiyor.\n&quot;); printf (&quot;Program ana menuye donecek.\n&quot;); break; case -3: printf (&quot;~satislar.dat gecici dosyasi yaratilamiyor.\n&quot;); printf (&quot;Program ana menuye donecek.\n&quot;); break; default: printf(&quot;Urun silindi. 😦\n&quot;); }</p>
+<p>beklet(); break; } break; case 54: //6 girdi = URUN_NO_MIN - 1; while (girdi &lt; URUN_NO_MIN || girdi &gt; URUN_NO_MAX) { system (&quot;cls&quot;); printf(&quot;Urun kodu giriniz: \n&quot;); scanf(&quot;%d&quot;,&amp;girdi); }</p>
+<p>switch (urun_bilgisi(girdi,girdi3)) { case -1: printf (&quot;%d kodlu bir urun yok.\n&quot;,girdi); printf (&quot;Program ana menuye donecek.\n&quot;); break; case -2: printf (&quot;urunler.dat acilamadi.\n&quot;); printf (&quot;Program ana menuye donecek.\n&quot;); break; default: system (&quot;cls&quot;); switch (urun_goster(girdi, STOK_LIMIT_YOK, STOK_LIMIT_YOK, girdi3)) { case -1: printf (&quot;urunler.dat dosyasi acilamiyor.\n&quot;); printf (&quot;Program ana menuye donecek.\n&quot;); break; case -2: printf (&quot;satislar.dat dosyasi acilamiyor.\n&quot;); printf (&quot;Program ana menuye donecek.\n&quot;); break; } break; } beklet(); break; case 55: //7 for (girdi=0;girdi&lt;20;girdi++) { girdi3[girdi] = NULL; }</p>
+<p>while (girdi3[0] == NULL) { fflush(stdin); printf(&quot;Urun adi giriniz: &quot;); gets(girdi3); }</p>
+<p>system (&quot;cls&quot;); if (urun_goster(URUN_ADI,STOK_LIMIT_YOK,STOK_LIMIT_YOK, girdi3) == -1) { system (&quot;cls&quot;); printf (&quot;urunler.dat acilamadi.\n&quot;); printf (&quot;Program ana menuye donecek.\n&quot;); } beklet();</p>
+<p>break; case 56: //8 system (&quot;cls&quot;); if (urun_goster(TUM_URUNLER,STOK_LIMIT_YOK,STOK_LIMIT_YOK, girdi3) == -1) { system (&quot;cls&quot;); printf (&quot;urunler.dat acilamadi.\n&quot;); printf (&quot;Program ana menuye donecek.\n&quot;); } beklet(); break; case 57: //9 /* Negatif stok girdisi almayi engelleme BASLANGICI */ girdi = STOK_LIMIT_MIN-1; while(girdi &lt; STOK_LIMIT_MIN) { system(&quot;cls&quot;); printf(&quot;Kactan kucuk olsun istiyorsunuz? &quot;); scanf(&quot;%d&quot;,&amp;girdi); }</p>
+<p>/* Bu program stok üst limitinin belirlenmesinin yanı sıra stok alt limiti belirleme özelliğini de sunar. Söz gelimi 10 ile 20 arasında stoka sahip ürünleri bu programda listeleyebilirsiniz. */</p>
+<p>/* Stok alt limit özelliğini aktif hale getirmek için comment işaretlerini kaldırın. <em>/ girdi2 = STOK_LIMIT_YOK; // Aşağıdaki commentleri kaldırın. /</em> girdi2 = STOK_LIMIT_MIN-1; while(girdi2 &lt; STOK_LIMIT_MIN) { system(&quot;cls&quot;); printf(&quot;Kactan buyuk olsun istiyorsunuz? &quot;); scanf(&quot;%d&quot;,&amp;girdi2); } */</p>
+<p>system (&quot;cls&quot;); if (urun_goster(TUM_URUNLER,girdi,girdi2,girdi3) == -1) { system (&quot;cls&quot;); printf (&quot;urunler.dat acilamadi.\n&quot;); printf (&quot;Program ana menuye donecek.\n&quot;); } beklet(); break; case 48: //10 system (&quot;cls&quot;); switch (istatistik_goster()) { case -1: printf (&quot;urunler.dat dosyasi acilamiyor.\n&quot;); printf (&quot;Program ana menuye donecek.\n&quot;); break; case -2: printf (&quot;satislar.dat dosyasi acilamiyor.\n&quot;); printf (&quot;Program ana menuye donecek.\n&quot;); break; } beklet(); break; case 99: //c case 67: //C /* E e H h ve disinda girdi kabul etmeyen cikmak istiyor musunuz sorusu BASLANGICI <em>/ do { printf (&quot;\nCidden cikmak istiyor musunuz? (E/H) &quot;); secenek = getche(); if (secenek == 'E' || secenek == 'e') { sag_serbest = 0; secenek = 'H'; } } while (secenek != 'H' &amp;&amp; secenek != 'h'); /</em> E e H h ve disinda girdi kabul etmeyen cikmak istiyor musunuz sorusu SONU <em>/ system (&quot;cls&quot;); break; default: /</em> Elleri yanlis tusa basan kullanicilar icin yazilan bolum BASLANGICI <em>/ printf(&quot;Bir zahmet 0'dan 9'a kadar bir secim yapin.&quot;); beklet(); /</em> Elleri yanlis tusa basan kullanicilar icin yazilan bolum SONU */ break; } }</p>
+<p>printf(&quot;O halde hoscakalin. 😃\n\n\n&quot;); return 0; }</p>
+<pre><code></code></pre>
+</div></div></article><div class="card comments main-container__items"><div class="card__contents" id="disqus_thread"></div></div></div><div class="sidebar main-content__sidebar"><div class="about"><img class="about__image" src="/img/profile.jpg"/><h1 class="about__name">Umut Benzer</h1><h2 class="about__mini-bio">Software Engineer in Berlin</h2></div></div></div><div class="main-container"><div class="footer"><div class="footer__copyright-holder"><p><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license noopener noreferrer" target="_blank"><img alt="Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License" src="/img/cclicense.png"/></a></p><p><span>Bu sitedeki tüm yazı ve görseller </span><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license noopener noreferrer" target="_blank">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a><span> ile lisanslanmıştır.</span></p></div><div class="footer__generator"><span>Bu sayfa </span><span>9 Nisan 2017</span><span> tarihinde </span><a href="https://github.com/ubenzer/fil" target="_blank">Fil</a><span> ile yaratılmıştır.</span></div></div></div></div>
+        <script src="/template/app.js" type="text/javascript"></script><script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = "https://ubenzer.com/2008/03/odev-dosyalar";
+          this.page.identifier = "post@/2008/03/odev-dosyalar";
+        };
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = 'https://ubenzer.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+        </script>
+      </body>
+    </html>
+  

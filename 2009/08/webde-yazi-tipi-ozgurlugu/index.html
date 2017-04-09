@@ -1,0 +1,258 @@
+<!doctype html>
+    <html lang="tr">
+      <head>
+        <title>Web’de Yazı Tipi Özgürlüğü - UBenzer</title>
+        <meta content="utf-8" name="charset"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="#2196F3" name="theme-color"/>
+        <link href="/template/ui.css" media="screen" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i&amp;amp;subset=latin-ext" media="screen" rel="stylesheet" type="text/css"/><link href="/img/favicon/apple-touch-icon-57x57.png" rel="apple-touch-icon-precomposed" sizes="57x57"/><link href="/img/favicon/apple-touch-icon-60x60.png" rel="apple-touch-icon-precomposed" sizes="60x60"/><link href="/img/favicon/apple-touch-icon-72x72.png" rel="apple-touch-icon-precomposed" sizes="72x72"/><link href="/img/favicon/apple-touch-icon-76x76.png" rel="apple-touch-icon-precomposed" sizes="76x76"/><link href="/img/favicon/apple-touch-icon-114x114.png" rel="apple-touch-icon-precomposed" sizes="114x114"/><link href="/img/favicon/apple-touch-icon-120x120.png" rel="apple-touch-icon-precomposed" sizes="120x120"/><link href="/img/favicon/apple-touch-icon-152x152.png" rel="apple-touch-icon-precomposed" sizes="152x152"/><link href="/img/favicon/favicon-196x196.png" rel="icon" sizes="196x196"/><link href="/img/favicon/favicon-128x128.png" rel="icon" sizes="128x128"/><link href="/img/favicon/favicon-96x96.png" rel="icon" sizes="96x96"/><link href="/img/favicon/favicon-32x32.png" rel="icon" sizes="32x32"/><link href="/img/favicon/favicon-16x16.png" rel="icon" sizes="16x16"/>
+      </head>
+      <body>
+        <div><header class="header"><div class="app-bar"><h1 class="app-bar__title"><a class="app-bar__title-link" href="/">UBenzer</a></h1></div></header><div class="main-container"><div class="main-content"><article class="card main-container__items"><div class="card__contents blog-post"><div class="blog-post__date">27 Ağustos 2009</div><h1><a class="blog-post__title" href="/2009/08/webde-yazi-tipi-ozgurlugu">Web’de Yazı Tipi Özgürlüğü</a></h1><div class="markdown-content blog-post__body blog-post__content"><h2>Problem</h2>
+<p>Web sitenizde kullanabileceğiniz yazı tiplerinin çok sınırlı olması. Yıl 2009 olmasına rağmen ne yazık ki öyle bir sınır var.</p>
+<p>Günümüzde bir sürü işletim sistemi ve bir sürü tarayıcı var. Her işletim sistemlerinde aynı yazı tipinin <em>(font)</em> yüklü olmadığını düşünmek çok da zor bir şey değil. Günümüzde birden fazla yazı tipi standardı olduğunu öğrenmek de kimseyi şaşırtmayacaktır.</p>
+<p>Hal böle olunca, tüm işletim sistemlerinde ve tarayıcılarda aynı <em>(en azından benzer)</em> görüntüyü elde edebileceğiniz yazı tipi sayısı çok sınırlı kalıyor. Sadece <em>temel web fontları</em> olarak adlandırabileceğimiz sayılı yazı tipleri, ya da eşlenikleri <em>(neredeyse)</em> tüm işletim sistemlerinde mevcut.</p>
+<p>Bu “güvenle kullanabileceğimiz” yazı tiplerine <a href="http://www.ampsoft.net/webdesign-l/WindowsMacFonts.html" rel="noopener noreferrer" target="_blank">buradan</a> veya resim dosyası halinde <a href="/2009/08/webde-yazi-tipi-ozgurlugu/temel-web-fontlari.png" >buradan</a> göz atabilirsiniz.</p>
+<p>Ancak koca internet dünyasının bu kadarcık yazı tipi ile sınırlı olmasını kimse bekleyemez tabi. Herhangi bir yazı tipini tarayıcı ve işletim sistemi fark etmeksizin web sitelerinde kullanılabilmesi için çeşitli yöntemler geliştirilmiş.</p>
+<p>Bu yazıda bu yöntemlerden <em>@font-face</em>, <em>sIFR</em>, <em>FLIR</em>, <em>Cufón</em> ve <em>Typeface</em> incelenecek. Yazının hazırlanmasında emeği geçen bir sürü kaynağı da en sonda bulabileceksiniz. <em>(ve muhtemelen sadece alıntıdır yazıp copy paste yapan bir forum hıyarını da yakında görürsünüz.)</em></p>
+<p>Hazır mıyız? O halde haydi başlayalım!</p>
+<h2>Yöntem 1: @font-face</h2>
+<h3>Tarihçe</h3>
+<p>@font-face, <em>CSS 2 ile</em> <em>(evet, öyle yeni bir şey değil!)</em> hayatımıza girmiş bir yapıdır. CSS Stil Sayfası üzerinden, sistemde adı belirtilen yazı tipi olmadığında, tarayıcının bunu internetten yükleyerek kullanmasını amaçlar.</p>
+<p>Bunu duyunca şaşıracaksınız ancak, aslında <em>font-face özelliğini ilk destekleyen tarayıcı Internet Explorer 4!</em> Ancak her şey istenildiği gibi gitmemiş.</p>
+<p>Yıllar Boyu Tarayıcı Kullanımı
+<a href="/2009/08/webde-yazi-tipi-ozgurlugu/1996-2009-tahmini-tarayici-kallanimi.png" target="_blank"><img src="/2009/08/webde-yazi-tipi-ozgurlugu/1996-2009-tahmini-tarayici-kallanimi.scaled-png-200.png" title="1996-2009-tahmini-tarayici-kallanimi" alt="1996-2009-tahmini-tarayici-kallanimi"  width="640" height="480" srcset="/2009/08/webde-yazi-tipi-ozgurlugu/1996-2009-tahmini-tarayici-kallanimi.scaled-png-200.png 200w, /2009/08/webde-yazi-tipi-ozgurlugu/1996-2009-tahmini-tarayici-kallanimi.scaled-png-500.png 500w, /2009/08/webde-yazi-tipi-ozgurlugu/1996-2009-tahmini-tarayici-kallanimi.png 640w"></a></p>
+<p><em>Internet Explorer</em> font-face özelliğini desteklemeye başladığında, font-face özelliği ile web sitesi tarafından tanımlanabilecek yazı tipi formatı olarak <em>EOT</em>'u geliştirmiş. EOT, <em>(yani Embedded OpenType)</em> yıllar önce Microsoft tarafından geliştirilmiş ve web sitelerince kullanılmak için özelleştirilmiş bir font tipi. Herhangi normal bir <em>TrueType</em> ya da <em>OpenType</em> yazı tipi Microsoft'un sağladığı bir dönüştürücü aracılığıyla <em>.eot</em> formatına dönüştürülebiliyormuş. EOT formatı, bir yazı tipinin sadece belirli karakterlerini içerecek şekilde ufaltılabiliyor ve sıkıştırılabiliyormuş. Ayrıca sadece belirli bir domainde <em>(alan adı)</em> çalışmak üzere <em>(başkalarının yazı tipini izinsiz kullanmasını engellemek için)</em> kısıtlanabiliyormuş.</p>
+<p>Ancak EOT popüler olamamış. Internet Explorer'ın o zamanki en büyük rakibi olan <em>Netscape Navigator</em> <em>(4. sürümüyle beraber)</em> başka bir yazı tipi formatı olan Trudoc'u desteklemeye başlamış. O zamanlar Netscape ciddi anlamda popülerdi. <em>(1997'de tarayıcı pazarının %60'ından fazlasının Netspace hâkimiyeti altında olduğu tahmin ediliyor.)</em> Bu yüzden EOT standart olamadı.</p>
+<p><a href="/2009/08/webde-yazi-tipi-ozgurlugu/netscape-firefox.jpg" target="_blank"><img src="/2009/08/webde-yazi-tipi-ozgurlugu/netscape-firefox.jpg" title="netscape-firefox" alt="netscape-firefox"  width="111" height="111" srcset="/2009/08/webde-yazi-tipi-ozgurlugu/netscape-firefox.jpg 111w"></a>{left}Ancak bir süre sonra Microsoft, Netscape'i gerek mail kaynaklarını yok ederek, gerek kendi promosyonunu yaparak pazardan dışarı sürüklemiş. Bu sırada Netscape'in kaynak kodlarını geliştiricilere açılır ve <em>Mozilla</em> Netscape'in kaynak kodunu geliştirmeye başlar.</p>
+<p>Mozilla, Netscape Trudoc'un kaynak kodunu açmadığı için bu formatı desteklemeyi bırakır. Bu sıralarda, EOT dosya formatında çeşitli açıklar <em>(örneğin belirli bir alan adının kullanımı için şifrelenmiş yazı tipinin kırılarak herkes tarafından kullanılabilir hale getirilebilmesi)</em> olduğu keşfedilmiştir.</p>
+<p>TTF <em>(TrueType)</em> ve OTF <em>(OpenType)</em> yazı tiplerini kullanma desteğini ilk Webkit yerleşim (layout) motorunu kullanan <em>Safari</em> sunmaya başlar <em>(3.1 sürümü ile)</em>. Gerek açıklarından duyulan endişe, gerek EOT'u bir tarayıcıya uyarlamanın <em>(implement)</em> gereksizliği ve uyarlama işleminin zorluğu gibi nedenlerle başka hiçbir tarayıcı EOT desteği sağlamamıştır.</p>
+<p>@font-face ile TrueType ve OpenType yazı tipi desteğini Safari'den sonra ikinci sunan tarayıcı <em>Gecko</em> yerleşim <em>(layout)</em> motorunu kullanan <em>Mozilla Firefox</em>'tur. <em>Firefox 3.5 sürümünden itibaren</em> TrueType ve OpenType yazı tiplerinin @font-face ile web sitesine gömülmesini desteklemektedir. <em>Opera da 10. sürümünden itibaren</em> TrueType ve OpenType yazı tiplerini desteklemeye başlar. <em>Google Chrome</em> 3. sürümünün betasında bu özelliği hala desteklememektedir. <em>Internet Explorer ise 8. sürümünde halen sadece EOT'u destekler.</em></p>
+<p>Görülebileceği üzere tüm tarayıcılar CSS'nin font-face özelliği ile sistemde hali hazırda yüklü olmayan bir yazı tipini internetten alarak gösterme kabiliyetine sahip değildir. Keza, sahip olan tarayıcılar da tek bir format üzerine anlaşabilmiş değillerdir.</p>
+<p>@font-face ile gömülen OTF uzantılı bir yazı tipinin Firefox'ta görünümü.
+<a href="/2009/08/webde-yazi-tipi-ozgurlugu/firefox.jpg" target="_blank"><img src="/2009/08/webde-yazi-tipi-ozgurlugu/firefox.scaled-jpg-200.jpg" title="Firefox" alt="Firefox"  width="734" height="293" srcset="/2009/08/webde-yazi-tipi-ozgurlugu/firefox.scaled-jpg-200.jpg 200w, /2009/08/webde-yazi-tipi-ozgurlugu/firefox.scaled-jpg-500.jpg 500w, /2009/08/webde-yazi-tipi-ozgurlugu/firefox.jpg 734w"></a></p>
+<p>Aynı yazı tipi Google Chrome özelliği desteklenmediği için görüntülenemiyor.
+<a href="/2009/08/webde-yazi-tipi-ozgurlugu/google-chrome.jpg" target="_blank"><img src="/2009/08/webde-yazi-tipi-ozgurlugu/google-chrome.scaled-jpg-200.jpg" title="Google-Chrome" alt="Google-Chrome"  width="783" height="441" srcset="/2009/08/webde-yazi-tipi-ozgurlugu/google-chrome.scaled-jpg-200.jpg 200w, /2009/08/webde-yazi-tipi-ozgurlugu/google-chrome.scaled-jpg-500.jpg 500w, /2009/08/webde-yazi-tipi-ozgurlugu/google-chrome.jpg 783w"></a></p>
+<p>Microsoft, W3C'nin CSS3 tanımında yer alması için 2007 yılında bir başvuru yapmış, ancak başvuru kabul edilmemiştir. Bunun üzerine EOT formatında bazı değişiklikler ve iyileştirmeler yapılarak 2008 yılında tekrar başvurulmuştur. EOT'un CSS3 standartları içerisinde yer almasının avantajları ve dezavantajları halen tartışılmaktadır.</p>
+<p>TTF ve OTF formatlarının internette kullanılmasının birçok dezavantajı vardır. Bunlardan en basiti, lisanslı olarak satılan bir yazı tipinin bir web sitesinde kullanılmak üzere sunucuya gönderilememesidir. Herhangi bir alan adı için şifreleme ve kullanım hakkı ayarlaması yapılamaması telif hakları dolayısıyla kullanımı kısıtlı yapar. Microsoft EOT formatıyla bunların üstesinden gelineceğini öne sürerken, karşı düşüncedekiler, bunların TTF ve OTF formatlarına yapılacak ufak eklentilerle de mümkün olabileceğini, webin yeni bir formata <em>(ve haliyle yeni hatalara, sıkıntılara)</em> ihtiyacını olmadığını, EOT formatının tarayıcılarda kullanılmak üzere uyarlanmasının <em>(implement)</em> zor olduğunu öne sürmektedirler.</p>
+<h3>Kullanım</h3>
+<p>Gelelim kullanıma... İlk iş olarak web sitemizde göstermek istediğimiz bir yazı tipi buluyoruz. <em>EOT uzantılı yazı tiplerinin sadece Internet Explorer'da, TTF ve OTF uzantılı yazı tiplerinin ise sadece Safari, Firefox 3.5+ ve Opera 10+ tarayıcılarda etkili olacağını, Chrome ve diğer tarayıcılarda ise, belirlediğiniz font ailesindeki bir sonraki yazı tipinin geçerli olacağını unutmayın.</em></p>
+<p>Kullanacağınız yazı tipini sunucunuza atıyorsunuz.</p>
+<p>CSS2'nin @font-face özelliği ile stil belgenizde yazı tipine bir ad veriyor ve konumunu belirtiyorsunuz.</p>
+<p>[css] @font-face { font-family: Dejavu; font-weight: normal; src: url('http://www.siteninadiniburayayaz.com/buraya/da/konumu/gir/dejavu.ttf'); } [/css]</p>
+<p>Eğer dilerseniz, yazı tipinin koyu italik ve koyu italik hallerinin bağlantılarını da aynı yazı tipi adı kullanıp <em>font-weight</em> ve <em>font-style</em> özelliklerini değiştirerek belirtebilirsiniz. Örneğin;</p>
+<p>[css] @font-face { font-family: Dejavu; font-weight: normal; src: url('http://www.siteninadiniburayayaz.com/buraya/da/konumu/gir/dejavu.ttf'); } @font-face { font-family: Dejavu; font-style: italic; src: url('http://www.siteninadiniburayayaz.com/buraya/da/konumu/gir/dejavu_italic.ttf'); } @font-face { font-family: Dejavu; font-weight: bold; src: url('http://www.siteninadiniburayayaz.com/buraya/da/konumu/gir/dejavu_bold.ttf'); } @font-face { font-family: Dejavu; font-weight: bold; font-style: italic; src: url('http://www.siteninadiniburayayaz.com/buraya/da/konumu/gir/dejavu_bold_italic.ttf'); } [/css]</p>
+<p>ile bu yazı tipinin değişik stillerini de kullanabilirsiniz. Daha sonra, sitenizde bu yazı tipini herhangi bir <em>font family</em> özelliğinde belirtebilirsiniz. Mesela;</p>
+<p>[css] .deneme { font-family: 'Dejavu', Georgia, serif; font-size: 32px; } [/css]</p>
+<p>kod parçası ile, &quot;deneme&quot; classını alan herhangi bir DOM nesnesi destekleyen tarayıcılarda Dejavu yazıtipinde gözükecek, desteklemeyenlerde ise <em>(Chrome, IE [ttf olduğu için] vs...)</em> alternatif yazı tipi Georgia görünecektir.</p>
+<p>(Destekleyen tarayıcılarda Dejavu yazıtipi sunucudan yüklenene kadar Georgia fontunda görünür, yazıtipi yüklenip kullanılmaya hazır hale geldiğinde tarayıcı yazı tiplerini değiştirir. Bu da yazı tipinin boyutuna göre birkaç saniye sürebileceğinden, okur bu değişimi genellikle fark eder. Bir test sürüşünü Firefox 3.5 ya da Safari ile <a href="http://opentype.info/demo/webfontdemo.html" rel="noopener noreferrer" target="_blank">şu adreste</a> yapın isterseniz.)</p>
+<p>Eğer bir yazı tipini stilini <em>@font-face</em> ile belirtmediğiniz bir özellikte kullanırsanız umulmadık bir sonuçla karşılaşabilirsiniz. <em>(Örneğin gördüğüm kadarıyla Gecko kendisi yazıyı eğebiliyor ancak koyulaştıramıyor.)</em></p>
+<p>Bu kadar @font-face @font-face dedikten sonra isterseniz <a href="http://opentype.info/demo/webfontdemo.html" rel="noopener noreferrer" target="_blank">şu sayfaya</a> bir Firefox ile, bir de Chrome ya da IE ile göz atın. @font-face uygulamasının nasıl bir şey olduğunu, yüklenme sürelerini ve tarayıcı bağımlılığını en iyi bu şekilde anlayabilirsiniz.</p>
+<h3>Örnek Kullanım</h3>
+<p>[html] &lt;!DOCTYPE HTML&gt; &lt;!-- Eksik değil, HTML 5 DOCTYPE tanımı bu kadarcık 😃 --&gt; &lt;html&gt; &lt;head&gt; &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=utf-8&quot; /&gt; &lt;title&gt;Haydi Yazı Tipi Test Edelim Dökümanı&lt;/title&gt; &lt;style type=&quot;text/css&quot;&gt; @font-face { font-family: Dejavu; src: url(Dejavu.ttf); } .deneme{ font-family: 'Dejavu', Georgia, serif; font-size: 52px; } &lt;/style&gt; &lt;/head&gt;   &lt;body&gt; &lt;p class=&quot;deneme&quot;&gt;Deneme 123&lt;/p&gt; &lt;/body&gt; &lt;/html&gt; [/html]</p>
+<h2>Yöntem 2: sIFR (Scalable Inman Flash Replacement)</h2>
+<h3>İşleyiş</h3>
+<p>sIFR Logo
+<a href="/2009/08/webde-yazi-tipi-ozgurlugu/logo_sifr2.gif" target="_blank"><img src="/2009/08/webde-yazi-tipi-ozgurlugu/logo_sifr2.gif" title="sIFR Logo" alt="sIFR Logo"   ></a></p>
+<p>sIFR işletim sistemi ve tarayıcı bağımsız yazı tipi kullanımı sunmak üzere geliştirilmiş, <em>Flash ve Java Scipt’ten oluşan</em> açık kaynak kodlu ve ücretsiz bir programcıktır. Tahmin edeceğiniz gibi, bu eklentinin çalışması için bir tarayıcıda Java Scipt'in aktif ve Flash Player'in yüklü olması gerekmektedir. Bu özelliklerden bir tanesi bile sağlanmadığı zaman sIFR çalışmaya başlamaz, yazı tipleri CSS’de nasıl ayarlıysa öyle görünür.</p>
+<p>sIFR en özet anlamıyla aşağıdaki işlemleri yapar:</p>
+<ol>
+<li>Normal bir web sayfası tarayıcıya yüklenir. Sayfa yüklendikten sonra sIFR'a ait Java Script çalışarak tarayıcıda Flash yüklü olup olmadığını kontrol eder. Eğer Flash Player yüklü değilse hiçbir değişiklik olmaz ve işlem burada sonlanır.</li>
+<li>Eğer Flash yüklüyse script, sizin belirttiğiniz yazı tipinin değiştirilmesini istediğiniz DOM elementlerini arar. Bu elementlerin her biri için, elementlerle aynı boyutta Flash sIFR kutuları oluşturur. Daha sonra elementin yazısını sIFR'a aktarıp, 6 pikselden başlatarak kutuya göre oranlayarak büyültür. sIFR objesini yazının üstüne atarak yazı tipi değişikliğini tamamlamış olur.</li>
+</ol>
+<p>İşlemler bu kadar meşakkatli olmasına rağmen bunlar saniyeler içerisinde oluverir ve kullanıcı hiçbir şey sezmez.</p>
+<h3>Kullanım</h3>
+<p>Ne yazık ki, sIFR'ı kullanması o kadar basit bir şey değildir. Bir defa kullanacağınız yazı tipini ayarlamak için, size <em>.fla</em> <em>(derlenmemiş flash dosyası)</em> formatında gelen sIFR Flash projesini açmak ve kendi yazıtipinizi buraya ekleyerek derlemek zorundasınız. Bu da size <em>Adobe Flash</em> ya da <em>.fla</em> dosyası açıp, <em>.swf</em> olarak derleyebilecek <em>Action Script</em> konusunda endişeleri olmayan bir program yüklemenizi zorunlu kılıyor. (Gerçi araştırdığımca siz yazı tipini gönderdiğinizde <a href="http://www.sifrgenerator.com/" rel="noopener noreferrer" target="_blank">şu site sizin için derliyormuş</a>.)</p>
+<p>.swf dosyanızı kendinize göre ayarladıktan sonra çeşitli <em>CSS</em>, <em>JS</em> ve <em>SWF</em> dosyalarını projenize ekliyorsunuz. Bu yazıda sIFR'ı kurmayı en ince ayrıntısına kadar anlatmayacağım. Çünkü hem kullanmanızı önermiyorum hem de daha önce Türkçe olarak anlatanlar var. (Google'da arayın.)</p>
+<p><em>Sonuç:</em> Uğ-raş-tı-rı-cı!</p>
+<p><a href="/2009/08/webde-yazi-tipi-ozgurlugu/flir_generated.png" target="_blank"><img src="/2009/08/webde-yazi-tipi-ozgurlugu/flir_generated.png" title="flir_generated" alt="flir_generated"  width="443" height="52" srcset="/2009/08/webde-yazi-tipi-ozgurlugu/flir_generated.scaled-png-200.png 200w, /2009/08/webde-yazi-tipi-ozgurlugu/flir_generated.png 443w"></a></p>
+<h2>Yöntem 3: FLIR (Facelift Image Replacement)</h2>
+<p>FLIR diğerlerinden farklı olarak, işi tarayıcıya bırakmak yerine ipleri eline alıp, tüm işi sunucuya yıkan bir sistemdir. FLIR'de istenilen yazı, istenilen stilde, <em>sunucu tarafında yaratılarak</em> bir resim dosyasına çizilir. <em>(Render edilir.)</em> Yazının kullanıcıya resim dosyası olarak gitmesi sayesinde, kullanıcı 1800'lerden kalan bir sistem kullanıyor olsa bile yazı tipini görür.</p>
+<p>Sistem şu şekilde işler:</p>
+<p>Tarayıcıya standart bir XHTML sayfası gönderilir. Sayfanın yüklenmesi ile bir Java Scipt kodu çalışarak, sunucuya çeşitli özelliklerde yeni yazı üretmesine dair istek gönderir. (Hangi DOM elementlerinin yazı tipinin değişeceğini siz belirlersiniz. Büyük, koyuluk gibi özelliklerde CSS etkilidir.) Sunucu kendi bünyesinde yazıyı üretir ve resim dosyası olarak istemciye gönderir. FLIR JS'si, standart metinle bu yeni gelen yazı tipini değiştirir.</p>
+<p><em>Özetle:</em> Sistem sIFR'la aynı şekilde işler. Ancak yazı tipi çizimi Flash ile yapılacağına, sunucu tarafından yapılarak istemciye resim dosyası olarak gönderilir.</p>
+<p>Ne yazık ki bu sistemin birkaç dezavantajı var. Özellikle fazla trafiği olan sitelerde, yazı tiplerinin çizimi yüksek işlemci maliyetine sebebiyet verebilir. Aynı zamanda bu yazıların hepsinin resim dosyası olarak gönderilmesi de gereksiz trafiğe neden olacaktır. Ayrıca sunucu taraflı bir işlem olduğundan ve FLIR PHP'de yazıldığından, sunucunuzda PHP kullanıyor olmanız gerekiyor.</p>
+<p>Kullanımını anlatmıyorum, zira <a href="http://net.tutsplus.com/tutorials/php/how-to-use-any-font-you-wish-with-flir/" rel="noopener noreferrer" target="_blank">burada anlatılmış</a>.</p>
+<p><em>Sonuç:</em> Tavsiye edilmez.</p>
+<h2>Yöntem 4: Cufon</h2>
+<p>Cufon
+<a href="/2009/08/webde-yazi-tipi-ozgurlugu/cufon.png" target="_blank"><img src="/2009/08/webde-yazi-tipi-ozgurlugu/cufon.png" title="Cufon" alt="Cufon"  width="132" height="59" srcset="/2009/08/webde-yazi-tipi-ozgurlugu/cufon.png 132w"></a></p>
+<p>Cufón (Cufon) da diğerleri gibi bir çeşit yazı tipi üretme aracıdır. <a href="http://github.com/sorccu/cufon/" rel="noopener noreferrer" target="_blank">Cufon</a>, <em>sadece Java Script</em>’ten oluşur ve bu yüzden flash gerektirmeksizin herhangi bir tarayıcıda çalışabilir. Çizimler sayfa yüklendikten sonra istemcide, yani browserda yapılacağından <em>sunucuya ek bir yük bindirmez.</em> Yazı tipleri, Cufon'un dönüştürücüsü ile JSON formatında bilgi içeren bir java script dosyasına dönüştürülür. Bu esnada yazının kalın, italik gibi diğer tipleri de seçilebilir. Cufon ile oluşturulan JS dosyası alt kümelemeyi destekler. Böylece sadece kullanacağınız karakterleri seçerek dosya boyutunu küçültebilirsiniz. Aynı zamanda dönüştürdüğünüz bu yazıtipi dosyasını <em>belirli bir alan adında kullanılmak üzere kilitleyebileceğinizden, lisans sorunu olmaksızın tüm yazı tiplerini kullanmanız mümkündür.</em> Ayrıca JS dosyaları tarayıcı önbelleğine atılabileceği için FLIR'da olduğu gibi aşırı bir trafik sorunu yaratılmaz.</p>
+<p><em>Teknik olarak işlem şudur:</em> Cufon, Firefox, Safari gibi <em>canvas</em> elementini destekleyen tarayıcılarda bu elementi kullanarak, Internet Explorer gibi VML <em>(Vector Markup Language)</em> çizimini destekleyen tarayıcılarda ise bu dili kullanarak, yazı tipi JS'sinden faydalanarak, yazı tipine çok benzeyen bir vektörel grafik çizimi yapar. <em>(Benziyor diyorum, çünkü JS dosyasına dönüştürülürken sıkıştırma yapıldığından ufak da olsa farklar olabilmektedir. Öte yandan fark edene aşk olsun!)</em></p>
+<p>Kulağa ne kadar süper gelse de, ne yazık ki Cufon'un da eksileri vardır. Tüm çizim istemci tarafında ve her sayfa yüklenmesinde tekrar tekrar yapıldığı için, aşırı derecede Cufon kullanılması sayfa açılışını yavaşlatır. Özellikle Internet Explorer gibi <em>(hele de IE6 gibi)</em> JS çalıştırma hızı çok çok düşük olan tarayıcılarda bu ciddi bir sorun olabilmektedir.</p>
+<p><em>Cufon ile yaratılan görüntüler seçilemez!</em> Bu yüzden, sIFR'dan farklı olarak Cufon'da yaratılan bir yazıyı, diğer metinler gibi seçemezsiniz. Cufon tüm CSS özelliklerini desteklememektedir. Ayrıntılı bir listeye <a href="http://wiki.github.com/sorccu/cufon/styling" rel="noopener noreferrer" target="_blank">şu</a> ve <a href="http://wiki.github.com/sorccu/cufon/known-bugs-and-issues" rel="noopener noreferrer" target="_blank">şu</a> adresten ulaşılabilir. <em>(Öte yandan desteklenmeyen özelliklerin %90'ını kullanmıyorsunuzdur muhtemelen.)</em></p>
+<h3>Kullanım</h3>
+<p>Önce yazı tipimizi Cufón'un anlayabileceği şekle çevirmemiz gerekiyor. Bunun için aşağıdaki adımları takip edin:</p>
+<ol>
+<li>
+<p>Kullanacak bir yazı tipi bulun. <em>(Türkçe karakterlerin de yazı tipinde olması sizin için iyi olur.)</em></p>
+</li>
+<li>
+<p>Yazı tipini <em>C:WindowsFonts</em> klasörü dışında bir yere koyun. <em>(Fonts dosyasından seçim yapılamamaktadır.)</em></p>
+</li>
+<li>
+<p><a href="http://cufon.shoqolate.com/generate/" rel="noopener noreferrer" target="_blank">Bu adrese</a> gidin.</p>
+</li>
+<li>
+<p>Regular typeface kısmında dönüştürmek istediğiniz yazı tipini seçin. <em>(TTF, OTF veya PFB uzantılı olması gerektiğini unutmayın.)</em></p>
+</li>
+<li>
+<p>Bold, Italic ve BoldItalic kısımlarında yazının diğer stilleri elinizde mevcutsa <em>(ve kullanmak istiyorsanız)</em> bu dosyaları seçebilirsiniz.</p>
+</li>
+<li>
+<p>Yazı tipini web sitesinde kullanma hakkınızın olduğunu beyan ettiğiniz kutuyu işaretleyin. <a href="/2009/08/webde-yazi-tipi-ozgurlugu/font_eula.jpg" target="_blank"><img src="/2009/08/webde-yazi-tipi-ozgurlugu/font_eula.jpg" title="Font_EULA" alt="Font_EULA"  width="430" height="27" srcset="/2009/08/webde-yazi-tipi-ozgurlugu/font_eula.scaled-jpg-200.jpg 200w, /2009/08/webde-yazi-tipi-ozgurlugu/font_eula.jpg 430w"></a></p>
+</li>
+<li>
+<p>Türkçe Karakterlere Sahip Bir Yazı Tipi Kullandığınızda En Ufak Dosya Boyutu İçin Yapmanız Gereken İdeal Ayarlar
+<a href="/2009/08/webde-yazi-tipi-ozgurlugu/cufon-settings-for-turkish.jpg" target="_blank"><img src="/2009/08/webde-yazi-tipi-ozgurlugu/cufon-settings-for-turkish.scaled-jpg-200.jpg" title="Türkçe Karakterlere Sahip Bir Yazı Tipi Kullandığınızda En Ufak Dosya Boyutu İçin Yapmanız Gereken İdeal Ayarlar" alt="Türkçe Karakterlere Sahip Bir Yazı Tipi Kullandığınızda En Ufak Dosya Boyutu İçin Yapmanız Gereken İdeal Ayarlar"  width="873" height="799" srcset="/2009/08/webde-yazi-tipi-ozgurlugu/cufon-settings-for-turkish.scaled-jpg-200.jpg 200w, /2009/08/webde-yazi-tipi-ozgurlugu/cufon-settings-for-turkish.scaled-jpg-500.jpg 500w, /2009/08/webde-yazi-tipi-ozgurlugu/cufon-settings-for-turkish.jpg 873w"></a></p>
+<p>Bir alttaki bölümde, yazı tipinin hangi karakterlerini dönüştürmek istediğinizi seçmelisiniz. <em>Unutmayın ki, ne kadar az karakter seçerseniz dosya boyutu o kadar azalacaktır.</em> Bu yüzden size önerim</p>
+<ul>
+<li>Uppercase <em>(Büyük Harfler)</em></li>
+<li>Lowercase <em>(Küçük Harfler)</em></li>
+<li>Numerals <em>(Sayılar)</em></li>
+<li>Punctuation <em>(Noktalama İşaretleri)</em></li>
+<li>WordPress punctuation <em>(Hangi harflerdir görmek için <a href="http://codex.wordpress.org/User:Here/Texturize" rel="noopener noreferrer" target="_blank">tıklayın</a>)</em></li>
+<li>Basic Latin <em>(Latin Alfabesi, aslında bunu seçmeniz halinde ilk ikisini seçmiş oluyorsunuz =) )</em></li>
+<li>and also these single characters kısmına ise, alfabemizin karakterleri <em>şŞıiĞğÜüÇçÖö</em> yazmayı unutmayın.</li>
+</ul>
+</li>
+<li>
+<p>Security kısmında, yazı tipini hangi alan adında kullanmak istiyorsanız onu yazmalısınız. Böylece başka birisi dosyanızı yürütse bile, yazı tipini kullanamayacaktır. Örneğin *<em>.site.com</em> yazarsanız, <em>site.com</em> ve <em>tüm alt alanlarında</em> <em>(naber.site.com, selam.site.com)</em> çalışacaktır.</p>
+</li>
+<li>
+<p>Performance &amp; File Size kısmında bir değişiklik yapmamıza gerek yok.</p>
+</li>
+<li>
+<p>Cufón kullanacağımızdan, Customiziation kısmında da değişiklik yapmıyoruz.</p>
+</li>
+<li>
+<p>En altta, Cufón'un kullanım koşullarını ve lisans anlaşmasını kabul ediyor, <em>&quot;Let's Do This!&quot;</em> ile dönüşümü yaparak, Java Script dosyamızı kaydediyoruz.</p>
+</li>
+</ol>
+<p>Bu kadar! Artık yazı tipimizi kullanabiliriz.</p>
+<h3>Siteye Monte</h3>
+<p>Şimdi yazı tipini web sitemizde kullanalım. Bunun için aşağıdaki adımları izlemelisiniz:</p>
+<ol>
+<li>
+<p><a href="http://cufon.shoqolate.com/js/cufon-yui.js" rel="noopener noreferrer" target="_blank">Şuradan</a> Cufón'u indirin. (Sağ tıklayıp farklı kaydet ile indirebilirsiniz.)</p>
+</li>
+<li>
+<p>Sitemizin kaynak kodlarını açalım. <em>HTML</em> belgemizin <em>HEAD</em> kısmına, <em>tüm dışsal CSS stil belgelerinin çağrımlarının hemen altına</em> Cufón ve yazı tipi JS'sini belgemize ekleyelim. Cufón ve yazı tipi şuna benzer bir kodla belgeye eklenir:</p>
+<p>[html] &lt;script src=&quot;cufon-yui.js&quot; type=&quot;text/javascript&quot; /&gt; &lt;script src=&quot;cufon-yazi-tipiniz.js&quot; type=&quot;text/javascript&quot; /&gt; [/html]</p>
+<p>Dikkat etmeniz gereken iki önemli nokta, dosya konumlarını doğru belirtmiş olmanız ve stil belgeleri ile Cufón dosyalarını doğru sırada çağırmış olmanızdır.</p>
+<p><em>Doğru sıra:</em></p>
+<ol>
+<li>Stil Belgeleri</li>
+<li>Cufón</li>
+<li>Cufón yazı tipi <em>(tipleri)</em><em>Bu sıraya bir örnek verecek olursak:</em></li>
+</ol>
+<p><em>Yanlış</em> [html] &lt;script src=&quot;cufon-yazi-tipiniz.js&quot; type=&quot;text/javascript&quot; /&gt; &lt;script src=&quot;cufon-yui.js&quot; type=&quot;text/javascript&quot; /&gt; [/html]</p>
+<p>[html] &lt;script src=&quot;cufon-yui.js&quot; type=&quot;text/javascript&quot; /&gt; &lt;script src=&quot;cufon-yazi-tipiniz.js&quot; type=&quot;text/javascript&quot; /&gt; [/html]</p>
+<p><em>Doğru</em> [html] &lt;!-- Önce stil belgeleri --&gt; &lt;script src=&quot;cufon-yui.js&quot; type=&quot;text/javascript&quot; /&gt; &lt;!-- Sonra Cufon --&gt; &lt;script src=&quot;cufon-yazi-tipiniz.js&quot; type=&quot;text/javascript&quot; /&gt; &lt;!-- En son yazı tipi 😃 --&gt; [/html]</p>
+</li>
+</ol>
+<p>Yazı tipimizi ve Cufón'u ekledikten sonra, geriye kalan tek şey neleri bu yazı tipi ile görüntülemek istediğimizi seçmek. Bunun için de az biraz HTML bilginiz olması gerekiyor. Ben örnek olarak UBenzer'deki başlıkları Cufón'layacağım.</p>
+<p>UBenzer'i açtım, kaynağı görüntüle ile HTML kaynağını görüntüledim. Yazıların başlığına giderek, bunun hangi HTML elemanı ile belirtildiğini buldum.</p>
+<p><a href="/2009/08/webde-yazi-tipi-ozgurlugu/h1.jpg" target="_blank"><img src="/2009/08/webde-yazi-tipi-ozgurlugu/h1.scaled-jpg-200.jpg" title="H1" alt="H1"  width="621" height="167" srcset="/2009/08/webde-yazi-tipi-ozgurlugu/h1.scaled-jpg-200.jpg 200w, /2009/08/webde-yazi-tipi-ozgurlugu/h1.scaled-jpg-500.jpg 500w, /2009/08/webde-yazi-tipi-ozgurlugu/h1.jpg 621w"></a></p>
+<p>[html] &lt;h1&gt;&lt;a title=&quot;Ege Bebek&quot; rel=&quot;bookmark&quot; href=&quot;http://www.ubenzer.com/ege-bebek/&quot;&gt;Ege Bebek&lt;/a&gt;&lt;/h1&gt; [/html]</p>
+<p>Gördüğünüz gibi, benim sitem için yazı başlıkları <em>h1</em> tagları arasında. Siz de kendi sitenizde hangi elemanlar için Cufón kullanacağınızı benzer şekilde tespit etmelisiniz.</p>
+<p>Hangi web elementlerini Cufón'layacağınıza karar verdikten sonra ufak bir Java Script ile bunu belirtiyoruz:</p>
+<p>[html] &lt;script type=&quot;text/javascript&quot;&gt; Cufon.replace('h1'); Cufon.replace('h2'); Cufon.replace('#deneme'); Cufon.replace('.sinif'); &lt;/script&gt; [/html]</p>
+<p>Eğer <em>h2 elementine</em>, <em>&quot;deneme&quot; id'sine</em> ve <em>&quot;sinif&quot; sınıfına</em> <em>(class)</em> sahip bir elemanlar için de yazı tipi değişimini etkinleştirmek isteseydiniz, kod şöyle olacaktı:</p>
+<p>[html] &lt;script type=&quot;text/javascript&quot;&gt; Cufon.replace('h1'); Cufon.replace('h2'); Cufon.replace('#deneme'); Cufon.replace('.sinif'); &lt;/script&gt; [/html]</p>
+<p>Seçebileceğiniz web elementi konusunda bir sınır yok. Ama b.knu çıkarırsanız render işlemi çok uzun sürecek ve ziyaretçiniz bundan rahatsızlık duyacaktır. <em>Cufon.replace</em> herhangi bir geçerli <em>CSS Selector</em>'unu kabul eder. Tam bir liste için <a href="http://docs.jquery.com/Selectors" rel="noopener noreferrer" target="_blank">buradaki kaynaktan</a> yararlanabilirsiniz.</p>
+<p>Tüm kodları derlediğimizde, Cufón için aşağıdakine benzer bir yapınız olması gerekir:</p>
+<p>[html] &lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.01//EN&quot; &quot;http://www.w3.org/TR/html4/strict.dtd&quot;&gt; &lt;html&gt; &lt;head&gt; &lt;title&gt;Cufon Denemesi&lt;/title&gt; &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=utf-8&quot;&gt; &lt;script src=&quot;cufon-yui.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt; &lt;script src=&quot;cufon-yazi-tipiniz.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt; &lt;script type=&quot;text/javascript&quot;&gt; Cufon.replace('h1'); &lt;/script&gt; &lt;/head&gt; &lt;body&gt; &lt;h1&gt;Cufon ile yazılmış bir metin. :)&lt;/h1&gt; &lt;/body&gt; &lt;/html&gt; [/html]</p>
+<p><em>Yukarıdaki kodda iki noktaya dikkat çekmek istiyorum:</em></p>
+<p>Birincisi <em>DOCTYPE</em> olarak <em>strict</em> tercih edilmesi tesadüf değil. <em>Cufón Transitional DOCTYPE'larda line-height gibi bazı CSS özelliklerinde problem çıkarabiliyor.</em> Eğer görünüm ile ilgili problem yaşarsanız DOCTYPE kontrolü yapmanızı ve <a href="http://wiki.github.com/sorccu/cufon/known-bugs-and-issues" rel="noopener noreferrer" target="_blank">şu belgeyi</a> incelemenizi öneririn.</p>
+<p>İkincisi, karakter kodlaması olarak UTF-8 seçilmesi bir tesadüf değil. <em>Cufón'un doğru çalışması için UTF-8 kullanmalısınız.</em></p>
+<p>Normalinde Cufón kurulumu bu kadar olmasına rağmen, <em>Internet Explorer</em> dandik olduğu için, <em>&lt;/body&gt;</em> tagından hemen önce, bir kod parçası daha eklememiz gerekiyor. Aksi halde Cufón IE'de çok geç gösterilebiliyor.</p>
+<p>[html] &lt;script type=&quot;text/javascript&quot;&gt; Cufon.now(); &lt;/script&gt; [/html]</p>
+<p>Eğer Google Analytics gibi JS dosyaları da sayfanın sonunda çağrılıyorsa, onlardan önce yazabilirsiniz. Kodumuzun son hali şöyle oluyor:</p>
+<p>[html] &lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.01//EN&quot; &quot;http://www.w3.org/TR/html4/strict.dtd&quot;&gt; &lt;html&gt; &lt;head&gt; &lt;title&gt;Cufon Denemesi&lt;/title&gt; &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=utf-8&quot;&gt; &lt;script src=&quot;cufon-yui.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt; &lt;script src=&quot;cufon-yazi-tipiniz.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt; &lt;script type=&quot;text/javascript&quot;&gt; Cufon.replace('h1'); &lt;/script&gt; &lt;/head&gt; &lt;body&gt; &lt;h1&gt;Cufon ile yazılmış bir metin. :)&lt;/h1&gt; &lt;!--- Sitenin diğer tüm içeriği de bu kısımda 😃 --&gt; &lt;script type=&quot;text/javascript&quot;&gt; Cufon.now(); &lt;/script&gt; &lt;!-- Google Analytics --&gt; &lt;/body&gt; &lt;/html&gt; [/html]</p>
+<p>Cufon birden fazla yazı tipini desteklemektedir. Ayrıntılı bilgi <a href="http://wiki.github.com/sorccu/cufon/usage" rel="noopener noreferrer" target="_blank">burada bulunabilir</a>.</p>
+<h3>Wordpres'te Kurulum İçin Kolaylaştırıcı Bilgiler</h3>
+<p>Tema dosyalarınız <em>/wp-content/themes/</em> içerisinde yer alır. Kullanıldığınız temanın muhtemelen <em>header.php</em> ve <em>footer.php</em> dosyaları vardır ve değişiklik yapmanız gereken kısımlar bu dosyalardadır.</p>
+<p>Ayrıca... <a href="http://wordpress.org/extend/plugins/wp-cufon/" rel="noopener noreferrer" target="_blank">Şurada bir Wordpress eklentisi gördüm.</a> Yukarıdaki kod değişikliklerinin hepsini sizin yerine yapıyor, size de sadece hangi kısımlarda Cufon kullanacağınızı belirttiğiniz <em>Cufon.replace();</em> kısmını eklentiye girmeniz gerekiyormuş. Böylece tema dosyalarını değiştirmeniz gerekmiyormuş. Denemedim, denersiniz...</p>
+<p>Şu an UBenzer'in yazı başlıklarında ve sair yerlerinde Cufon'u kullanımda görebilirsiniz. Ben kullanıyorum memnunum.</p>
+<p>Cufon ve En Yakın Rakibi Typeface'in Karşılaştırması
+<a href="/2009/08/webde-yazi-tipi-ozgurlugu/cufon-versus-typeface.jpg" target="_blank"><img src="/2009/08/webde-yazi-tipi-ozgurlugu/cufon-versus-typeface.scaled-jpg-200.jpg" title="Cufon ve En Yakın Rakibi Typeface'in Karşılaştırması" alt="Cufon ve En Yakın Rakibi Typeface'in Karşılaştırması"  width="814" height="473" srcset="/2009/08/webde-yazi-tipi-ozgurlugu/cufon-versus-typeface.scaled-jpg-200.jpg 200w, /2009/08/webde-yazi-tipi-ozgurlugu/cufon-versus-typeface.scaled-jpg-500.jpg 500w, /2009/08/webde-yazi-tipi-ozgurlugu/cufon-versus-typeface.jpg 814w"></a></p>
+<h2>Yöntem 5: Typeface</h2>
+<p><a href="http://typeface.neocracy.org/" rel="noopener noreferrer" target="_blank">Typeface</a>, yapısal bakımdan Cufon ile neredeyse aynı özellikleri gösteren benzer bir yazı tipi gösterim yöntemidir. Typeface de Cufon gibi sadece JS'ye ihtiyaç duyar. Yazı tipi dosyaları kendi biçimine dönüştürülür ve benzer bir şekilde DOM'a uygulanır.</p>
+<p>Aslına bakarsanız Typeface ile Cufon'u birbiriyle karşılaştırıp birini öne çıkarmak oldukça zordur. Belki ilk Cufon değil de Typeface'den haberdar olsam onu kullanıyor olabilirdim. Gelelim aralarındaki ufak farklara...</p>
+<p>Typeface daha eski ve köklü iken, Cufon çok daha yeni ve _&quot;taze kan&quot;_dır. Typeface, çok daha fazla CSS özelliğini desteklerken, Cufon daha küçük boyutlara sahiptir. Typeface sadece TTF (True Type) yazıtipinin dönüşümünü desteklerken, Cufon Open Type tipini de destekler. İkisinde de alan adına göre kısıtlama, alt kümeleme mevcuttur. Yapılan testlere göre Cufon'un daha hızlı olduğu iddia edilse de gözle görülür bir fark bulunmamaktadır. Ne yazık ki ikisinde de metinler seçilemez.</p>
+<p>Typeface'de yazı tipinin istenilen elemanlara uygulanması daha farklı şekildedir. Typeface'de, CSS ile dilediğiniz font-ailesini seçersiniz. Daha sonra bunu &quot;typefacelemek&quot; için, ilgili elemente typeface-js sınıfını eklersiniz.</p>
+<p>Örnek HTML kodu: [html] &lt;html&gt; &lt;head&gt; &lt;!-- önce dışsal cssleri yükleyin --&gt; &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; ref=&quot;/style.css&quot;&gt; &lt;!-- sonra typeface.js ve ardından typeface fontlarını ekleyin --&gt; &lt;script type=&quot;text/javascript&quot; src=&quot;typeface-0.10.js&quot;&gt;&lt;/script&gt; &lt;script type=&quot;text/javascript&quot; src=&quot;helvetiker_regular.typeface.js&quot;&gt;&lt;/script&gt; &lt;/head&gt; &lt;body&gt; &lt;!-- örnek kullanım --&gt; &lt;div class=&quot;typeface-js&quot; style=&quot;font-family: Helvetiker&quot;&gt;Ahanda Typeface ile yazıldı.&lt;/div&gt; &lt;/body&gt; &lt;/html&gt; [/html]</p>
+<p>Web sitenizin yapısına göre, Cufon yerine bunu uygulamak bazılarınıza daha kolay gelebilir. Cufon'da <em>Cufon.replace()</em>, kullanılırken, Typeface'de elementlere <em>typeface-js</em> sınıfını atar ve <em>font-family</em> ile Typeface JS'sini eklediğiniz font-ailesini seçersiniz.</p>
+<p>Hangisini kullanacağınız konusunda tercih tamamen sizindir. Bana kalırsa birbirinden bir farkı yok. =)</p>
+<p><a href="/2009/08/webde-yazi-tipi-ozgurlugu/typeface-examples.jpg" target="_blank"><img src="/2009/08/webde-yazi-tipi-ozgurlugu/typeface-examples.scaled-jpg-200.jpg" title="typeface-examples" alt="typeface-examples"  width="580" height="363" srcset="/2009/08/webde-yazi-tipi-ozgurlugu/typeface-examples.scaled-jpg-200.jpg 200w, /2009/08/webde-yazi-tipi-ozgurlugu/typeface-examples.scaled-jpg-500.jpg 500w, /2009/08/webde-yazi-tipi-ozgurlugu/typeface-examples.jpg 580w"></a></p>
+<h2>Tüm Yöntemler ve SEO Sorunu</h2>
+<p>Metinlerin seçilebilir olmaması, vektör ve resim dosyayı şeklinde olmaları arama motorlarında problem yaratacakmış gibi görünebilir. Öte yandan, burada anlatılan yöntemlerin beşinde de <em>ilk başta standart bir HTML sayfası alınmakta</em>, sayfanın yüklenmesinin bitiminin hemen ardından istenilen yazı tipi uygulanmaktadır. Bu yüzden arama motorları tüm metinleri rahatlıkla indeksleyebilecek ve Java Script, Flash çalıştırma kapasitesi olmayan tarayıcılar bile tüm metinleri rahatlıkla gösterebilecektir. <em>Sizin istediğiniz yazı tipinde olmasa bile.</em></p>
+<p><em>Bu yüzden arama motoru konusunda kara kara düşünmenize gerek yok.</em> Dikkat etmeniz gereken yazı tipi gömmeyi öğrendim diye, sitenizin her satırını farklı yazı tipi kullanarak maymuna çevirmemek, çok fazla dönüşüm kullanarak bant genişliğinizi harcamamak, tarayıcıları ve sunucunuzu yormamak, ziyaretçiyi sayfa önünde dakikalarca bekletmemek.</p>
+<p>Hepsi bu kadar. 😃</p>
+<h2>Yararlanılan Kaynaklar</h2>
+<h3>@font-face</h3>
+<ul>
+<li><a href="http://www.ampsoft.net/webdesign-l/WindowsMacFonts.html" rel="noopener noreferrer" target="_blank">http://www.ampsoft.net/webdesign-l/WindowsMacFonts.html</a></li>
+<li><a href="http://www.w3.org/TR/1998/REC-CSS2-19980512/fonts.html#font-descriptions" rel="noopener noreferrer" target="_blank">http://www.w3.org/TR/1998/REC-CSS2-19980512/fonts.html#font-descriptions</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Embedded_OpenType" rel="noopener noreferrer" target="_blank">http://en.wikipedia.org/wiki/Embedded_OpenType</a></li>
+<li><a href="http://tr.wikipedia.org/wiki/Taray%C4%B1c%C4%B1_sava%C5%9Flar%C4%B1" rel="noopener noreferrer" target="_blank">http://tr.wikipedia.org/wiki/Taray%C4%B1c%C4%B1_sava%C5%9Flar%C4%B1</a></li>
+<li><a href="http://www.fontembedding.com/fonts-and-the-web/" rel="noopener noreferrer" target="_blank">http://www.fontembedding.com/fonts-and-the-web/</a></li>
+<li><a href="http://en.wikipedia.org/wiki/TrueDoc" rel="noopener noreferrer" target="_blank">http://en.wikipedia.org/wiki/TrueDoc</a></li>
+<li><a href="http://upload.wikimedia.org/wikipedia/commons/7/74/Timeline_of_web_browsers.svg" rel="noopener noreferrer" target="_blank">http://upload.wikimedia.org/wikipedia/commons/7/74/Timeline_of_web_browsers.svg</a></li>
+<li><a href="http://tr.wikipedia.org/wiki/Netscape" rel="noopener noreferrer" target="_blank">http://tr.wikipedia.org/wiki/Netscape</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Browser_wars" rel="noopener noreferrer" target="_blank">http://en.wikipedia.org/wiki/Browser_wars</a></li>
+<li><a href="http://www.w3.org/Submission/EOT/" rel="noopener noreferrer" target="_blank">http://www.w3.org/Submission/EOT/</a></li>
+<li><a href="http://www.w3.org/Fonts/Misc/minutes-2008-10" rel="noopener noreferrer" target="_blank">http://www.w3.org/Fonts/Misc/minutes-2008-10</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Embedded_OpenType" rel="noopener noreferrer" target="_blank">http://en.wikipedia.org/wiki/Embedded_OpenType</a></li>
+<li><a href="https://developer.mozilla.org/index.php?title=En/CSS/%40font-face" rel="noopener noreferrer" target="_blank">https://developer.mozilla.org/index.php?title=En/CSS/%40font-face</a></li>
+<li><a href="http://jontangerine.com/silo/typography/font-face/" rel="noopener noreferrer" target="_blank">http://jontangerine.com/silo/typography/font-face/</a></li>
+<li><a href="http://opentype.info/demo/webfontdemo.html" rel="noopener noreferrer" target="_blank">http://opentype.info/demo/webfontdemo.html</a></li>
+</ul>
+<h3>sIFR</h3>
+<ul>
+<li><a href="http://www.mikeindustries.com/blog/sifr/" rel="noopener noreferrer" target="_blank">http://www.mikeindustries.com/blog/sifr/</a></li>
+<li><a href="http://www.sifrgenerator.com/" rel="noopener noreferrer" target="_blank">http://www.sifrgenerator.com/</a></li>
+<li><a href="http://www.yakuter.com/sifr-ile-guzelleselim/" rel="noopener noreferrer" target="_blank">http://www.yakuter.com/sifr-ile-guzelleselim/</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Scalable_Inman_Flash_Replacement" rel="noopener noreferrer" target="_blank">http://en.wikipedia.org/wiki/Scalable_Inman_Flash_Replacement</a></li>
+</ul>
+<h3>FLIR</h3>
+<ul>
+<li>&lt;del datetime=&quot;2011-08-21T21:39:41+00:00&quot;&gt;http://facelift.mawhorter.net/&lt;/del&gt;</li>
+<li><a href="http://net.tutsplus.com/tutorials/php/how-to-use-any-font-you-wish-with-flir/" rel="noopener noreferrer" target="_blank">http://net.tutsplus.com/tutorials/php/how-to-use-any-font-you-wish-with-flir/</a></li>
+</ul>
+<h3>Cufon</h3>
+<ul>
+<li><a href="http://en.wikipedia.org/wiki/Canvas_%28HTML_element%29" rel="noopener noreferrer" target="_blank">http://en.wikipedia.org/wiki/Canvas_%28HTML_element%29</a></li>
+<li><a href="http://www.w3.org/TR/NOTE-VML" rel="noopener noreferrer" target="_blank">http://www.w3.org/TR/NOTE-VML</a></li>
+<li><a href="http://www.yakuter.com/cufon-bir-sifr-alternatifi-hakkinda-her-sey/" rel="noopener noreferrer" target="_blank">http://www.yakuter.com/cufon-bir-sifr-alternatifi-hakkinda-her-sey/</a></li>
+<li><a href="http://wiki.github.com/sorccu/cufon/styling" rel="noopener noreferrer" target="_blank">http://wiki.github.com/sorccu/cufon/styling</a></li>
+<li><a href="http://codex.wordpress.org/User:Here/Texturize" rel="noopener noreferrer" target="_blank">http://codex.wordpress.org/User:Here/Texturize</a></li>
+<li><a href="http://cufon.shoqolate.com/generate/" rel="noopener noreferrer" target="_blank">http://cufon.shoqolate.com/generate/</a></li>
+<li><a href="http://docs.jquery.com/Selectors" rel="noopener noreferrer" target="_blank">http://docs.jquery.com/Selectors</a></li>
+<li><a href="http://wiki.github.com/sorccu/cufon/known-bugs-and-issues" rel="noopener noreferrer" target="_blank">http://wiki.github.com/sorccu/cufon/known-bugs-and-issues</a></li>
+<li><a href="http://wiki.github.com/sorccu/cufon/usage" rel="noopener noreferrer" target="_blank">http://wiki.github.com/sorccu/cufon/usage</a></li>
+<li><a href="http://wordpress.org/extend/plugins/wp-cufon/" rel="noopener noreferrer" target="_blank">http://wordpress.org/extend/plugins/wp-cufon/</a></li>
+</ul>
+<h3>Typeface</h3>
+<ul>
+<li><a href="http://typeface.neocracy.org/" rel="noopener noreferrer" target="_blank">http://typeface.neocracy.org/</a></li>
+<li><a href="http://kilianvalkhof.com/uploads/cufon-vs-typeface/" rel="noopener noreferrer" target="_blank">http://kilianvalkhof.com/uploads/cufon-vs-typeface/</a></li>
+<li><a href="http://kilianvalkhof.com/2009/javascript/cufon-vs-typefacejs-which-one-is-better/" rel="noopener noreferrer" target="_blank">http://kilianvalkhof.com/2009/javascript/cufon-vs-typefacejs-which-one-is-better/</a></li>
+<li><a href="http://stackoverflow.com/questions/692990/sifr-vs-cufon-vs-typeface-js" rel="noopener noreferrer" target="_blank">http://stackoverflow.com/questions/692990/sifr-vs-cufon-vs-typeface-js</a></li>
+<li><a href="http://typeface.neocracy.org/usage.html" rel="noopener noreferrer" target="_blank">http://typeface.neocracy.org/usage.html</a></li>
+</ul>
+</div></div></article><div class="card comments main-container__items"><div class="card__contents" id="disqus_thread"></div></div></div><div class="sidebar main-content__sidebar"><div class="about"><img class="about__image" src="/img/profile.jpg"/><h1 class="about__name">Umut Benzer</h1><h2 class="about__mini-bio">Software Engineer in Berlin</h2></div></div></div><div class="main-container"><div class="footer"><div class="footer__copyright-holder"><p><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license noopener noreferrer" target="_blank"><img alt="Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License" src="/img/cclicense.png"/></a></p><p><span>Bu sitedeki tüm yazı ve görseller </span><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license noopener noreferrer" target="_blank">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a><span> ile lisanslanmıştır.</span></p></div><div class="footer__generator"><span>Bu sayfa </span><span>9 Nisan 2017</span><span> tarihinde </span><a href="https://github.com/ubenzer/fil" target="_blank">Fil</a><span> ile yaratılmıştır.</span></div></div></div></div>
+        <script src="/template/app.js" type="text/javascript"></script><script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = "https://ubenzer.com/2009/08/webde-yazi-tipi-ozgurlugu";
+          this.page.identifier = "post@/2009/08/webde-yazi-tipi-ozgurlugu";
+        };
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = 'https://ubenzer.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+        </script>
+      </body>
+    </html>
+  

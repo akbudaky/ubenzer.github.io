@@ -1,0 +1,223 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+void sirala(int *sirala, char *karakter) {
+
+    /* Bu foksiyon int girdilerini büyükten küçüðe sýralarken char dizisinde de
+       ayný indise sahip elemanlarýnn yerlerini deðiþtirir.
+       Bu fonksiyonda girdide eþitlik olmasý durumu gözardý edilmiþtir.       */
+
+    char sayac1, sayac2;                  /* Önce karakter dizisinin elemanlarýný sýfýrlayalým. */
+    int gecici;                           /* Aslýnda bu sýfýrlama kullanýlmasa fonksiyon daha   */
+                                           /* genel olurdu. Ancak sýralama partiler dýþýnda bir  */
+    for (sayac1=0; sayac1<8;sayac1++) {   /* yerde kullanýlmayacaðýndan burada sýfýrlamayý daha */
+        karakter[sayac1] = sayac1;        /* uygun gördüm.                                      */
+    }
+
+    for (sayac1=0; sayac1<7;sayac1++) {                   /* SIRALAMA ALGORITMASI (Selection Sort)             */
+        for (sayac2=sayac1 + 1; sayac2<8;sayac2++) {      /* Selection Sort algoritmasý'nýn 8 elemanlýk diziye */
+            if (sirala[sayac1] < sirala[sayac2]) {        /* uyarlanmýþ versiyonu.                             */
+                gecici = sirala[sayac1];
+                sirala[sayac1] = sirala[sayac2];
+                sirala[sayac2] = gecici;
+
+                gecici = karakter[sayac1]; // integer'a char atiyorum ama sorun olmuyor. integerin tanim araligi daha büyük nasilsa.
+                karakter[sayac1] = karakter[sayac2];
+                karakter[sayac2] = gecici; // char'a integer atiyorum ama iki satir ustte integer'e char kadar küçük bir deðer atadýðýmý biliyorum.
+
+            }
+
+        }
+    }
+
+}
+
+void mvsay (int *parti_oy, int *mvsay, int kontenjan) {
+
+    /* Bu foksiyon milletvekili sayýlarýný hesaplayarak mvsay dizisinde geri
+       gönderir. Hangi milletvekili sayýsýnýn hangi partiye ait olduðunun
+       sýrasý parti oy sayýlarýnýn geldiði dizi ile aynýdýr.              */
+
+    int azaltilan_oy[8];  // Asýl parti oy sayýsý setinin etkilenmemesi için tüm girdiler bu deðiþkene kopyalanacak.
+    char sayac;
+
+    for (sayac=0;sayac<8;sayac++) {
+        azaltilan_oy[sayac] = parti_oy[sayac];  // Asýl parti oy sayýsý setinin etkilenmemesi için tüm girdiler bu deðiþkene kopyalanacak.
+    }
+
+    for (sayac=0;sayac<8;sayac++) {
+        mvsay[sayac] = 0; // Deðiþken sýfýrlama
+    }
+
+    /* Milletvekili sayýsý hesaplama algoritmasý BAÞLANGICI */
+    for (sayac=1;sayac<=kontenjan;sayac++) {
+        mvsay[enbuyuk(azaltilan_oy)]++;
+        azaltilan_oy[enbuyuk(azaltilan_oy)] = azaltilan_oy[enbuyuk(azaltilan_oy)] / 2;
+    }
+    /* Milletvekili sayýsý hesaplama algoritmasý SONU */
+
+}
+
+int enbuyuk (int *girdi) {
+
+    /* 8 elemanlýk girdi[] dizisinin en büyük elemanýnýn kaçýncý eleman
+       olduðunu döndürür. 0 ile 7 arasý bir deðer döndürür.
+       Bu fonksiyonda girdide eþitlik olmasý durumu gözardý edilmiþtir.       */
+
+    char sayac;
+    int enbuyuk=0; // Ýlk baþta en büyük 0. eleman kabul edilir.
+
+    for (sayac=0; sayac<8;sayac++) {
+        if (girdi[enbuyuk] < girdi[sayac]) { // Daha büyüðü varsa deðiþtirilir.
+            enbuyuk=sayac;
+        }
+    }
+
+    return enbuyuk;
+
+}
+
+int main()
+{
+
+    /* Acilis yazilari BASLANGICI */
+    printf("Umut BENZER\n");
+    printf("05-06-7670\n");
+    printf("Ege Universitesi Bilgisayar Muhendisligi 1. Sinif\n");
+    printf("http://www.ubenzer.com\n");
+    printf("Genel Secim Sonuclari 1.1\n\n"); /* Etkinliði artýrýlmýþ ve enbuyuk fonksiyonunda hatalar ayýklanmýþ ikinci sürüm */
+    /* Acilis yazilari SONU */
+
+    /* Dosyayý bir nedenden dolayý açamama durumunda hata mesajý verme de dahil olmak üzere dosya açma iþlemi BASLANGICI */
+    FILE *fp;
+
+    if((fp=fopen("secim.dat","r")) == NULL) {
+        printf ("secim.dat dosyasi acilamadi. Umarim nedeni yazilimim degildir ve sifir almam. :(");
+        return 0;
+    }
+    /* Dosyayý bir nedenden dolayý açamama durumunda hata mesajý verme de dahil olmak üzere dosya açma iþlemi SONU */
+
+
+    /* Sehir bazinda islem yapilacak olan degiskenler */
+    int sehirno;
+    int kontenjan;
+    int sehir_oy;
+    int parti_oy[8];
+    char parti_id[8];
+    int mvsay_sehir[8];
+
+    /* Ulke bazinda islem yapilacak olan degiskenler */
+    int kontenjan_ulke=0;
+    int oy_ulke=0;
+    int parti_oy_ulke[8] = {0};
+    int mvsay_ulke[8] = {0};
+    int ildebirinci[8] = {0};
+
+    /* Diger degiskenler */
+    char sayac; // Bellekde integerden daha az yer kapladýðý için tüm sayaçlarý char olarak kullanýyorum.
+                // Alt tarafi 8 eleman dondurecegim, fazla kapasiteye gerek yok.
+
+    /* Þehir bazýnda hesaplama BAÞANGICI */
+    while(!feof(fp)) {  // Dosya sonu gelmediði (iller bitmediði sürece dön)
+
+        // Önce girdi diskten okunur
+        fscanf(fp,"%d %d %d %d %d %d %d %d %d %d",&sehirno,&kontenjan,&parti_oy[0],&parti_oy[1],&parti_oy[2],&parti_oy[3],&parti_oy[4],&parti_oy[5],&parti_oy[6],&parti_oy[7]);
+
+        sirala(parti_oy,parti_id); // Oy çokluðuna göre sýralanýr.
+        mvsay(parti_oy,mvsay_sehir,kontenjan); // Milletvekili sayýlarý hesaplanýr.
+
+        /* Güncel þehirdeki geçerli oy sayýsý hesabýnýn BAÞLANGICI */
+        sehir_oy = 0;
+        for (sayac=0;sayac<8;sayac++) {
+            sehir_oy += parti_oy[sayac];
+
+            parti_oy_ulke[parti_id[sayac]] += parti_oy[sayac];
+            mvsay_ulke[parti_id[sayac]] += mvsay_sehir[sayac];
+            /* Bu iki satýr güncel þehirdeki geçerli oy sayýsýnýn hesabý ile alakalý */
+            /* deðil. Bunlar daha sonra Türkiye genelinde kullanýlmak üzere toplanan */
+            /* parti bazýnda MV ve oy sayýlarý.                                      */
+            /* indislerin [parti_id[sayac]] olmasýnýn anlamý: doðrudan sayac diye    */
+            /* kullanamam, çünkü üstte sýraladýðým için sayac ile parti nosu ayný    */
+            /* deðil. Örneðin sayac = 0 'A' partisine iþaret etmiyor olabilir, çünkü */
+            /* sirala(parti_oy,parti_id); ile sýralamayý deðiþtirdik.                */
+            /* Oy sayýlarý ve MV sayýlarýný partilere doðru kaydedebilmek için       */
+            /* parti_id[sayac] ile sýralarken partinolarýný da sýraladýðým diziden   */
+            /* faydalanýyorum.                                                       */
+            /*                                                                       */
+            /* Böylece Türkiye geneline ait tüm verilerde 0. indis A, 1. B... parti- */
+            /* sine ait olacaktýr.                                                   */
+        }
+        /* Güncel þehirdeki geçerli oy sayýsý hesabýnýn SONU */
+
+        ildebirinci[parti_id[0]]++; // Yukarýdaki uzun açýklama burada da geçerli. Birinci partiye 1 ekler.
+
+        /* Çýktý BAÞLANGICI */
+        printf("Il Plaka Kodu           : %d\n",sehirno);
+        printf("Milletvekili Kontenjani : %d\n",kontenjan);
+        printf("Gecerli Oy Sayisi       : %d\n",sehir_oy);
+        printf("Parti Adi  Oy Sayisi  Oy Yuzdesi  MV Sayisi\n");
+        printf("---------  ---------  ----------  ---------\n");
+
+        for (sayac=0;sayac<8;sayac++) {
+            printf("        %c  %9d  %10.3f %10d\n",parti_id[sayac] + 65,parti_oy[sayac], parti_oy[sayac] * 100.0 / sehir_oy,mvsay_sehir[sayac]);
+        }
+        /* Çýktý SONU */
+
+        /* Önemli Comment: Program genelindeki +65 'lerin anlamý:                                              */
+        /* --------------- ----------------------------------------------------------------------------------- */
+        /* Program genelinde parti_id[] dizisinde A partisi için 0, B partisi için 1... deðerlerini kullandým. */
+        /* A partisi için kullandýðým 0'ý rakam olarak alýp yanýna 65 eklersem A'nýn ASCII kodunu elde ederim. */
+        /* Bu diðer harfler için de deðerli. ASCII kodlarý ardýþýk olduðu için harf indislerinin 65 fazlasý    */
+        /* harfi veriyor.                                                                                      */
+        /* Böylece programýn herhangi bir yerinde rakamý alýp harf döndüren bir fonksiyon yazmaktan kurtulu-   */
+        /* yorum. Programým daha etkin ve kýsa oluyor.                                                         */
+        /* --------------------------------------------------------------------------------------------------- */
+
+        /* Bir sonraki þehire hazýrlýk BAÞLANGICI */
+        printf("\n\nDevam etmek icin bir tusa basiniz...\n");
+        getche();
+        system("cls");
+        printf("\n\n\n\n\n\n");
+        /* Bir sonraki þehire hazýrlýk SONU */
+    }
+    /*    Þehir bazýnda hesaplama SONU    */
+    /* -----------------------------------*/
+    /* Türkiye geneli hesaplama BALANGICI */
+    /* Toplam oy ve kontenjan sayýlarýný hesaplama BAÞLANGICI */
+    for (sayac=0;sayac<8;sayac++) {
+        oy_ulke += parti_oy_ulke[sayac];     /* Bu iki veriyi her þehirde bir defa toplamaktansa burda toplamak daha etkin. */
+        kontenjan_ulke += mvsay_ulke[sayac]; /* Eðer her þehirde toplasaydým þehir sayýsý kadar iþlem yapardým. Burda ise   */
+    }                                        /* 8 iþlem yapýyorum. Ülkenin 8'den fazla ile sahip olduðunu kabul ediyorum.   */
+    /* Toplam oy ve kontenjan sayýlarýný hesaplama SONU */
+
+    /* Çýktý BAÞLANGICI */
+    printf("Turkiye Geneli\n");
+    printf("Milletvekili Kontenjani : %d\n",kontenjan_ulke);
+    printf("Gecerli Oy Sayisi       : %d\n",oy_ulke);
+    printf("Parti Adi  Oy Sayisi  Oy Yuzdesi  MV Sayisi  MV Yuzdesi\n");
+    printf("---------  ---------  ----------  ---------  ----------\n");
+
+    for (sayac=0;sayac<8;sayac++) {
+        printf("        %c  %9d  %10.3f  %9d  %10.3f\n",sayac + 65,parti_oy_ulke[sayac], parti_oy_ulke[sayac] * 100.0 / oy_ulke,mvsay_ulke[sayac],mvsay_ulke[sayac] * 100.0 / kontenjan_ulke);
+    }
+
+    printf("\n\n");
+    printf("Iktidar Partisi       : %c\n", enbuyuk(parti_oy_ulke)+ 65);
+
+    parti_oy_ulke[enbuyuk(parti_oy_ulke)] = 0;
+
+    printf("Ana Muhalefet Partisi : %c\n\n", enbuyuk(parti_oy_ulke) + 65);
+    printf("Partilerin Oy Sayilarina Gore Il Birincilikleri\n");
+
+    for (sayac=0;sayac<8;sayac++) {
+        if (ildebirinci[sayac] != 0) { // Eðer birinci olamadýysa niye ekraný 0'larla doldurayým?
+            printf("%c partisi : %d\n",sayac + 65,ildebirinci[sayac]);
+        }
+    }
+    /* Çýktý SONU */
+
+    /* Kapanýþ iþlemleri BAÞLANGICI */
+    fclose(fp); //Dosyayý kapat
+    return 0;
+    /* Kapanýþ iþlemleri SONU */
+}

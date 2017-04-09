@@ -1,0 +1,76 @@
+<!doctype html>
+    <html lang="tr">
+      <head>
+        <title>C’de Processler ve vfork() - UBenzer</title>
+        <meta content="utf-8" name="charset"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="#2196F3" name="theme-color"/>
+        <link href="/template/ui.css" media="screen" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i&amp;amp;subset=latin-ext" media="screen" rel="stylesheet" type="text/css"/><link href="/img/favicon/apple-touch-icon-57x57.png" rel="apple-touch-icon-precomposed" sizes="57x57"/><link href="/img/favicon/apple-touch-icon-60x60.png" rel="apple-touch-icon-precomposed" sizes="60x60"/><link href="/img/favicon/apple-touch-icon-72x72.png" rel="apple-touch-icon-precomposed" sizes="72x72"/><link href="/img/favicon/apple-touch-icon-76x76.png" rel="apple-touch-icon-precomposed" sizes="76x76"/><link href="/img/favicon/apple-touch-icon-114x114.png" rel="apple-touch-icon-precomposed" sizes="114x114"/><link href="/img/favicon/apple-touch-icon-120x120.png" rel="apple-touch-icon-precomposed" sizes="120x120"/><link href="/img/favicon/apple-touch-icon-152x152.png" rel="apple-touch-icon-precomposed" sizes="152x152"/><link href="/img/favicon/favicon-196x196.png" rel="icon" sizes="196x196"/><link href="/img/favicon/favicon-128x128.png" rel="icon" sizes="128x128"/><link href="/img/favicon/favicon-96x96.png" rel="icon" sizes="96x96"/><link href="/img/favicon/favicon-32x32.png" rel="icon" sizes="32x32"/><link href="/img/favicon/favicon-16x16.png" rel="icon" sizes="16x16"/>
+      </head>
+      <body>
+        <div><header class="header"><div class="app-bar"><h1 class="app-bar__title"><a class="app-bar__title-link" href="/">UBenzer</a></h1></div></header><div class="main-container"><div class="main-content"><article class="card main-container__items"><div class="card__contents blog-post"><div class="blog-post__date">9 Mayıs 2010</div><h1><a class="blog-post__title" href="/2010/05/c-de-processler-ve-vfork">C’de Processler ve vfork()</a></h1><div class="markdown-content blog-post__body blog-post__content"><p>Bu sene Doç. Dr. Aylin Kantarcı hocamızın verdiği İşletim Sistemleri 2 dersinde, süreçleri <em>(processler)</em> ve nasıl işlediklerini ayrıntılı bir şekilde öğrendik.</p>
+<p>Bize verilen ödevde, iki matrisin çarpma işleminin her satırını bir sürece yaptıracağımız bir program istendi. Ödevin daha sonra değiştirilen ve <em>kontrolü iptal edilen ilk sürümünde</em>, henüz IPC’leri görmediğimizden süreçler arası bilgi aktarımını süreçleri aynı adres sahasında farklı program counterlar ile çalıştırarak sağlamıştık. <em>(vfork)</em></p>
+<p>Zaten sonra IPC’lere dönüştürmek 15 dakikamı ya aldı ya almadı.</p>
+<p><em>Vfork bir linux sistem çağrısıdır.</em> <em>(system call)</em> Onun için <em>aşağıdaki kod Windows’ta çalışmaz</em>.</p>
+<p>Kaynak kodlarını, örnek girdi dosyasını ve ödev metnini aşağıdan indirebilirsiniz. Kaynak kodunu indirmek istemezseniz yazının devamına göz atabilirsiniz.</p>
+<ul>
+<li><a href="/2010/05/c-de-processler-ve-vfork/os-odev-1-eski.pdf" >Ödev Metni</a></li>
+<li><a href="/2010/05/c-de-processler-ve-vfork/vfork.c" >Benim Çözümüm (vfork.c)</a></li>
+<li><a href="/2010/05/c-de-processler-ve-vfork/input.txt" >Örnek Dosya (input.txt)</a></li>
+</ul>
+<pre><code class="language-c"> #include &lt;stdio.h&gt; #include &lt;stdlib.h&gt; #include &lt;unistd.h&gt; #include &lt;errno.h&gt;
+
+int main() {
+
+/* Acilis yazilari BASLANGICI */ printf(&quot;Umut BENZER\n&quot;); printf(&quot;05-06-7670\n&quot;); printf(&quot;Ege Universitesi Bilgisayar Muhendisligi 3\. Sinif\n&quot;); printf(&quot;http://www.ubenzer.com\n&quot;); printf(&quot;Processes\n\n&quot;); /* Acilis yazilari SONU */
+
+int m; int n; int k;
+
+int pid; pid = fork();
+
+if (pid == 0) { /* B süreci */ FILE *fp; if((fp=fopen(&quot;input.txt&quot;,&quot;r&quot;)) == NULL) { printf (&quot;Dosya acilamadi.&quot;); exit(-1); }
+
+fscanf(fp,&quot;%d %d %d&quot;,&amp;m, &amp;n, &amp;k);
+
+int matrisA[m][n]; int matrisB[n][k]; int matrisC[m][k];
+
+int i; int j;
+
+for(i=0;i&lt;m;i++) { for(j=0;j&lt;k;j++) { matrisC[i][j] = 0; } }
+
+/* A MATRISINI OKU */ for(i=0;i&lt;m;i++) { for(j=0;j&lt;n;j++) { fscanf(fp,&quot;%d&quot;,&amp;matrisA[i][j]); } }
+
+/* B MATRISINI OKU */ for(i=0;i&lt;n;i++) { for(j=0;j&lt;k;j++) { fscanf(fp,&quot;%d&quot;,&amp;matrisB[i][j]); } }
+
+fclose(fp);
+
+/* EKRANA MATRISLERI YAZDIR */ printf(&quot;Matris A:\n&quot;); for(i=0;i&lt;m;i++) { for(j=0;j&lt;n;j++) { printf(&quot;%d\t&quot;, matrisA[i][j]); } printf(&quot;\n&quot;); }
+
+printf(&quot;\nMatris B:\n&quot;); for(i=0;i&lt;n;i++) { for(j=0;j&lt;k;j++) { printf(&quot;%d\t&quot;, matrisB[i][j]); } printf(&quot;\n&quot;); }
+
+int pidler[m]; for(i=0;i&lt;m;i++) { pidler[i] = vfork(); if (pidler[i] == 0) {
+
+int ic1,ic2; for(ic1=0; ic1&lt;k; ic1++) { for(ic2=0; ic2&lt;n; ic2++) { matrisC[i][ic1] += matrisA[i][ic2] * matrisB[ic2][ic1]; } }
+
+exit(0);
+
+} else if(pid &lt; 0){ fprintf(stderr, &quot;Fork yapamadim. %d\n&quot;, errno); exit(EXIT_FAILURE); } } for(i=0;i&lt;m;i++) { wait(pidler[i]); }
+
+printf(&quot;\nMatris C:\n&quot;); for(i=0;i&lt;m;i++) { for(j=0;j&lt;k;j++) { printf(&quot;%d\t&quot;, matrisC[i][j]); } printf(&quot;\n&quot;); } exit(0);
+
+} else if (pid &gt; 0) { wait(); } else { fprintf(stderr, &quot;Fork yapamadim. %d\n&quot;, errno); exit(EXIT_FAILURE); } }
+</code></pre>
+</div></div></article><div class="card comments main-container__items"><div class="card__contents" id="disqus_thread"></div></div></div><div class="sidebar main-content__sidebar"><div class="about"><img class="about__image" src="/img/profile.jpg"/><h1 class="about__name">Umut Benzer</h1><h2 class="about__mini-bio">Software Engineer in Berlin</h2></div></div></div><div class="main-container"><div class="footer"><div class="footer__copyright-holder"><p><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license noopener noreferrer" target="_blank"><img alt="Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License" src="/img/cclicense.png"/></a></p><p><span>Bu sitedeki tüm yazı ve görseller </span><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license noopener noreferrer" target="_blank">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a><span> ile lisanslanmıştır.</span></p></div><div class="footer__generator"><span>Bu sayfa </span><span>9 Nisan 2017</span><span> tarihinde </span><a href="https://github.com/ubenzer/fil" target="_blank">Fil</a><span> ile yaratılmıştır.</span></div></div></div></div>
+        <script src="/template/app.js" type="text/javascript"></script><script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = "https://ubenzer.com/2010/05/c-de-processler-ve-vfork";
+          this.page.identifier = "post@/2010/05/c-de-processler-ve-vfork";
+        };
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = 'https://ubenzer.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+        </script>
+      </body>
+    </html>
+  

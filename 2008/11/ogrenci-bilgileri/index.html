@@ -1,0 +1,84 @@
+<!doctype html>
+    <html lang="tr">
+      <head>
+        <title>Öğrenci Bilgileri - UBenzer</title>
+        <meta content="utf-8" name="charset"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="#2196F3" name="theme-color"/>
+        <link href="/template/ui.css" media="screen" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i&amp;amp;subset=latin-ext" media="screen" rel="stylesheet" type="text/css"/><link href="/img/favicon/apple-touch-icon-57x57.png" rel="apple-touch-icon-precomposed" sizes="57x57"/><link href="/img/favicon/apple-touch-icon-60x60.png" rel="apple-touch-icon-precomposed" sizes="60x60"/><link href="/img/favicon/apple-touch-icon-72x72.png" rel="apple-touch-icon-precomposed" sizes="72x72"/><link href="/img/favicon/apple-touch-icon-76x76.png" rel="apple-touch-icon-precomposed" sizes="76x76"/><link href="/img/favicon/apple-touch-icon-114x114.png" rel="apple-touch-icon-precomposed" sizes="114x114"/><link href="/img/favicon/apple-touch-icon-120x120.png" rel="apple-touch-icon-precomposed" sizes="120x120"/><link href="/img/favicon/apple-touch-icon-152x152.png" rel="apple-touch-icon-precomposed" sizes="152x152"/><link href="/img/favicon/favicon-196x196.png" rel="icon" sizes="196x196"/><link href="/img/favicon/favicon-128x128.png" rel="icon" sizes="128x128"/><link href="/img/favicon/favicon-96x96.png" rel="icon" sizes="96x96"/><link href="/img/favicon/favicon-32x32.png" rel="icon" sizes="32x32"/><link href="/img/favicon/favicon-16x16.png" rel="icon" sizes="16x16"/>
+      </head>
+      <body>
+        <div><header class="header"><div class="app-bar"><h1 class="app-bar__title"><a class="app-bar__title-link" href="/">UBenzer</a></h1></div></header><div class="main-container"><div class="main-content"><article class="card main-container__items"><div class="card__contents blog-post"><div class="blog-post__date">5 Kasım 2008</div><h1><a class="blog-post__title" href="/2008/11/ogrenci-bilgileri">Öğrenci Bilgileri</a></h1><div class="markdown-content blog-post__body blog-post__content"><p>Bu sene Algoritma ve Programlama dersi almamama rağmen hem birinci sınıflara yardımcı olsun, hem sitemin trafiği artsın 😄, hem de internetteki C kaynak kodu örnekleri artsın diye ödev çözümlerini Didem’den alıp sizinle paylaşıyorum.</p>
+<p>Umuyorum burada paylaşılanlar birinin işine yarar… Kaynak kodlarını paylaştığı için Didem’e çok teşekkür ediyorum.</p>
+<ul>
+<li><a href="/2008/11/ogrenci-bilgileri/algo-odev-2.pdf" >Algoritma ve Programlama Dersi Ödev 2 açıklaması</a></li>
+<li><a href="/2008/11/ogrenci-bilgileri/7669-odev2.c" >Didem’in Çözümü (7669.c)</a></li>
+</ul>
+<pre><code class="language-c"> #include &lt;stdio.h&gt; #include &lt;stdlib.h&gt;
+
+int main() { int ogrno; float notort; char ikamet; char cinsiyet; float burs, kizort,okulort, erkekort,yuzdekiz, yuzdeerkek,yuzdeokul; int basarilikiz=0; int basarilier=0; float kiznotort=0; float erkeknotort=0; int kizsay=0; int erkeksay=0; int maxogrno; float maxnotort=0; float maxburs=0; int zenginogrno; float zenginnotort=0; int zenginogr=0; int evdekiz=0; int evdeerkek=0; float topburs=0; int basarisizev=0; int basarisizaile=0; int basarisizyurt=0; int a=0;
+
+while (ogrno!=0) { printf(&quot;ogrenci numarasini giriniz. &lt;cikis icin 0 a basiniz&gt; \n&quot;); scanf(&quot;%d&quot;,&amp;ogrno); a=a+1;
+
+if ((a==1) &amp;&amp; (ogrno==0)) { return 0; } //ilk girilen ogrenci numarasinin 0 olmasi durumunda programdan cikisi saglar.
+
+if (ogrno&lt;0) { printf(&quot;hatali girdi\n&quot;); continue; } //hatali veri girisi halinde bir bildiri vererek dongunun icindeki sonraki asamalari atlar ve basa doner.
+
+if (ogrno==0) { break; } //ogrenci numarasinin 0 girilmesi halinde donguden cikarak sonucu listelemeye gider.
+
+printf(&quot;cinsiyetini giriniz.(e/E/k/K)\n&quot;); fflush(stdin); cinsiyet=getchar(); if (cinsiyet!='e' &amp;&amp; cinsiyet!='E' &amp;&amp; cinsiyet!='k' &amp;&amp; cinsiyet!='K') { printf(&quot;hatali girdi\n&quot;); continue; } //hatali veri girisi halinde bir bildiri vererek dongunun icindeki sonraki asamalari atlar ve basa doner.
+
+printf(&quot;ikamet giriniz.(a/A/y/Y/e/E)\n&quot;); fflush(stdin); ikamet=getchar(); if (ikamet!='a' &amp;&amp; ikamet!='A' &amp;&amp; ikamet!='y' &amp;&amp; ikamet!='Y' &amp;&amp; ikamet!='e' &amp;&amp; ikamet!='E') { printf(&quot;hatali girdi\n&quot;); continue; } //hatali veri girisi halinde bir bildiri vererek dongunun icindeki sonraki asamalari atlar ve basa doner. printf(&quot;not ortalamasini giriniz.(0 ile 4 arasinda ondalikli sayi)\n&quot;); scanf(&quot;%f&quot;,&amp;notort); if (notort&lt;0||notort&gt;4) { printf(&quot;hatali girdi\n&quot;); continue; } //hatali veri girisi halinde bir bildiri vererek dongunun icindeki sonraki asamalari atlar ve basa doner.
+
+if (ikamet=='a'||ikamet=='A') { if (notort&lt;2) { burs=100; basarisizaile=basarisizaile+1; } if (notort&lt;3 &amp;&amp; notort&gt;=2) { burs=(notort*50)+100; } if (notort&gt;=3) { burs=(notort*60)+150; } //ailesiyle kalan ogrencilerin burslarini hesaplar, basarisiz ogrecilere ait bir sayac tutar. }
+
+if (ikamet=='Y'||ikamet=='y') { if (notort&lt;2) { burs=130; basarisizyurt=basarisizyurt+1; } if (notort&lt;3 &amp;&amp; notort&gt;=2) { burs=((notort*50)+100)*1.3; }
+
+if (notort&gt;=3) { burs=((notort*60)+150)*1.3; } //yurtta kalan ogrencilerin burslarini hesaplar, basarisiz ogrecilere ait bir sayac tutar. }
+
+if (ikamet=='E'||ikamet=='e') { if (notort&lt;2) { burs=130; basarisizev=basarisizev+1; } if (notort&lt;3 &amp;&amp; notort&gt;=2) { burs=((notort*50)+100)*1.5; } if (notort&gt;=3) { burs=((notort*60)+150)*1.5; } //evde kalan ogrencilerin burslarini hesaplar, basarisiz ogrecilere ait bir sayac tutar. }
+
+printf(&quot;ogrenci no:%d\n&quot;,ogrno); printf(&quot;ogrencinin not ortalamasi:%.2f\n&quot;,notort); printf(&quot;aldigi burs:%.2f YTL\n\n&quot;,burs); //bir ogrencinin veri girisi tamamlandiktan sonra bilgileri yazdidir.
+
+if (cinsiyet=='k'||cinsiyet=='K') { kiznotort=kiznotort+notort; kizsay=kizsay+1; if (notort&gt;=2) { basarilikiz=basarilikiz+1; } if (ikamet=='e'||ikamet=='E') { evdekiz=evdekiz+1; } //toplam kiz, basarili kiz ve evde kalan kizlari sayar. }
+
+if (cinsiyet=='e'||cinsiyet=='E') { erkeknotort=erkeknotort+notort; erkeksay=erkeksay+1; if (notort&gt;=2) { basarilier=basarilier+1; } if (ikamet=='e'||ikamet=='E') { evdeerkek=evdeerkek+1; } //toplam erkek, basarili erkek ve evde kalan erkeleri sayar. }
+
+if (notort&gt;maxnotort) { maxnotort=notort; maxogrno=ogrno; //okul birincisinin verilerini tutar. }
+
+if (burs&gt;maxburs) { maxburs=burs; zenginogrno=ogrno; zenginnotort=notort; //en cok burs alan ogrencinin verilerini tutar. }
+
+if (burs&gt;500) { zenginogr=zenginogr+1; //500 den fazla burs alan ogrencileri sayar. } topburs=topburs+burs; //toplam burs miktarini hesaplar. }
+
+if (kizsay&gt;0) { printf(&quot;\n\nbasarili kizlarin sayisi:%d\n&quot;,basarilikiz); yuzdekiz=(basarilikiz*100)/kizsay; printf(&quot;basarili kiz yuzdesi:%.2f\n&quot;,yuzdekiz); } else { printf(&quot;\n\nKiz ogrenci girisi yapilmadi.\n&quot;); } //varsa kizlarin basari yuzdesini hesaplar, yoksa islem yapmadan bildiri verir.
+
+if (erkeksay&gt;0) { printf(&quot;basarili erkeklerin sayisi:%d\n&quot;,basarilier); yuzdeerkek=(basarilier*100)/erkeksay; printf(&quot;basarili erkek yuzdesi:%.2f\n&quot;,yuzdeerkek); } else { printf(&quot;erkek ogrenci girisi yapilmadi.\n&quot;); } //varsa erkek ogrenci basari yuzdesini hesaplar, yoksa islem yapmadan bildiri verir.
+
+yuzdeokul=((basarilikiz+basarilier)*100)/(kizsay+erkeksay); printf(&quot;okul basari yuzdesi:%.2f\n&quot;,yuzdeokul); //okulun basari yuzdesini hesaplar.
+
+if (kizsay&gt;0) { kizort=kiznotort/kizsay; printf(&quot;kizlarin not ortalamasi:%.2f\n&quot;,kizort); } else { printf(&quot;Kiz ogrenci girisi yapilmadi.\n&quot;); } /*kiz ogrenci yoksa 0a bolunme hatasi vermemesi icin islem yapmaz ve bir bildiri yazar. Varsa kizlarin ortalamasini hesaplar*/
+
+if (erkeksay&gt;0) { erkekort=erkeknotort/erkeksay; printf(&quot;erkeklerin not ortalamasi:%.2f\n&quot;,erkekort); } else { printf(&quot;erkek ogrenci girisi yapilmadi.\n&quot;); } /*Erkek ogrenci yoksa 0a bolunme hatasi vermemesi icin islem yapmaz ve bir bildiri yazar. Varsa erkeklerin ortalamasini hesaplar*/
+
+okulort=(kiznotort+erkeknotort)/(kizsay+erkeksay); printf(&quot;okulun not ortalamasi:%.2f\n\n&quot;,okulort); //okul ortalamasini hesaplar.
+
+printf(&quot;okul birincisinin ogrenci numarasi:%d\n&quot;,maxogrno); printf(&quot;okul birincisinin not ortalamasi:%.2f\n\n&quot;,maxnotort); printf(&quot;odenen toplam burs:%.2f\n\n&quot;,topburs); printf(&quot;en cok burs alan ogrencinin numarasi:%d\n&quot;,zenginogrno); printf(&quot;en cok burs alan ogrencinin not ortlamasi:%.2f\n&quot;,zenginnotort); printf(&quot;en cok burs alan ogrencinin aldigi burs:%.2f Ytl\n\n&quot;,maxburs); printf(&quot;500 ytlden fazla burs alan ogrenci sayisi:%d\n\n&quot;,zenginogr); printf(&quot;evde kalan kiz:%d\n&quot;,evdekiz); printf(&quot;evde kalan erkek:%d\n\n&quot;,evdeerkek);
+
+if (basarisizaile!=0&amp;&amp;basarisizyurt!=0&amp;&amp;basarisizev!=0) {
+
+if ((basarisizev&gt;basarisizyurt)&amp;&amp;(basarisizev&gt;basarisizaile)) { printf(&quot;en dusuk basari yuzdesine sahip ogrenciler evde kalmaktadir.\n&quot;); } else if ((basarisizyurt&gt;basarisizev)&amp;&amp;(basarisizyurt&gt;basarisizaile)) { printf(&quot;en dusuk basari yuzdesine sahip ogrenciler yurtta kalmaktadir.\n &quot;); } else { printf(&quot;en dusuk basari yuzdesine sahip ogrenciler aileleriyle kalmaktadir.\n &quot;); } } else { printf(&quot;ikamete gore basari yuzdesi hesaplayabilmek icin yeterli veri girisi yapilmadi.\n&quot;); } /*eger yurtta, evde ve ailesiyle kalan en az bir ogrenci varsa en dusuk basari yuzdesinin ikamet adresini ekrana yazdirir. ancak bunlardan herhangi birinde kalan bir ogranci yoksa bu hesaplamayi yapmaz. aksi halde, diyelim ki tum ogrenciler evde kaliyor olarak girildi, o zaman en dusuk basari yuzdesi evde kalan ogrenciye ait oluyor. bu nedenle boylesi bu durumda program hesaplama yapmiyor.*/ }
+</code></pre>
+</div></div></article><div class="card comments main-container__items"><div class="card__contents" id="disqus_thread"></div></div></div><div class="sidebar main-content__sidebar"><div class="about"><img class="about__image" src="/img/profile.jpg"/><h1 class="about__name">Umut Benzer</h1><h2 class="about__mini-bio">Software Engineer in Berlin</h2></div></div></div><div class="main-container"><div class="footer"><div class="footer__copyright-holder"><p><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license noopener noreferrer" target="_blank"><img alt="Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License" src="/img/cclicense.png"/></a></p><p><span>Bu sitedeki tüm yazı ve görseller </span><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license noopener noreferrer" target="_blank">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a><span> ile lisanslanmıştır.</span></p></div><div class="footer__generator"><span>Bu sayfa </span><span>9 Nisan 2017</span><span> tarihinde </span><a href="https://github.com/ubenzer/fil" target="_blank">Fil</a><span> ile yaratılmıştır.</span></div></div></div></div>
+        <script src="/template/app.js" type="text/javascript"></script><script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = "https://ubenzer.com/2008/11/ogrenci-bilgileri";
+          this.page.identifier = "post@/2008/11/ogrenci-bilgileri";
+        };
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = 'https://ubenzer.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+        </script>
+      </body>
+    </html>
+  

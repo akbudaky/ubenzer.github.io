@@ -1,0 +1,527 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define OYUNALANI 12
+#define GEMILIMIT 10
+#define GEMIGENISLIK 6
+#define DENEMELIMIT 30
+#define BASTANDENEMELIMIT 90000
+
+/* Sabitler ve Anlamlari */
+/* --------------------- */
+/* OYUNALANI        : Oyun alaninin bir ayritinin genisligi.
+   GEMILIMIT        : Eklenebilecek gemi sayisinin ust limiti.
+   GEMIGENISLIK     : Bir geminin en fazla sahip olabilecegi uzunluk degeri.
+   DENEMELIMIT      : Programin rastgele gemi yerlesimi yaparken bir gemi yerlesemediginde sadece o
+                      gemiyi tekrar yerlestirmeye kac defa deneyecegini belirleyen sabit.
+   BASTANDENEMELIMIT: Programin rastgele gemi yerlesimi yaparken bir gemi DENEMELIMIT kadar deneme-
+                      de yerlesemezse tum gemiler kac defa sifiradan baslayarak yerlestirmeyi dene-
+                      yeceginin ust limiti.
+
+   Bu programda asagidaki limitler kolayca degistirilebilir:
+    * OYUNALANI degiskeni degistirilerek oyunun oynandigi alan kolaylikla degistirilebilir. Bu yapi-
+      lirken GEMILIMIT ve GEMIGENISLIK degerleri goz onune alinarak gemilerin yeni oyun alanina sigip
+      sigmayacaginin kontrolunu yapmaniz oncelikle onemlidir.
+      Program koordinat olarak harf (harfin ASCII kodu)'nu aldigi icin koordinat duzlemi teorik ola-
+      rak limitsiz buyultulebilse de veri girisi Z'de son bulacagi icin en fazla 26 olabilir.
+      Bu degerin 2'den kucuk olmamasi onerilir, 0 ya da negatif sayilar olamaz.
+    * GEMILIMIT degiskeni degistirilerek eklenebilecek gemi sayisinin ust limiti kolaylikla degisti-
+      rilebilir. Bu sabit en az 1 olmalidir. GEMIGENISLIK uzunlugunda GEMILIMIT'in OYUNALANI genis-
+      ligindeki oyun alanina sigip sigmadiginin kontrolunu yapmaniz onemlidir.
+    * GEMIGENISLIK degiskeni degistirilerek her geminin maksimum uzunluk limiti kolaylikla degistiri-
+      lebilir. Bu sabit en az 1 olmalidir. GEMIGENISLIK uzunlugunda GEMILIMIT'in OYUNALANI genis-
+      ligindeki oyun alanina sigip sigmadiginin kontrolunu yapmaniz onemlidir.
+    * DENEMELIMIT degiskeni oyun alanina bir gemi yerlestirilemediginde oyun alaninin farkli bolge-
+      lerine ayni gemiyi yerlestirmenin kac defa daha deneneceginin ust limitidir. Eger ust limit
+      asilirsa BASTANDENEMELIMIT kadar defa tum gemiler sifirdan yerlestirilmeye calisilacaktir.
+      Iki deger de asilirsa program "Yerlestiremedim." ifadesiyle kendini kapatacaktir.
+      Bu degerleri arttirmak programi yavaslatabilirken gemilerin yerlesebilme olasiligini (eger
+      yerlesme olasiligi 0'dan farkliysa) arttirir.
+
+      Tum sabitler hakkinda daha ayrintili bilgiler raporda bulunabilir.
+
+*/
+
+void beklet() {
+    /* Bu fonksiyonun tek amaci kullaniciyi bir tusa basana kadar
+       bekletmek, ve sonra ekrani silmektir.                      */
+    printf("\nDevam etmek icin bir tusa basin.");
+    getche();
+    system ("cls");
+}
+
+void cheat (int *gemiler) {
+
+    /*
+       Bu fonksiyon herhangi bir yerde cagrilirsa ekrana gemilerin
+       guncel durumunu cizer. Diger bir deyisle hile yapmaya yarayan
+       bir fonksiyondur. Odev yaparken cok isime yaradi. Belki odev
+       kontrolunde de kolaylik (gemiler nasil yerlestirilmis bakmak
+       acisindan) diye silmek yerine burda birakiyorum.               */
+
+    int sayac;
+    int sayac2;
+
+    system("cls");
+
+    printf("* ");
+    for (sayac=1;sayac<=OYUNALANI;sayac++) {
+        printf("%d ",sayac%10);
+    }
+    printf("\n");
+
+    for (sayac=0;sayac<OYUNALANI;sayac++) {
+        printf("%c ",rakam_to_harf(sayac));
+        for (sayac2=0;sayac2<OYUNALANI;sayac2++) {
+            switch (gemiler[sayac*OYUNALANI+sayac2]) { // Konumdaki geminin durmunu al
+                case 0: // Haritanýn o kýsmý boþ.
+                    printf("0 ");
+                    break;
+                case 1: // O kýsýmda gemi var ama vurulmamýþ.
+                    printf("X ");
+                    break;
+                case 2: // O kýsýmda gemi var vurulmuþ ama batýrýlmamýþ.
+                    printf("I ");
+                    break;
+                case 3: // O kýsýmda gemi var veeeeeeeeee artýk yok çünkü batýrýlmýþ.
+                    printf("B ");
+                    break;
+                case 4:
+                    printf("K "); // Karavana
+                    break;
+            }
+        }
+        printf("\n");
+    }
+
+    beklet();
+}
+
+void ciz(int *gemiler) {
+
+    /* Bu fonksiyon gemiler dizisinde yer alan gemi yerlesim
+       ve gemi durumu bilgilerini kullanarak guncel oyun ala-
+       nini ekrana cizer.                                      */
+
+    int sayac;
+    int sayac2;
+
+    // Koordinant ekseninin üst kýsmýnýn çizimi
+    system("cls");
+    printf("\n* ");
+    for (sayac=1;sayac<=OYUNALANI;sayac++) {
+        printf("%d ",sayac%10);
+    }
+    printf("\n");
+    // Bitti
+
+    for (sayac=0;sayac<OYUNALANI;sayac++) {
+        printf("%c ",rakam_to_harf(sayac)); // Harf ekseninin ekrana yazma
+        for (sayac2=0;sayac2<OYUNALANI;sayac2++) {
+            switch (gemiler[sayac*OYUNALANI+sayac2]) { // Konumdaki geminin durmunu al
+                case 0: // Haritanýn o kýsmý boþ.
+                case 1: // O kýsýmda gemi var ama vurulmamýþ.
+                    printf("0 ");
+                    break;
+                case 2: // O kýsýmda gemi var vurulmuþ ama batýrýlmamýþ.
+                    printf("I ");
+                    break;
+                case 3: // O kýsýmda gemi var veeeeeeeeee artýk yok çünkü batýrýlmýþ.
+                    printf("B ");
+                    break;
+                case 4:
+                    printf("K "); // Karavana
+                    break;
+            }
+        }
+        printf("\n");
+
+    }
+    printf("\n");
+
+}
+
+int rakam_to_harf (int rakam) {
+
+    /* RAKAM degiskeninde gelen rakamin hangi harfe karsilik gel-
+       digini geri gonderir.
+
+       Ayrintili bilgi raporda bulunabilir.                        */
+
+    rakam = rakam + 65;
+    if (rakam > 90) {
+        rakam = rakam%65;
+    }
+
+    return rakam;
+
+}
+
+int konum_gecerli (int konum) {
+
+    /* KONUM degiskeninin oyun alanina ait bir koordinat olup
+       olmadigini denetler.
+
+       Ayrintili bilgi raporda bulunabilir.                        */
+
+    if (konum < OYUNALANI*OYUNALANI && konum >= 0) return 1;
+    return 0;
+
+}
+
+int eleman(int satir, int sutun, int yatay_dikey) {
+
+    /* SATIR satýrýna ve SUTUN sutuna ait noktanin bellekte
+       hangi numarali dizinde tutuyor oldugunu geri gonderir.
+       yatay_diket 1 olursa SATIR ve SUTUN yer degistirir.
+
+       Ayrintili bilgi raporda bulunabilir.                        */
+
+    if (yatay_dikey == 0) {
+        if (satir+1>OYUNALANI || sutun+1>OYUNALANI) return -1;
+        return satir*OYUNALANI + sutun;
+    } else {
+        if (sutun+1>OYUNALANI || satir+1>OYUNALANI) return -1;
+        return sutun*OYUNALANI + satir;
+    }
+
+}
+
+int yerlestir(int *gemiuzunluk, int *gemiler, int *gemidurumu) {
+
+    /* Gemileri oyun alanina yerlestirir.
+
+       Ayrintili bilgi raporda bulunabilir.                        */
+
+    srand((unsigned) time(NULL)); // Sistem saatine göre rastgele
+
+    /* Degisken tanimlamalari BASLANGICI */
+    int yon;
+    int konum_yatay;
+    int konum_dikey;
+    int gemino;
+    int sayac;
+    int olmadi;
+    int denemesayisi = 0;
+    int denemesayisi_fatal = 0;
+    /* Degisken tanimlamalari SONU */
+
+    system("cls");
+    printf("Gemiler rastgele yerlestirilirken lutfen bekleyin...\n");
+    gemino = 0;
+    while(gemiuzunluk[gemino] != 0) {
+
+        denemesayisi++;
+
+        if(denemesayisi>DENEMELIMIT) {
+            denemesayisi_fatal++;
+            denemesayisi = 0;
+            sifirla(gemiler);
+            gemino = 0;
+
+            /* Rastgele yerlesme durumunu goruntulemek icin commenti kaldirin */
+            // system("cls");
+            // printf("Deneme: (%d/%d)\narama devam ediyor...",denemesayisi_fatal * DENEMELIMIT,DENEMELIMIT*BASTANDENEMELIMIT);
+
+            if(denemesayisi_fatal>BASTANDENEMELIMIT) {
+                system("cls");
+                printf("Uzgunuz, girdiginiz degerlere ait bir yerlesim yok.\n Devam etmek icin bir tusa basin.");
+                getche();
+                return -1;
+           }
+        }
+
+        yon = rand()%2;
+        konum_yatay = rand()%(OYUNALANI);
+        konum_dikey = rand()%(OYUNALANI);
+
+        /* 0 = Kuzey-Güney doðrultusu
+           1 = Doðu-Batý doðrultusu    */
+
+
+        olmadi = 0;
+
+
+        for(sayac=0;sayac<gemiuzunluk[gemino];sayac++) {
+
+            if(konum_gecerli(eleman(konum_yatay+sayac,konum_dikey,yon))) { // Harita disina tasiyorsa
+                if (gemiler[eleman(konum_yatay+sayac,konum_dikey,yon)] != 0) { // Gemiyle cakisiyosa
+                    olmadi = 1;
+                }
+            } else {
+               olmadi = 1;
+            }
+
+            if (konum_dikey%OYUNALANI != 0) { //en solda deðilse
+                if(konum_gecerli(eleman(konum_yatay+sayac,konum_dikey-1,yon))) {
+                    if (gemiler[eleman(konum_yatay+sayac,konum_dikey-1,yon)] != 0) { // Solunda gemi var
+                        olmadi = 1;
+                    }
+                }
+            }
+
+            if ((konum_dikey+1)%OYUNALANI != 0) { //en saðda deðilse
+                if(konum_gecerli((eleman(konum_yatay+sayac,konum_dikey+1,yon)))) {
+                    if (gemiler[eleman(konum_yatay+sayac,konum_dikey+1,yon)] != 0) { // Saðýnda gemi var
+                        olmadi = 1;
+                    }
+                }
+            }
+        }
+
+        if (konum_dikey%OYUNALANI != 0) { //en solda deðilse
+            if(konum_gecerli(eleman(konum_yatay-1,konum_dikey-1,yon))) {
+                if (gemiler[eleman(konum_yatay-1,konum_dikey-1,yon)] != 0) { // Sol üst çaprazda gemi var
+                    olmadi = 1;
+                }
+            }
+        }
+
+        if ((konum_dikey+1)%OYUNALANI != 0) { //en saðda deðilse
+            if(konum_gecerli(eleman(konum_yatay-1,konum_dikey+1,yon))) {
+                if (gemiler[eleman(konum_yatay-1,konum_dikey+1,yon)] != 0) { // Sað üst çaprazda gemi var
+                    olmadi = 1;
+                }
+            }
+        }
+
+        if(konum_gecerli(eleman(konum_yatay-1,konum_dikey,yon))) {
+            if (gemiler[eleman(konum_yatay-1,konum_dikey,yon)] != 0) { // Üstte gemi var
+                olmadi = 1;
+            }
+        }
+
+
+        if(konum_gecerli(eleman(konum_yatay + gemiuzunluk[gemino],konum_dikey,yon))) {
+            if (gemiler[eleman(konum_yatay + gemiuzunluk[gemino],konum_dikey,yon)] != 0) { // Altýnda gemi var
+                olmadi = 1;
+            }
+        }
+
+        if (konum_dikey%OYUNALANI != 0) { //en solda deðilse
+            if(konum_gecerli(eleman(konum_yatay + gemiuzunluk[gemino],konum_dikey-1,yon))) {
+                if (gemiler[eleman(konum_yatay + gemiuzunluk[gemino],konum_dikey-1,yon)] != 0) { // Sol altýnda gemivar
+                    olmadi = 1;
+                }
+            }
+        }
+
+        if ((konum_dikey+1)%OYUNALANI != 0) { //en saðda deðilse
+            if(konum_gecerli(eleman(konum_yatay + gemiuzunluk[gemino],konum_dikey+1,yon))) {
+                if (gemiler[eleman(konum_yatay + gemiuzunluk[gemino],konum_dikey+1,yon)] != 0) { // Sað altýnda gemivar
+                    olmadi = 1;
+                }
+            }
+        }
+
+
+        if (olmadi != 1) { // gemi kurala uygunsa
+
+            for(sayac=0;sayac<gemiuzunluk[gemino];sayac++) { // gemiyi belleðe at
+                gemiler[eleman(konum_yatay+sayac,konum_dikey,yon)] = 1;
+                gemidurumu[GEMIGENISLIK*gemino + sayac] = eleman(konum_yatay+sayac,konum_dikey,yon);
+            }
+
+            denemesayisi = 0;
+            gemino++;
+        }
+
+    }
+
+    // cheat(gemiler); // Gemilerin yerleþimini görmek için bu satýrýn commentini kaldýrýn.
+    return 0;
+}
+
+int sifirla(int *gemiler) {
+
+    int sayac;
+
+    for (sayac=0;sayac<OYUNALANI*OYUNALANI;sayac++) {
+        gemiler[sayac] = 0;
+    }
+
+}
+
+int atis(int *gemiler, int yatay, int dikey, int *gemidurumu) {
+
+    int sayac;
+    int sayac2;
+    int gemino;
+    int tamam;
+
+    switch(gemiler[eleman(yatay,dikey,0)]) {
+        case 0: // Bosluga ates etti (sanssiz)
+            gemiler[eleman(yatay,dikey,0)] = 4;
+            return 0;
+        case 1: // Gemiyi vurdu! nhahahaha, acaba batti mi?
+
+            gemiler[eleman(yatay,dikey,0)] = 2;
+
+            for (sayac=0;sayac<GEMILIMIT;sayac++) {
+                for (sayac2=0;sayac2<GEMIGENISLIK;sayac2++) {
+                    if (gemidurumu[sayac*GEMIGENISLIK+sayac2] == eleman(yatay,dikey,0)) {
+                        gemino = sayac;
+                        break;
+                    }
+                }
+            }
+
+            tamam = 1;
+            for (sayac=0;sayac<GEMIGENISLIK;sayac++) {
+                if (gemidurumu[GEMIGENISLIK*gemino + sayac] != -1) {
+                    if (gemiler[gemidurumu[GEMIGENISLIK*gemino + sayac]] == 1) { // Gemi daha batmadi.
+                        tamam = 0;
+                        break;
+                    }
+                }
+            }
+
+            if (tamam == 1) {
+                for (sayac=0;sayac<GEMIGENISLIK;sayac++) {
+                    if (gemidurumu[GEMIGENISLIK*gemino + sayac] != -1) {
+                        gemiler[gemidurumu[GEMIGENISLIK*gemino + sayac]] = 3;
+                    }
+                }
+                return 2;
+            }
+
+            return 1;
+        default:
+            return 3;
+    }
+
+}
+
+int main() {
+    /* Acilis yazilari BASLANGICI */
+    printf("Umut BENZER\n");
+    printf("05-06-7670\n");
+    printf("Ege Universitesi Bilgisayar Muhendisligi 1. Sinif\n");
+    printf("http://www.ubenzer.com\n");
+    printf("Amiral Batti 1.0\n\n");
+    /* Acilis yazilari SONU */
+
+    int gemisayi;
+    int gemiuzunluk [GEMILIMIT+1];
+    int sayac,sayac2;
+    int gemiler[OYUNALANI*OYUNALANI];
+    int atissayisi;
+    int gemidurumu[GEMILIMIT*GEMIGENISLIK];
+    int mesaj;
+    int batikgemi;
+    int secenek;
+    int sag_serbest = 1;
+
+    while (sag_serbest != 0) {
+
+        sifirla(gemiler);
+        atissayisi = 0;
+        gemisayi = 0;
+        batikgemi = 0;
+        mesaj = -1;
+
+        for (sayac=0;sayac<GEMILIMIT+1;sayac++) {
+            gemiuzunluk[sayac] = 0;
+        }
+
+        for (sayac=0;sayac<GEMILIMIT*GEMIGENISLIK;sayac++) {
+            gemidurumu[sayac] = -1;
+        }
+
+        printf("Amiral batti oyununa hosgeldiniz.\n");
+        printf("Oyuna baslamadan gemileri yerlestirmek zorundayim.");
+
+        while (gemisayi < 1 || gemisayi > GEMILIMIT) {
+            printf("\nEn fazla %d gemi olmak uzere kac gemi yerlestirmek istediginizi giriniz: ",GEMILIMIT);
+            scanf("%d",&gemisayi);
+        }
+
+        system("cls");
+        printf("Tesekkur ediyorum. Simdi bu %d geminin uzunluklarini sizden isteyecegim.\n",gemisayi);
+        printf("Gemilerin uzunluklari 0'dan buyuk %d'den kucuk olmalidir.",GEMIGENISLIK+1);
+
+        for (sayac=0;sayac<gemisayi;sayac++) {
+
+            while(gemiuzunluk[sayac] < 1 || gemiuzunluk[sayac] > GEMIGENISLIK) {
+                printf("\n(%d/%d) %d. geminin uzunlugunu giriniz: ",sayac+1,gemisayi,sayac+1);
+                scanf("%d",&gemiuzunluk[sayac]);
+            }
+
+        }
+
+        if (yerlestir(gemiuzunluk,gemiler, gemidurumu) == -1) { // Gemiler yerleþtirilemedi.
+            return 0;
+        }
+
+        sayac = 0;
+        while(gemiuzunluk[sayac] != 0) { // Gemiler bitene kadar
+            atissayisi += gemiuzunluk[sayac];
+            sayac++;
+        }
+
+        atissayisi = atissayisi * 2;
+
+        char yatay;
+        int dikey;
+
+        for (sayac=1;sayac<=atissayisi;sayac++) {
+            ciz(gemiler);
+            printf("\nOyun: (%d/%d)\n",sayac,atissayisi);
+
+            switch (mesaj) {
+                case 0:
+                    printf("Uzgunum, iskaladin.");
+                    break;
+                case 1:
+                    printf("Tebrikler isabetli atis.");
+                    break;
+                case 2:
+                    printf("Cok iyi! Gemi batti!");
+                    break;
+                case 3:
+                    printf("Acemi misiniz? Oraya daha once ates etmistiniz?");
+                    break;
+            }
+
+            printf("\nGemi %d/%d",batikgemi,gemisayi);
+
+            yatay = -1;
+            dikey = -1;
+            do {
+                printf("\nAtis yapmak istediginiz koordinati giriniz: ");
+                scanf("%c%d",&yatay,&dikey);
+            } while(dikey < 1 || dikey > OYUNALANI || (yatay - 65) < 0 || (yatay - 64) > OYUNALANI);
+
+            mesaj = (atis(gemiler,yatay-65,dikey-1,gemidurumu));
+            if (mesaj==2) {
+                batikgemi++;
+            }
+
+            if (batikgemi == gemisayi) {
+                system("cls");
+                printf("Tebrikler! Kazandiniz!");
+                beklet();
+                break;
+            }
+        }
+
+        if (batikgemi != gemisayi) {
+            system("cls");
+            printf("Uzgunum, kaybettiniz.\n Gemi dizilimi gormek icin bir tusa basin.");
+            getche();
+            cheat(gemiler);
+        }
+
+        do {
+            printf ("\nYeniden oynamak ister misiniz? (E-H)");
+            secenek = getche();
+            if (secenek == 'H' || secenek == 'h') {
+                sag_serbest = 0;
+                secenek = 'E';
+            }
+        } while (secenek != 'E' && secenek != 'e');
+        system("cls");
+
+    }
+    return 0;
+}

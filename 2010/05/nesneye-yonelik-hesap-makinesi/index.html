@@ -1,0 +1,165 @@
+<!doctype html>
+    <html lang="tr">
+      <head>
+        <title>Nesneye Yönelik Hesap Makinesi - UBenzer</title>
+        <meta content="utf-8" name="charset"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="#2196F3" name="theme-color"/>
+        <link href="/template/ui.css" media="screen" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i&amp;amp;subset=latin-ext" media="screen" rel="stylesheet" type="text/css"/><link href="/img/favicon/apple-touch-icon-57x57.png" rel="apple-touch-icon-precomposed" sizes="57x57"/><link href="/img/favicon/apple-touch-icon-60x60.png" rel="apple-touch-icon-precomposed" sizes="60x60"/><link href="/img/favicon/apple-touch-icon-72x72.png" rel="apple-touch-icon-precomposed" sizes="72x72"/><link href="/img/favicon/apple-touch-icon-76x76.png" rel="apple-touch-icon-precomposed" sizes="76x76"/><link href="/img/favicon/apple-touch-icon-114x114.png" rel="apple-touch-icon-precomposed" sizes="114x114"/><link href="/img/favicon/apple-touch-icon-120x120.png" rel="apple-touch-icon-precomposed" sizes="120x120"/><link href="/img/favicon/apple-touch-icon-152x152.png" rel="apple-touch-icon-precomposed" sizes="152x152"/><link href="/img/favicon/favicon-196x196.png" rel="icon" sizes="196x196"/><link href="/img/favicon/favicon-128x128.png" rel="icon" sizes="128x128"/><link href="/img/favicon/favicon-96x96.png" rel="icon" sizes="96x96"/><link href="/img/favicon/favicon-32x32.png" rel="icon" sizes="32x32"/><link href="/img/favicon/favicon-16x16.png" rel="icon" sizes="16x16"/>
+      </head>
+      <body>
+        <div><header class="header"><div class="app-bar"><h1 class="app-bar__title"><a class="app-bar__title-link" href="/">UBenzer</a></h1></div></header><div class="main-container"><div class="main-content"><article class="card main-container__items"><div class="card__contents blog-post"><div class="blog-post__date">5 Mayıs 2010</div><h1><a class="blog-post__title" href="/2010/05/nesneye-yonelik-hesap-makinesi">Nesneye Yönelik Hesap Makinesi</a></h1><div class="markdown-content blog-post__body blog-post__content"><p><a href="/2010/05/nesneye-yonelik-hesap-makinesi/nesneye-yonelik-hesap-makinesi.jpg" target="_blank"><img src="/2010/05/nesneye-yonelik-hesap-makinesi/nesneye-yonelik-hesap-makinesi.jpg" title="nesneye-yonelik-hesap-makinesi" alt="nesneye-yonelik-hesap-makinesi"  width="329" height="251" srcset="/2010/05/nesneye-yonelik-hesap-makinesi/nesneye-yonelik-hesap-makinesi.scaled-jpg-200.jpg 200w, /2010/05/nesneye-yonelik-hesap-makinesi/nesneye-yonelik-hesap-makinesi.jpg 329w"></a>NYHM, iki tane sayıyı, toplayan, çıkartan, çarpan veya bölen, NetBeans ortamı ile <em>JAVA</em> dilinde geliştirilmiş, Nesneye Yönelik Programlamanın <em>(Object Oriented Programming)</em> <em>temellerine</em> örnek teşkil eden basit bir programcıktır.</p>
+<p>Bu programcıkta</p>
+<ul>
+<li>Encapsulation <em>(?)</em></li>
+<li>Inheritence <em>(Kalıtım)</em></li>
+<li>Polymorphism <em>(?)</em></li>
+</ul>
+<p>adları verilen OOP’un olmazsa olmaz temel parçalarına basit <em>(ama umuyorum anlaşılır)</em> örnekler bulacaksınız.</p>
+<p>Bu kaynak kodda hatalı veri girdilerinin tamamı kontrol edilmemiş olabilir, 0’a bölme ya da benzer hatalar alabilirsiniz. Ama amacınız <em>Nesneye Yönelik Programlama alıştırmaları</em> görmek ise, o zaman bu kod işinize yarayacaktır.</p>
+<p>Projeyi aşağıdan indirebilir veya kaynak kodlar için yazının devamına bakabilirsiniz.</p>
+<ul>
+<li><a href="/2010/05/nesneye-yonelik-hesap-makinesi/nesneye-yonelik-hesap-makinesi.zip" >Proje Klasörü (nesneye-yonelik-hesap-makinesi.zip)</a></li>
+</ul>
+<h2>Makine.java</h2>
+<pre><code class="language-java"> package makine;
+
+public abstract class Makine { protected int sayi1 = 0; protected int sayi2 = 0;
+
+/* TÜM ALT SINIFLAR İÇİN ORTAK İŞLEYİŞE SAHİP METOTLAR BURADA YAZILIYOR. */ public void setSayi1(int sayi1) { this.sayi1 = sayi1; }
+
+public void setSayi2(int sayi2) { this.sayi2 = sayi2; }
+
+/* AYNI İŞLEVE SAHİP AMA İŞLEYİŞİ FARKLI METOTLAR, ALT SINIFLARDA YAZILMAK ÜZERE, TANIMLANIYOR KODLANMIYOR */ public abstract int hesapla(); /* Abstract (soyut) bir metot, bu metodun alt sınıflarda implement edilmesini zorunlu kılar. */ }
+</code></pre>
+<h2>Cikar.java</h2>
+<pre><code class="language-java"> package makine;
+
+public class Cikar extends Makine {
+
+public int hesapla() { return super.sayi1 - super.sayi2; }
+
+}
+</code></pre>
+<h2>Bol.java</h2>
+<pre><code class="language-java"> package makine;
+
+public class Bol extends Makine {
+
+public int hesapla() { if(super.sayi2 != 0) { return super.sayi1 / super.sayi2; } return 0; }
+
+}
+</code></pre>
+<h2>Topla.java</h2>
+<pre><code class="language-java"> package makine;
+
+public class Topla extends Makine {
+
+public int hesapla() { return super.sayi1 + super.sayi2; } }
+</code></pre>
+<h2>Carp.java</h2>
+<pre><code class="language-java"> package makine;
+
+public class Carp extends Makine {
+
+public int hesapla() { return super.sayi1 * super.sayi2; }
+
+}
+</code></pre>
+<h2>Gorsel.java</h2>
+<pre><code class="language-java"> package makine;
+
+public class Gorsel extends javax.swing.JFrame {
+
+private Makine hesMak; /** Creates new form Gorsel */ public Gorsel() { initComponents(); }
+
+private int stringToInt(String s) { Integer dondurulecek = null; try { dondurulecek = Integer.parseInt(s); } catch (NumberFormatException numberFormatException) { dondurulecek = 0; } return dondurulecek; }
+
+/** This method is called from within the constructor to * initialize the form. * WARNING: Do NOT modify this code. The content of this method is * always regenerated by the Form Editor. */ @SuppressWarnings(&quot;unchecked&quot;) // &lt;editor-fold defaultstate=&quot;collapsed&quot; desc=&quot;Generated Code&quot;&gt;//GEN-BEGIN:initComponents private void initComponents() {
+
+jLabel1 = new javax.swing.JLabel(); birinciSayi = new javax.swing.JTextField(); jLabel2 = new javax.swing.JLabel(); ikinciSayi = new javax.swing.JTextField(); toplaButon = new javax.swing.JButton(); sonuc = new javax.swing.JLabel(); jLabel3 = new javax.swing.JLabel(); carpButon = new javax.swing.JButton(); bolButon = new javax.swing.JButton(); cikarButon = new javax.swing.JButton();
+
+setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE); setResizable(false);
+
+jLabel1.setLabelFor(birinciSayi); jLabel1.setText(&quot;Birinci sayı:&quot;); jLabel1.setToolTipText(&quot;ABC&quot;);
+
+jLabel2.setLabelFor(ikinciSayi); jLabel2.setText(&quot;İkinci Sayı:&quot;);
+
+toplaButon.setText(&quot;+&quot;); toplaButon.addActionListener(new java.awt.event.ActionListener() { public void actionPerformed(java.awt.event.ActionEvent evt) { toplaButonActionPerformed(evt); } });
+
+sonuc.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N sonuc.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT); sonuc.setText(&quot;sonuç gelecek&quot;);
+
+jLabel3.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 24)); jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER); jLabel3.setText(&quot;Hesap Makinesi&quot;);
+
+carpButon.setText(&quot;X&quot;); carpButon.addActionListener(new java.awt.event.ActionListener() { public void actionPerformed(java.awt.event.ActionEvent evt) { carpButonActionPerformed(evt); } });
+
+bolButon.setText(&quot;/&quot;); bolButon.addActionListener(new java.awt.event.ActionListener() { public void actionPerformed(java.awt.event.ActionEvent evt) { bolButonActionPerformed(evt); } });
+
+cikarButon.setText(&quot;-&quot;); cikarButon.addActionListener(new java.awt.event.ActionListener() { public void actionPerformed(java.awt.event.ActionEvent evt) { cikarButonActionPerformed(evt); } });
+
+javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane()); getContentPane().setLayout(layout); layout.setHorizontalGroup( layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING) .addGroup(layout.createSequentialGroup() .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false) .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup() .addContainerGap() .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)) .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup() .addGap(21, 21, 21) .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false) .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE) .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE)) .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED) .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false) .addComponent(birinciSayi) .addComponent(ikinciSayi) .addGroup(layout.createSequentialGroup() .addComponent(toplaButon) .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED) .addComponent(cikarButon) .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED) .addComponent(carpButon) .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED) .addComponent(bolButon))))) .addContainerGap(23, Short.MAX_VALUE)) .addGroup(layout.createSequentialGroup() .addContainerGap() .addComponent(sonuc, javax.swing.GroupLayout.DEFAULT_SIZE, 261, Short.MAX_VALUE) .addGap(23, 23, 23)) ); layout.setVerticalGroup( layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING) .addGroup(layout.createSequentialGroup() .addContainerGap() .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE) .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED) .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE) .addComponent(jLabel1) .addComponent(birinciSayi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)) .addGap(10, 10, 10) .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE) .addComponent(jLabel2) .addComponent(ikinciSayi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)) .addGap(18, 18, 18) .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE) .addComponent(toplaButon) .addComponent(cikarButon) .addComponent(carpButon) .addComponent(bolButon)) .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED) .addComponent(sonuc, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE) .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)) );
+
+pack(); }// &lt;/editor-fold&gt;//GEN-END:initComponents
+
+private void toplaButonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toplaButonActionPerformed String s1 = birinciSayi.getText(); String s2 = ikinciSayi.getText();
+
+int sayi1 = stringToInt(s1); int sayi2 = stringToInt(s2);
+
+hesMak = new Topla();
+
+hesMak.setSayi1(sayi1); hesMak.setSayi2(sayi2);
+
+sonuc.setText(hesMak.hesapla() + &quot;&quot;);
+
+}//GEN-LAST:event_toplaButonActionPerformed
+
+private void carpButonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_carpButonActionPerformed String s1 = birinciSayi.getText(); String s2 = ikinciSayi.getText();
+
+int sayi1 = stringToInt(s1); int sayi2 = stringToInt(s2);
+
+hesMak = new Carp();
+
+hesMak.setSayi1(sayi1); hesMak.setSayi2(sayi2);
+
+sonuc.setText(hesMak.hesapla() + &quot;&quot;); }//GEN-LAST:event_carpButonActionPerformed
+
+private void bolButonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bolButonActionPerformed String s1 = birinciSayi.getText(); String s2 = ikinciSayi.getText();
+
+int sayi1 = stringToInt(s1); int sayi2 = stringToInt(s2);
+
+hesMak = new Bol();
+
+hesMak.setSayi1(sayi1); hesMak.setSayi2(sayi2);
+
+sonuc.setText(hesMak.hesapla() + &quot;&quot;); }//GEN-LAST:event_bolButonActionPerformed
+
+private void cikarButonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cikarButonActionPerformed String s1 = birinciSayi.getText(); String s2 = ikinciSayi.getText();
+
+int sayi1 = stringToInt(s1); int sayi2 = stringToInt(s2);
+
+hesMak = new Cikar();
+
+hesMak.setSayi1(sayi1); hesMak.setSayi2(sayi2);
+
+sonuc.setText(hesMak.hesapla() + &quot;&quot;); }//GEN-LAST:event_cikarButonActionPerformed
+
+/** * @param args the command line arguments */ public static void main(String args[]) { java.awt.EventQueue.invokeLater(new Runnable() { public void run() { new Gorsel().setVisible(true); } }); }
+
+// Variables declaration - do not modify//GEN-BEGIN:variables private javax.swing.JTextField birinciSayi; private javax.swing.JButton bolButon; private javax.swing.JButton carpButon; private javax.swing.JButton cikarButon; private javax.swing.JTextField ikinciSayi; private javax.swing.JLabel jLabel1; private javax.swing.JLabel jLabel2; private javax.swing.JLabel jLabel3; private javax.swing.JLabel sonuc; private javax.swing.JButton toplaButon; // End of variables declaration//GEN-END:variables
+
+}
+</code></pre>
+</div></div></article><div class="card comments main-container__items"><div class="card__contents" id="disqus_thread"></div></div></div><div class="sidebar main-content__sidebar"><div class="about"><img class="about__image" src="/img/profile.jpg"/><h1 class="about__name">Umut Benzer</h1><h2 class="about__mini-bio">Software Engineer in Berlin</h2></div></div></div><div class="main-container"><div class="footer"><div class="footer__copyright-holder"><p><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license noopener noreferrer" target="_blank"><img alt="Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License" src="/img/cclicense.png"/></a></p><p><span>Bu sitedeki tüm yazı ve görseller </span><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license noopener noreferrer" target="_blank">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a><span> ile lisanslanmıştır.</span></p></div><div class="footer__generator"><span>Bu sayfa </span><span>9 Nisan 2017</span><span> tarihinde </span><a href="https://github.com/ubenzer/fil" target="_blank">Fil</a><span> ile yaratılmıştır.</span></div></div></div></div>
+        <script src="/template/app.js" type="text/javascript"></script><script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = "https://ubenzer.com/2010/05/nesneye-yonelik-hesap-makinesi";
+          this.page.identifier = "post@/2010/05/nesneye-yonelik-hesap-makinesi";
+        };
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = 'https://ubenzer.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+        </script>
+      </body>
+    </html>
+  

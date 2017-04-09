@@ -1,0 +1,126 @@
+<!doctype html>
+    <html lang="tr">
+      <head>
+        <title>Dahili SD kartı bozulan Samsung GalaxyS&#x27;i hayata döndürmek - UBenzer</title>
+        <meta content="utf-8" name="charset"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="#2196F3" name="theme-color"/>
+        <link href="/template/ui.css" media="screen" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i&amp;amp;subset=latin-ext" media="screen" rel="stylesheet" type="text/css"/><link href="/img/favicon/apple-touch-icon-57x57.png" rel="apple-touch-icon-precomposed" sizes="57x57"/><link href="/img/favicon/apple-touch-icon-60x60.png" rel="apple-touch-icon-precomposed" sizes="60x60"/><link href="/img/favicon/apple-touch-icon-72x72.png" rel="apple-touch-icon-precomposed" sizes="72x72"/><link href="/img/favicon/apple-touch-icon-76x76.png" rel="apple-touch-icon-precomposed" sizes="76x76"/><link href="/img/favicon/apple-touch-icon-114x114.png" rel="apple-touch-icon-precomposed" sizes="114x114"/><link href="/img/favicon/apple-touch-icon-120x120.png" rel="apple-touch-icon-precomposed" sizes="120x120"/><link href="/img/favicon/apple-touch-icon-152x152.png" rel="apple-touch-icon-precomposed" sizes="152x152"/><link href="/img/favicon/favicon-196x196.png" rel="icon" sizes="196x196"/><link href="/img/favicon/favicon-128x128.png" rel="icon" sizes="128x128"/><link href="/img/favicon/favicon-96x96.png" rel="icon" sizes="96x96"/><link href="/img/favicon/favicon-32x32.png" rel="icon" sizes="32x32"/><link href="/img/favicon/favicon-16x16.png" rel="icon" sizes="16x16"/>
+      </head>
+      <body>
+        <div><header class="header"><div class="app-bar"><h1 class="app-bar__title"><a class="app-bar__title-link" href="/">UBenzer</a></h1></div></header><div class="main-container"><div class="main-content"><article class="card main-container__items"><div class="card__contents blog-post"><div class="blog-post__date">25 Kasım 2013</div><h1><a class="blog-post__title" href="/2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek">Dahili SD kartı bozulan Samsung GalaxyS&#x27;i hayata döndürmek</a></h1><div class="markdown-content blog-post__body blog-post__content"><p>GalaxyS GT-I9000 telefonlarında bir sorun var. Üretim hatası mı parça dandikliği mi bilmiyorum ama telefonun içindeki (anakarttaki) internal sdcard bozuluyor. Google'da veya XDA'da arattığınızda yüzlerce, <a href="https://www.google.com/search?q=galaxy+s+internal+sd+card+broken" rel="noopener noreferrer" target="_blank">binlerce kişinin aynı sorundan yakındığını görüyorsunuz</a>.</p>
+<p>Peki, bunu çözebilir misiniz?</p>
+<p>Çözeriz... Gelin, çözelim!</p>
+<h2>Internal SD Card Bozulunca Ne Oluyor?</h2>
+<p><a href="/2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/i9000-motherboard.jpg" target="_blank"><img src="/2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/i9000-motherboard.jpg" title="i9000-motherboard" alt="i9000-motherboard" class="right" width="320" height="310" srcset="/2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/i9000-motherboard.scaled-jpg-200.jpg 200w, /2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/i9000-motherboard.jpg 320w"></a></p>
+<p>Kart bozulunca karta hiçbir şey yazamıyorsunuz, yazdıklarınızı göremiyorsunuz ve genellikle kartı sisteme mount bile edemiyorsunuz. Bu nedenle üzerine işletim sistemi (ROM) yüklemeniz de mümkün olmuyor ve telefon kullanılamaz hale geliyor. Garantiniz devam ediyorsa servis anakartını değiştiriyor ama devam etmiyorsa $$€€...</p>
+<p>Sd kartın bozulduğunu anlamanın çok net bir yolu yok. Genelde belirtileri izleyerek çıkarsama yapmak gerekiyor. Genelde karta ne yaparsan yap, partition tablosunu dahi yeniden oluştur bir türlü yazamıyorsan, kartın bozuduğundan emin oluyorsun.</p>
+<p>En popüler mesaj: <code>E:Can't mount /dev/block/mmcblk0</code></p>
+<h2>Nasıl Çözeriz?</h2>
+<p>Kart öldü, huzur içinde yatsın. Neyse ki GalaxyS'lere dışarıdan SD Kart takabiliyorsunuz. Acaba dışarıdan taktığımız SD Kartı, telefonun kendi internal SD Kartı gibi göstermeyi başarır da telefonu çalıştırabilir miyiz?</p>
+<p>Yaptım, çalıştı.</p>
+<p><em>Dikkat:</em> Bu adımlar bilgisayar ve işletim sistemlerinde genel bilgisi olan kişilere hitap etmektedir. Bu yazıda neler yapılacağı anlatılmaktadır, nasıl yapılacağı değil. <em>(Örn: İkinci partition'u ext4 dosya sistemi ile formatlayın. Nasıl? İstediğin gibi yap!)</em></p>
+<p><em>Dikkat 2:</em> Eğer bu yazıyı okuyorsanız telefonunuz zaten ölmüş demektir. Ama yine de bu yazıdan dolayı başınıza bir şey gelirse bu konuda herhangi bir sorumluluk kabul etmiyorum.</p>
+<h2>Ön Şartlar</h2>
+<p><a href="/2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/class10-e1385154298929.jpg" target="_blank"><img src="/2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/class10-e1385154298929.jpg" title="class10" alt="class10" class="right" width="137" height="100" srcset="/2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/class10-e1385154298929.jpg 137w"></a>Elinizde telefonunuza takabileceğiniz <em>en azından 8GB</em>'lık bir kart olsun ve bu kartı bilgisayara takabileceğiniz bir kart okuyucuya ihtiyacınız var. Telefonunuzun işletim sistemi bu kart içinde olacak. <em>Yani kart ne kadar hızlı, telefonunuz o kadar hızlı.</em> Bu nedenle kartınızın <a href="https://www.sdcard.org/developers/overview/speed_class/" rel="noopener noreferrer" target="_blank">Class 10 olmasında</a> fayda var.</p>
+<h2>Adımlar</h2>
+<ol>
+<li>
+<p>Kartınızı iki <em>primary</em> partition'a bölün. Birinci partition <em>FAT32</em> olsun. İkinci partition <em>2GB ext4</em> olsun. Birinci partition, ikinciden ardakalan tüm alanı kaplamalıdır. Partitionları formatlarken, hızlı format seçeneğini <em>seçmeyin</em>! Neden bilimiyorum, çalışmıyor. Ben bu işlemi Ubuntu üzerinde yaptım.</p>
+</li>
+<li>
+<p>İnternetten <a href="https://mega.co.nz/#!nN8x2TLQ!ZHZPPXV2gJeDiXRaUOluUSLc2Z0Fzq8Fz71j-0YMPTM" rel="noopener noreferrer" target="_blank">şu dosyayı indirin</a> ve dosyayı açın.</p>
+</li>
+<li>
+<p>Telefonunuz açıksa kapatın ve kartı takın.</p>
+</li>
+<li>
+<p>Telefonunuzu ses kısma tuşu (alttaki) alttaki tuş ve açma tuşuna basılı tutarak <code>download mode</code>da açın. <a href="/2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/andorid-download-mode.jpg" target="_blank"><img src="/2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/andorid-download-mode.scaled-jpg-200.jpg" title="andorid-download-mode" alt="andorid-download-mode"  width="1325" height="1874" srcset="/2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/andorid-download-mode.scaled-jpg-200.jpg 200w, /2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/andorid-download-mode.scaled-jpg-500.jpg 500w, /2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/andorid-download-mode.scaled-jpg-1000.jpg 1000w, /2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/andorid-download-mode.jpg 1325w"></a></p>
+</li>
+<li>
+<p>Telefonunuzu bilgisayara bağlayın.</p>
+</li>
+<li>
+<p>İndirdiğiniz dosyadan çıkanlar içinde, Odin klasörüne gidin ve uygulamayı çalıştırın.</p>
+</li>
+<li>
+<p>İndirdiğiniz dosyadan çıkan OS klasöründe yer alan dosyaları aşağıdaki şekilde uygulamaya ekleyin:</p>
+<ul>
+<li>PIT: <code>20100512.pit</code></li>
+<li>Sol üstte yer alan &quot;Re-Partition&quot; işaretli.</li>
+<li>PDA: <code>PDA_XXJW4_Sbl.tar.md5</code></li>
+<li>PHONE: <code>PHONE_XXJW4.tar.md5</code></li>
+<li>CSC: <code>CSC_OXAJW4.tar.md5</code><a href="/2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/odin-1.png" target="_blank"><img src="/2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/odin-1.scaled-png-200.png" title="odin-1" alt="odin-1"  width="911" height="675" srcset="/2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/odin-1.scaled-png-200.png 200w, /2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/odin-1.scaled-png-500.png 500w, /2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/odin-1.png 911w"></a></li>
+</ul>
+<p>Ardından &quot;<em>START</em>&quot; düğmesine basın ve işletim sisteminin telefonunuza yüklenmesini bekleyin.</p>
+</li>
+<li>
+<p>Eğer kartı doğru formatladıysanız <em>(ve her şey doğru giderse)</em> işletim sistemi karta yüklenecek ve açılacaktır. Ancak, ayarlardan disk alanına baktığınızda ve dahili sd kartın ne de hariçi sd kartın kullanılabilir durumda olduğunu göreceksiniz. O yüzden işiniz bitmedi.</p>
+</li>
+<li>
+<p>Telefonu bilgisayardan çıkarın ve kapatın.</p>
+</li>
+<li>
+<p>ODIN uygulamasında alt taraftaki butonlardan &quot;<em>RESET</em>&quot;e basarak uygulamayı ilk haline getirin.</p>
+</li>
+<li>
+<p>Telefonu üçlü tuş kombinasyonu ile yine &quot;Download Mode&quot;da açın ve ardından bilgisayara bağlayın.</p>
+</li>
+<li>
+<p>Bu sefer <code>PDA</code> kısmına <code>Kernel.tar</code> dosyasını yerleştirin ve <em>START</em> ile <em>'root'lu kerneli</em> telefonunuza yükleyin. Artık telefonunuzda root erişimi olmalı ve <code>CWM recovery</code> yüklenmiş olmalıdır. <a href="/2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/odin-2.png" target="_blank"><img src="/2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/odin-2.scaled-png-200.png" title="odin-2" alt="odin-2"  width="911" height="675" srcset="/2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/odin-2.scaled-png-200.png 200w, /2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/odin-2.scaled-png-500.png 500w, /2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/odin-2.png 911w"></a></p>
+</li>
+<li>
+<p>Telefonunuzu yeniden başlatıp açılıp açılmadığını kontrol edin. telefon açıldığı zaman CWM ve Superuser uygulamalarını telefonunuzda görüyor olmalısınız. <a href="/2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/rooted-i9000-cf-root.jpg" target="_blank"><img src="/2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/rooted-i9000-cf-root.scaled-jpg-200.jpg" title="rooted-i9000-cf-root" alt="rooted-i9000-cf-root"  width="2448" height="3264" srcset="/2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/rooted-i9000-cf-root.scaled-jpg-200.jpg 200w, /2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/rooted-i9000-cf-root.scaled-jpg-500.jpg 500w, /2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/rooted-i9000-cf-root.scaled-jpg-1000.jpg 1000w, /2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/rooted-i9000-cf-root.scaled-jpg-1500.jpg 1500w, /2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/rooted-i9000-cf-root.scaled-jpg-2000.jpg 2000w, /2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/rooted-i9000-cf-root.jpg 2448w"></a></p>
+</li>
+<li>
+<p>Bir sonraki adımda SD Kartınızı telefona göstermek için mount pointleri değiştirmeniz gerekiyor. Bunun için <code>/system/etc/vold.fstab</code> dosyasını modifiye etmeniz gerekiyor. Bunu istediğiniz gibi yapabilirsiniz. Ben kendi yöntemimi anlatıyorum.</p>
+</li>
+<li>
+<p>Telefonu bilgisayardan çekin ve kapatın.</p>
+</li>
+<li>
+<p>Telefonu ses açma (üst ok) orta tuş ve açma kapama düğmesine aynı anda basarak <em>recovery</em> modunda açın.</p>
+</li>
+<li>
+<p><code>mounts and storage</code> kısmına giderek <code>mount /system</code> seçeneğini seçin.
+<a href="/2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/i9000-recovery.jpg" target="_blank"><img src="/2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/i9000-recovery.scaled-jpg-200.jpg" title="i9000-recovery" alt="i9000-recovery"  width="2448" height="3264" srcset="/2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/i9000-recovery.scaled-jpg-200.jpg 200w, /2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/i9000-recovery.scaled-jpg-500.jpg 500w, /2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/i9000-recovery.scaled-jpg-1000.jpg 1000w, /2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/i9000-recovery.scaled-jpg-1500.jpg 1500w, /2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/i9000-recovery.scaled-jpg-2000.jpg 2000w, /2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/i9000-recovery.jpg 2448w"></a>
+<a href="/2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/i9000-recovery-mounts-and-storage.jpg" target="_blank"><img src="/2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/i9000-recovery-mounts-and-storage.scaled-jpg-200.jpg" title="i9000-recovery-mounts-and-storage" alt="i9000-recovery-mounts-and-storage"  width="2448" height="3264" srcset="/2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/i9000-recovery-mounts-and-storage.scaled-jpg-200.jpg 200w, /2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/i9000-recovery-mounts-and-storage.scaled-jpg-500.jpg 500w, /2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/i9000-recovery-mounts-and-storage.scaled-jpg-1000.jpg 1000w, /2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/i9000-recovery-mounts-and-storage.scaled-jpg-1500.jpg 1500w, /2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/i9000-recovery-mounts-and-storage.scaled-jpg-2000.jpg 2000w, /2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/i9000-recovery-mounts-and-storage.jpg 2448w"></a></p>
+</li>
+<li>
+<p>Ardından telefonu bilgisayara bağlayın ve yaşasın <a href="http://developer.android.com/tools/help/adb.html" rel="noopener noreferrer" target="_blank">ADB</a>!</p>
+</li>
+<li>
+<p>Terminal'de <code>adb pull /system/etc/vold.fstab vold.fstab</code> ile dosyayı kendi bilgisayarınıza çekin.</p>
+</li>
+<li>
+<p>Daha sonra bir metin editörü yardımı ile dosyayı açın.</p>
+</li>
+<li>
+<p><code>dev_mount sdcard /mnt/sdcard 1 /devices/platform/s3c-sdhci.0/mmc_host/mmc0</code> satırını <code>dev_mount sdcard /mnt/sdcard 1 /devices/platform/s3c-sdhci.2/mmc_host/mmc2</code> ile değiştirin ve dosyayı kaydedip kapatın. Bu adım ile arızalı olan <code>s3c-sdhci.0/mmc_host/mmc0</code> dahili sd kart yerine <code>s3c-sdhci.2/mmc_host/mmc2</code> sağlam olan harici kartı kullanacağınızı belirttiniz. <a href="/2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/voldfstab-i9000.png" target="_blank"><img src="/2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/voldfstab-i9000.scaled-png-200.png" title="voldfstab-i9000" alt="voldfstab-i9000"  width="879" height="700" srcset="/2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/voldfstab-i9000.scaled-png-200.png 200w, /2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/voldfstab-i9000.scaled-png-500.png 500w, /2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/voldfstab-i9000.png 879w"></a></p>
+</li>
+<li>
+<p><code>adb push vold.fstab /system/etc/vold.fstab</code> ile düzenlenmiş dosyayı telefona atın. <a href="/2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/adb-pull-push.png" target="_blank"><img src="/2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/adb-pull-push.scaled-png-200.png" title="adb-pull-push" alt="adb-pull-push"  width="614" height="298" srcset="/2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/adb-pull-push.scaled-png-200.png 200w, /2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/adb-pull-push.scaled-png-500.png 500w, /2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/adb-pull-push.png 614w"></a></p>
+</li>
+<li>
+<p>Telefonu yeniden başlatın.</p>
+</li>
+</ol>
+<p>Eğer her şey yolunda gittiyse kartınızın 2GB bölümünden ardakalan alan tüm alan kullanılabilir olmalı.</p>
+<p><a href="/2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/i9000-storage.jpg" target="_blank"><img src="/2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/i9000-storage.scaled-jpg-200.jpg" title="i9000-storage" alt="i9000-storage"  width="2448" height="3264" srcset="/2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/i9000-storage.scaled-jpg-200.jpg 200w, /2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/i9000-storage.scaled-jpg-500.jpg 500w, /2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/i9000-storage.scaled-jpg-1000.jpg 1000w, /2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/i9000-storage.scaled-jpg-1500.jpg 1500w, /2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/i9000-storage.scaled-jpg-2000.jpg 2000w, /2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/i9000-storage.jpg 2448w"></a></p>
+<p>Tebrikler! Telefonunuzu hayata döndürdünüz.</p>
+<p>Kartı bilgisayarınıza takıp baktığınızda Andorid'i böyle görebilirsiniz:</p>
+<p><a href="/2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/sdcard-i9000.png" target="_blank"><img src="/2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/sdcard-i9000.scaled-png-200.png" title="sdcard-i9000" alt="sdcard-i9000"  width="1468" height="928" srcset="/2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/sdcard-i9000.scaled-png-200.png 200w, /2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/sdcard-i9000.scaled-png-500.png 500w, /2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/sdcard-i9000.scaled-png-1000.png 1000w, /2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek/sdcard-i9000.png 1468w"></a></p>
+</div></div></article><div class="card comments main-container__items"><div class="card__contents" id="disqus_thread"></div></div></div><div class="sidebar main-content__sidebar"><div class="about"><img class="about__image" src="/img/profile.jpg"/><h1 class="about__name">Umut Benzer</h1><h2 class="about__mini-bio">Software Engineer in Berlin</h2></div></div></div><div class="main-container"><div class="footer"><div class="footer__copyright-holder"><p><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license noopener noreferrer" target="_blank"><img alt="Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License" src="/img/cclicense.png"/></a></p><p><span>Bu sitedeki tüm yazı ve görseller </span><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license noopener noreferrer" target="_blank">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a><span> ile lisanslanmıştır.</span></p></div><div class="footer__generator"><span>Bu sayfa </span><span>9 Nisan 2017</span><span> tarihinde </span><a href="https://github.com/ubenzer/fil" target="_blank">Fil</a><span> ile yaratılmıştır.</span></div></div></div></div>
+        <script src="/template/app.js" type="text/javascript"></script><script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = "https://ubenzer.com/2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek";
+          this.page.identifier = "post@/2013/11/dahili-sd-karti-bozulan-samsung-galaxysi-hayata-dondurmek";
+        };
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = 'https://ubenzer.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+        </script>
+      </body>
+    </html>
+  

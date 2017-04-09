@@ -1,0 +1,108 @@
+<!doctype html>
+    <html lang="tr">
+      <head>
+        <title>Lab: Stok Olayları - UBenzer</title>
+        <meta content="utf-8" name="charset"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="#2196F3" name="theme-color"/>
+        <link href="/template/ui.css" media="screen" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i&amp;amp;subset=latin-ext" media="screen" rel="stylesheet" type="text/css"/><link href="/img/favicon/apple-touch-icon-57x57.png" rel="apple-touch-icon-precomposed" sizes="57x57"/><link href="/img/favicon/apple-touch-icon-60x60.png" rel="apple-touch-icon-precomposed" sizes="60x60"/><link href="/img/favicon/apple-touch-icon-72x72.png" rel="apple-touch-icon-precomposed" sizes="72x72"/><link href="/img/favicon/apple-touch-icon-76x76.png" rel="apple-touch-icon-precomposed" sizes="76x76"/><link href="/img/favicon/apple-touch-icon-114x114.png" rel="apple-touch-icon-precomposed" sizes="114x114"/><link href="/img/favicon/apple-touch-icon-120x120.png" rel="apple-touch-icon-precomposed" sizes="120x120"/><link href="/img/favicon/apple-touch-icon-152x152.png" rel="apple-touch-icon-precomposed" sizes="152x152"/><link href="/img/favicon/favicon-196x196.png" rel="icon" sizes="196x196"/><link href="/img/favicon/favicon-128x128.png" rel="icon" sizes="128x128"/><link href="/img/favicon/favicon-96x96.png" rel="icon" sizes="96x96"/><link href="/img/favicon/favicon-32x32.png" rel="icon" sizes="32x32"/><link href="/img/favicon/favicon-16x16.png" rel="icon" sizes="16x16"/>
+      </head>
+      <body>
+        <div><header class="header"><div class="app-bar"><h1 class="app-bar__title"><a class="app-bar__title-link" href="/">UBenzer</a></h1></div></header><div class="main-container"><div class="main-content"><article class="card main-container__items"><div class="card__contents blog-post"><div class="blog-post__date">7 Mart 2008</div><h1><a class="blog-post__title" href="/2008/03/lab-stok-olaylari">Lab: Stok Olayları</a></h1><div class="markdown-content blog-post__body blog-post__content"><p>8 Mart 2008 tarihli derste yazdığım kodun geliştirilmiş ve hataları ayıklanmış hali.</p>
+<p><em>Lütfen dikkat:</em> Bu program yeterince test edilmedi ve hatalar olabilir. Kaynak kodu sadece bilgi amaçlıdır.</p>
+<p>Bu ödevde veri yapıları ve dosya işlemlerinin kullanımı amaçlanmış sanırım.</p>
+<ul>
+<li><a href="/2008/03/lab-stok-olaylari/8mart.zip" >Stok Olayları (main.c ve bazı .dat dosyaları)</a></li>
+</ul>
+<p>Kaynak kodunu incelemek ve fikir sahibi olmak amacıyla kullanabilirsiniz. Ama lütfen kaynak kodunu kopyala yapıştır yapmayalım, kendimize mal etmeyelim. Onun yerine nasıl çalıştığını inceleyip kavrama yoluna gidelim.</p>
+<p>Kaynak kodunun bir kopyası aşağıdadır: [rawr] ```c
+#include &lt;stdio.h&gt; #include &lt;stdlib.h&gt;</p>
+<p>#define MIN_URUN_KODU 0 #define MAX_URUN_KODU 1000</p>
+<p>struct STOK { int urun_kodu; char urun_adi[15]; int stok_miktari; float birim_fiyati; };</p>
+<p>void beklet() { /* Bu fonksiyonun tek amaci kullaniciyi bir tusa basana kadar bekletmek, ve sonra ekrani silmektir. */ printf(&quot;\nDevam etmek icin bir tusa basin.&quot;); getche(); system (&quot;cls&quot;); return 0; }</p>
+<p>int urun_bilgileri (FILE *fp, int urun_kodu, int tumu, int stok_limit) {</p>
+<p>/* Eger urun varsa bilgilerinigosterir, yoksa -1 döndürür. */ struct STOK urun;</p>
+<p>fseek(fp,0,0); while(!feof(fp)) { fscanf(fp, &quot;%d %s %d %f\n&quot;,&amp;urun.urun_kodu, urun.urun_adi,&amp;urun.stok_miktari,&amp;urun.birim_fiyati);</p>
+<p>if ((tumu == 0 &amp;&amp; urun.urun_kodu == urun_kodu) || tumu == 1 &amp;&amp; (stok_limit == -1 || stok_limit &gt;= urun.stok_miktari)) { system (&quot;cls&quot;); printf(&quot;*** Urun bilgileri ***\n&quot;); printf(&quot;Urun kodu: %d \n&quot;,urun.urun_kodu); printf(&quot;Urun adi: %s \n&quot;,urun.urun_adi); printf(&quot;Stok miktari: %d \n&quot;,urun.stok_miktari); printf(&quot;Birim fiyati: %.2f \n\n&quot;,urun.birim_fiyati); beklet(); if (tumu == 0) { return 0; } } }</p>
+<p>return -1; }</p>
+<p>void urun_ara(FILE *fp, char *metin) {</p>
+<p>int buldum; int denetlenenharf; struct STOK durum;</p>
+<p>fseek(fp,0,0); while(!feof(fp)) { fscanf(fp, &quot;%d %s %d %f\n&quot;,&amp;durum.urun_kodu, durum.urun_adi,&amp;durum.stok_miktari,&amp;durum.birim_fiyati);</p>
+<p>denetlenenharf = 0; buldum = 1;</p>
+<p>for(;😉 {</p>
+<p>if (durum.urun_adi[denetlenenharf] != metin[denetlenenharf]) { buldum = 0; break; }</p>
+<p>if (durum.urun_adi[denetlenenharf] == NULL &amp;&amp; metin[denetlenenharf + 1] != NULL) { buldum = 0; break; }</p>
+<p>if (metin[denetlenenharf + 1] == NULL) { break; }</p>
+<p>denetlenenharf++; }</p>
+<p>if (buldum == 1) {</p>
+<p>system(&quot;cls&quot;); printf(&quot;Arama Sonuclari\n&quot;); printf(&quot;---------------\n\n&quot;); printf(&quot;Urun kodu: %d\n&quot;, durum.urun_kodu); printf(&quot;Urun adi: %s\n&quot;,durum.urun_adi); printf(&quot;Stok miktari: %d\n\n&quot;,durum.stok_miktari); printf(&quot;Birim fiyati: %.2f\n&quot;,durum.birim_fiyati);</p>
+<p>beklet(); } }</p>
+<p>system(&quot;cls&quot;); printf(&quot;Arama tamamlandi. 😃\n&quot;);</p>
+<p>beklet();</p>
+<p>}</p>
+<p>int urun_var_mi(FILE *fp, int urun_kodu) {</p>
+<p>struct STOK urun; fseek(fp,0,0); while(!feof(fp)) { fscanf(fp, &quot;%d %s %d %f\n&quot;,&amp;urun.urun_kodu, urun.urun_adi,&amp;urun.stok_miktari,&amp;urun.birim_fiyati);</p>
+<p>if (urun_kodu == urun.urun_kodu) { return 0; } }</p>
+<p>return -1; }</p>
+<p>int toplu_guncelle(FILE *fp, FILE *fp2, FILE *fp3) {</p>
+<p>int urun_kodu; float urun_fiyat; float yeni_urun_fiyat; struct STOK durum;</p>
+<p>fseek(fp,0,0); while (!feof(fp)) { fscanf(fp, &quot;%d %s %d %f\n&quot;,&amp;durum.urun_kodu, durum.urun_adi,&amp;durum.stok_miktari,&amp;durum.birim_fiyati);</p>
+<p>yeni_urun_fiyat = durum.birim_fiyati;</p>
+<p>fseek(fp2,0,0); while(!feof(fp2)) { fscanf(fp2,&quot;%d %f\n&quot;,&amp;urun_kodu,&amp;urun_fiyat); if (urun_kodu == durum.urun_kodu) { yeni_urun_fiyat = urun_fiyat; } }</p>
+<p>fprintf(fp3,&quot;%d %s %d %.2f\n&quot;,durum.urun_kodu, durum.urun_adi,durum.stok_miktari,yeni_urun_fiyat); }</p>
+<p>fclose(fp); fclose(fp2); fclose(fp3);</p>
+<p>remove(&quot;urunler.dat&quot;); rename(&quot;gecici.tmp&quot;,&quot;urunler.dat&quot;);</p>
+<p>if((fp=fopen(&quot;urunler.dat&quot;,&quot;r&quot;)) == NULL) { return -1; }</p>
+<p>return 0;</p>
+<p>}</p>
+<p>int stok_guncelle(FILE *fp, FILE *fp2, FILE *fp3) {</p>
+<p>int urun_kodu; int urun_stok; struct STOK durum;</p>
+<p>fseek(fp,0,0); while (!feof(fp)) { fscanf(fp, &quot;%d %s %d %f\n&quot;,&amp;durum.urun_kodu, durum.urun_adi,&amp;durum.stok_miktari,&amp;durum.birim_fiyati); fseek(fp2,0,0); while(!feof(fp2)) { fscanf(fp2,&quot;%d %d\n&quot;,&amp;urun_kodu,&amp;urun_stok); if (urun_kodu == durum.urun_kodu) { durum.stok_miktari = durum.stok_miktari + urun_stok; } }</p>
+<p>fprintf(fp3,&quot;%d %s %d %.2f\n&quot;,durum.urun_kodu, durum.urun_adi,durum.stok_miktari,durum.birim_fiyati); }</p>
+<p>fclose(fp); fclose(fp2); fclose(fp3);</p>
+<p>remove(&quot;urunler.dat&quot;); rename(&quot;gecici.tmp&quot;,&quot;urunler.dat&quot;);</p>
+<p>if((fp=fopen(&quot;urunler.dat&quot;,&quot;r&quot;)) == NULL) { return -1; }</p>
+<p>return 0;</p>
+<p>}</p>
+<p>int urun_guncelle(FILE *fp, FILE *gecici,int urun_kodu) {</p>
+<p>struct STOK urun; int yeni_stok = -1; float yeni_fiyat = -1; int sayac;</p>
+<p>while (yeni_stok &lt; 0) { system(&quot;cls&quot;); printf(&quot;Yeni stok miktarini giriniz: &quot;); scanf(&quot;%d&quot;,&amp;yeni_stok); }</p>
+<p>while (yeni_fiyat &lt; 0) { system(&quot;cls&quot;); printf(&quot;Yeni fiyati giriniz: (ondalik icin . kullanilir) &quot;); scanf(&quot;%f&quot;,&amp;yeni_fiyat); }</p>
+<p>fseek(fp,0,0);</p>
+<p>while(!feof(fp)) {</p>
+<p>for (sayac=0;sayac&lt;15;sayac++) { urun.urun_adi[sayac] = NULL; }</p>
+<p>fscanf(fp, &quot;%d %s %d %f\n&quot;,&amp;urun.urun_kodu, urun.urun_adi,&amp;urun.stok_miktari,&amp;urun.birim_fiyati);</p>
+<p>if (urun.urun_kodu != urun_kodu) { fprintf(gecici,&quot;%d %s %d %.2f\n&quot;,urun.urun_kodu, urun.urun_adi,urun.stok_miktari,urun.birim_fiyati); } else { fprintf(gecici,&quot;%d %s %d %.2f\n&quot;,urun.urun_kodu, urun.urun_adi,yeni_stok,yeni_fiyat); } }</p>
+<p>fclose(gecici); fclose(fp); remove(&quot;urunler.dat&quot;); rename(&quot;gecici.tmp&quot;,&quot;urunler.dat&quot;);</p>
+<p>if((fp=fopen(&quot;urunler.dat&quot;,&quot;r&quot;)) == NULL) { return -1; }</p>
+<p>return 0;</p>
+<p>}</p>
+<p>int main() { printf(&quot;Umut Benzer\n&quot;); printf(&quot;Urun Raporlama Yazilimi 2 (beta)\n&quot;); printf(&quot;http://www.ubenzer.com\n\n&quot;);</p>
+<p>/* Dosyayy bir nedenden dolayy açamama durumunda hata mesajy verme de dahil olmak üzere dosya açma i?lemi BASLANGICI */ FILE *fp; FILE *fp2; FILE *fp3;</p>
+<p>if((fp=fopen(&quot;urunler.dat&quot;,&quot;r&quot;)) == NULL) { printf (&quot;Hata: urunler.dat dosyasi acilamadi. Gidiyorum ben.&quot;); return 0; }</p>
+<p>int sag_serbest=-1; char secenek; int girdi; char ara_urun_adi[16]; int sayac;</p>
+<p>while (sag_serbest==-1) {</p>
+<p>/* menu BASLANGICI <em>/ printf(&quot;</em>** Menu *** \n\n&quot;); printf(&quot;1. Urun bilgisi sorgulama \n&quot;); printf(&quot;2. Urun arama \n&quot;); printf(&quot;3. Tum urunleri listeleme \n&quot;); printf(&quot;4. Stok miktarina gore urun listeleme \n&quot;); printf(&quot;5. Urun bilgisi guncelleme \n&quot;); printf(&quot;6. Toplu urun fiyati guncelleme \n&quot;); printf(&quot;7. Toplu stok miktari guncelleme \n&quot;); printf(&quot;8. Cikis \n\n&quot;);</p>
+<p>printf(&quot;Lutfen istediginiz islemin numarasini giriniz. &quot;); /*menu BITIMI */</p>
+<p>secenek=getche(); system (&quot;cls&quot;);</p>
+<p>switch(secenek) { case 49: //1 girdi = MIN_URUN_KODU - 1; while(girdi &lt; MIN_URUN_KODU || girdi &gt; MAX_URUN_KODU) { system(&quot;cls&quot;); printf(&quot;Urun kodunu giriniz: &quot;); scanf(&quot;%d&quot;,&amp;girdi); } if (urun_bilgileri(fp,girdi,0,-1) == -1) { printf(&quot;Boyle bir urun yok.&quot;); beklet(); } break; case 50: //2 for (sayac=0;sayac&lt;16;sayac++) { ara_urun_adi[sayac] = NULL; /* Once sifirlayalim, babalara gelmeyelim sonra. */ } system(&quot;cls&quot;); printf(&quot;Aranacak urunun ilk harflerinden bir kacini giriniz:\n&quot;); printf(&quot;(kucuk harf, tek kelime)\n&quot;); scanf(&quot;%s&quot;,ara_urun_adi); urun_ara(fp,ara_urun_adi);</p>
+<p>break; case 51: //3 urun_bilgileri(fp,girdi,1,-1); system(&quot;cls&quot;); printf(&quot;Islem tamam. 😃&quot;); beklet(); break; case 52: //4 girdi = -1; while(girdi &lt; 0) { system(&quot;cls&quot;); printf(&quot;Kactan kucuk olsun istiyorsunuz? &quot;); scanf(&quot;%d&quot;,&amp;girdi); } urun_bilgileri(fp,-1,1,girdi); system(&quot;cls&quot;); printf(&quot;Islem tamam. 😃&quot;); beklet(); break; case 53: //5 girdi = MIN_URUN_KODU - 1; while(girdi &lt; MIN_URUN_KODU || girdi &gt; MAX_URUN_KODU) { system(&quot;cls&quot;); printf(&quot;Urun kodunu giriniz: &quot;); scanf(&quot;%d&quot;,&amp;girdi); }</p>
+<p>if (urun_var_mi(fp,girdi) == -1) { printf(&quot;Boyle bir urun yok.&quot;); beklet(); } else { if((fp2=fopen(&quot;gecici.tmp&quot;,&quot;w&quot;)) == NULL) { printf (&quot;Hata: gecici dosya yaratilamadi.&quot;); return 0; } if (urun_guncelle(fp,fp2,girdi) == -1) { printf(&quot;Bir hata olustu, gidiyorum ben.&quot;); return 0; } else { system(&quot;cls&quot;); printf(&quot;Islem tamam. 😃&quot;); beklet(); } } break; case 54: //6 system(&quot;cls&quot;); printf(&quot;fiyati_degisenler.dat doyasindan toplu guncellemeye\nbaslamak icin bir tusa basin.\n&quot;); getche();</p>
+<p>if((fp2=fopen(&quot;fiyati_degisenler.dat&quot;,&quot;r&quot;)) == NULL) { system (&quot;cls&quot;); printf (&quot;fiyati_degisenler.dat okunamadi.\n Ana menuye donuyorum.\n&quot;); beklet(); } else { if((fp3=fopen(&quot;gecici.tmp&quot;,&quot;w&quot;)) == NULL) { printf (&quot;Hata: gecici dosya yaratilamadi.&quot;); return 0; } if (toplu_guncelle(fp,fp2,fp3) == -1) { printf(&quot;Bir hata olustu, gidiyorum ben.&quot;); return 0; } else { system(&quot;cls&quot;); printf(&quot;Islem tamam. 😃&quot;); beklet(); } } break; case 55: //7 system(&quot;cls&quot;); printf(&quot;stok_giris_cikis.dat doyasindan toplu guncellemeye\nbaslamak icin bir tusa basin.\n&quot;); getche();</p>
+<p>if((fp2=fopen(&quot;stok_giris_cikis.dat&quot;,&quot;r&quot;)) == NULL) { system (&quot;cls&quot;); printf (&quot;stok_giris_cikis.dat okunamadi.\n Ana menuye donuyorum.\n&quot;); beklet(); } else { if((fp3=fopen(&quot;gecici.tmp&quot;,&quot;w&quot;)) == NULL) { printf (&quot;Hata: gecici dosya yaratilamadi.&quot;); return 0; } if (stok_guncelle(fp,fp2,fp3) == -1) { printf(&quot;Bir hata olustu, gidiyorum ben.&quot;); return 0; } else { system(&quot;cls&quot;); printf(&quot;Islem tamam. 😃&quot;); beklet(); } } break; case 56: //8 /* E e H h ve disinda girdi kabul etmeyen cikmak istiyor musunuz sorusu BASLANGICI <em>/ do { printf (&quot;\nCidden cikmak istiyor musunuz? (E/H) &quot;); secenek = getche(); if (secenek == 'E' || secenek == 'e') { sag_serbest = 0; secenek = 'H'; } } while (secenek != 'H' &amp;&amp; secenek != 'h'); /</em> E e H h ve disinda girdi kabul etmeyen cikmak istiyor musunuz sorusu SONU <em>/ system (&quot;cls&quot;); break; default: /</em> Elleri yanlis tusa basan kullanicilar icin yazilan bolum BASLANGICI <em>/ printf(&quot;Bir zahmet 1'den 8'e kadar bir secim yapin.&quot;); beklet(); /</em> Elleri yanlis tusa basan kullanicilar icin yazilan bolum SONU */ break; } }</p>
+<p>printf(&quot;O halde hoscakalin. 😃\n\n\n&quot;); return 0; }</p>
+<pre><code class="language-[/rawr]"></code></pre>
+</div></div></article><div class="card comments main-container__items"><div class="card__contents" id="disqus_thread"></div></div></div><div class="sidebar main-content__sidebar"><div class="about"><img class="about__image" src="/img/profile.jpg"/><h1 class="about__name">Umut Benzer</h1><h2 class="about__mini-bio">Software Engineer in Berlin</h2></div></div></div><div class="main-container"><div class="footer"><div class="footer__copyright-holder"><p><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license noopener noreferrer" target="_blank"><img alt="Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License" src="/img/cclicense.png"/></a></p><p><span>Bu sitedeki tüm yazı ve görseller </span><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license noopener noreferrer" target="_blank">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a><span> ile lisanslanmıştır.</span></p></div><div class="footer__generator"><span>Bu sayfa </span><span>9 Nisan 2017</span><span> tarihinde </span><a href="https://github.com/ubenzer/fil" target="_blank">Fil</a><span> ile yaratılmıştır.</span></div></div></div></div>
+        <script src="/template/app.js" type="text/javascript"></script><script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = "https://ubenzer.com/2008/03/lab-stok-olaylari";
+          this.page.identifier = "post@/2008/03/lab-stok-olaylari";
+        };
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = 'https://ubenzer.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+        </script>
+      </body>
+    </html>
+  

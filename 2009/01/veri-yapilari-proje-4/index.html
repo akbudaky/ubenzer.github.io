@@ -1,0 +1,181 @@
+<!doctype html>
+    <html lang="tr">
+      <head>
+        <title>Veri Yapıları: Proje 4 - UBenzer</title>
+        <meta content="utf-8" name="charset"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="#2196F3" name="theme-color"/>
+        <link href="/template/ui.css" media="screen" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i&amp;amp;subset=latin-ext" media="screen" rel="stylesheet" type="text/css"/><link href="/img/favicon/apple-touch-icon-57x57.png" rel="apple-touch-icon-precomposed" sizes="57x57"/><link href="/img/favicon/apple-touch-icon-60x60.png" rel="apple-touch-icon-precomposed" sizes="60x60"/><link href="/img/favicon/apple-touch-icon-72x72.png" rel="apple-touch-icon-precomposed" sizes="72x72"/><link href="/img/favicon/apple-touch-icon-76x76.png" rel="apple-touch-icon-precomposed" sizes="76x76"/><link href="/img/favicon/apple-touch-icon-114x114.png" rel="apple-touch-icon-precomposed" sizes="114x114"/><link href="/img/favicon/apple-touch-icon-120x120.png" rel="apple-touch-icon-precomposed" sizes="120x120"/><link href="/img/favicon/apple-touch-icon-152x152.png" rel="apple-touch-icon-precomposed" sizes="152x152"/><link href="/img/favicon/favicon-196x196.png" rel="icon" sizes="196x196"/><link href="/img/favicon/favicon-128x128.png" rel="icon" sizes="128x128"/><link href="/img/favicon/favicon-96x96.png" rel="icon" sizes="96x96"/><link href="/img/favicon/favicon-32x32.png" rel="icon" sizes="32x32"/><link href="/img/favicon/favicon-16x16.png" rel="icon" sizes="16x16"/>
+      </head>
+      <body>
+        <div><header class="header"><div class="app-bar"><h1 class="app-bar__title"><a class="app-bar__title-link" href="/">UBenzer</a></h1></div></header><div class="main-container"><div class="main-content"><article class="card main-container__items"><div class="card__contents blog-post"><div class="blog-post__date">12 Ocak 2009</div><h1><a class="blog-post__title" href="/2009/01/veri-yapilari-proje-4">Veri Yapıları: Proje 4</a></h1><div class="markdown-content blog-post__body blog-post__content"><p>Dördüncü Veri Yapıları (Data Structures) projemiz çizgeler (graphs) üzerineydi. Proje temel olarak aşağıdakileri içeriyor:</p>
+<ul>
+<li>Dosyadan metin okuma. (<em>FileInputStream</em>, <em>DataInputStream</em> ve <em>BufferedReader</em> kullanımlarına örnekler)</li>
+<li>String Tokenizer kullanımına örnek.</li>
+<li>Çizgelerin bellekte tutulması. (komşuluk matrisi ile)</li>
+<li>Çizgeler üzerinde <a href="http://en.wikipedia.org/wiki/Dijkstra%27s_algorithm" rel="noopener noreferrer" target="_blank">Dijkstra algoritmasının</a> uygulanması. (En kısa yol hesabı)</li>
+<li>Çizgeler üzerinde <a href="http://en.wikipedia.org/wiki/Prim%27s_algorithm" rel="noopener noreferrer" target="_blank">Prim algoritması</a> ile en küçük kapsayan ağaç bulunması. (<a href="http://en.wikipedia.org/wiki/Minimum_spanning_tree" rel="noopener noreferrer" target="_blank">Minimum Spannig Tree</a>) (projede yönlü çizgelerde [digraph] MST bulunması [<a href="http://en.wikipedia.org/wiki/Edmonds%27s_algorithm" rel="noopener noreferrer" target="_blank">Edmonds Algoritması</a>] kaynak kodunda yer almamaktadır.)</li>
+<li>Çizgelerin önce-genişliğine (breadth first [<a href="http://en.wikipedia.org/wiki/Breadth-first_search" rel="noopener noreferrer" target="_blank">BFS</a>]) dolaşılması.</li>
+</ul>
+<p>Bu JAVA projesi Windows Vista üzerinde Eclipse Ganymede kullanılarak geliştirilmiştir. Kodlamada foreach ve generic tip tarzı yenilikler içerdiğinden sadece JAVA 5 ile çalışır. (JDK 1.6)</p>
+<p>Metotların işleyişi, programın kullanımı ve benzer konularda daha ayrıntılı bilgiyi projenin raporunda bulabilirsiniz.</p>
+<p>Ayrıca ödev kapsamında araştırma konusu olarak seçtiğimiz <em>Huffman Decoding &amp; Encoding</em> hakkında Türkçe bir araştırmayı da ödev raporunda bulabilirsiniz. Araştırmanın kaynakları raporun sonunda belirtilmiştir.</p>
+<ul>
+<li><a href="/2009/01/veri-yapilari-proje-4/proje-4.pdf" >Ödev metni</a></li>
+<li><a href="/2009/01/veri-yapilari-proje-4/shortest_path_cbs.7z" >Ödevin çözümü</a>_<br>
+(Eclipse projesi halinde, sıkıştırılmış biçimde)_</li>
+<li><a href="/2009/01/veri-yapilari-proje-4/proje-4-rapor.pdf" >Ödevin raporu</a>_<br>
+(İşleyişi hakkında bilgi sahibi olmanızı kolaylaştıracaktır.)_</li>
+</ul>
+<p>Kaynak kodlarını örnek almak, fikir edinmek ve bilgi sahibi olma amaçlı kullanabilirsiniz. Eğer projenin kodlarını indirmeden incelemek isterseniz, yazının devamında kodları bulabilirsiniz. Sınıfların ne işe yaradığı gibi teknik bilgiler proje raporunda bulunmaktadır.</p>
+<p><em>Tüm bilmuhçulara sınavda başarılar diliyorum.</em></p>
+<h2>Çizgeler</h2>
+<p><em>Algorithms.java</em> ```java
+import java.util.Vector;</p>
+<p>public class Algorithms {</p>
+<p>/** * @param: Ağırlıklı çizge * @param: Başlangıç düğüm numarası * @param: Bitiş düğüm numarası (-1: tüm düğümleri bul) * @return: En kısa yol sırasını içeren dizi * @see: http://www.cs.fit.edu/~ryan/java/programs/graph/Dijkstra-java.html * @author: UB <em>/ /</em> Kaynak kodunda değişiklikler ve eklemeler yapılmıştır. */ public static int[] dijkstra(WeightedGraph G, int s, int f) { final int[] dist = new int[G.size()]; final int[] pred = new int[G.size()]; final boolean[] visited = new boolean[G.size()];</p>
+<p>for (int i = 0; i &lt; dist.length; i++) { dist[i] = Integer.MAX_VALUE; } dist[s] = 0;</p>
+<p>for (int i = 0; i &lt; dist.length; i++) { final int next = minVertex(dist, visited); /* Çizge bağlı değilse yol bulunamaz. */ if (next == -1) { for (int a = 0; a &lt; pred.length; a++) { pred[a] = -1; } return pred; } visited[next] = true;</p>
+<p>/* Eğer istediğimiz şehre ulaşmışsak devam etmemize gerek yok. */ if (next == f) return pred;</p>
+<p>final int[] n = G.neighbors(next); for (int j = 0; j &lt; n.length; j++) { final int v = n[j]; final int d = dist[next] + G.getWeight(next, v); if (dist[v] &gt; d) { dist[v] = d; pred[v] = next; } } } return pred; }</p>
+<p>/** * @param: Ağırlıklı çizge * @param: Başlangıç düğüm numarası * @return: MST bulunduktan sonra düğümler arası bağlantıları içeren dizi * @see: http://www.cs.fit.edu/~ryan/java/programs/graph/Prim-java.html * @author: Özlem */ public static int[] prim(WeightedGraph G, int s) { final int[] dist = new int[G.size()]; final int[] pred = new int[G.size()]; final boolean[] visited = new boolean[G.size()];</p>
+<p>for (int i = 0; i &lt; dist.length; i++) { dist[i] = Integer.MAX_VALUE; } dist[s] = 0;</p>
+<p>for (int i = 0; i &lt; dist.length; i++) { final int next = minVertex(dist, visited); /* Yol bulunamazsa */ if (next == -1) { for (int a = 0; a &lt; pred.length; a++) { pred[a] = -1; } return pred; } visited[next] = true;</p>
+<p>final int[] n = G.neighbors(next); for (int j = 0; j &lt; n.length; j++) { final int v = n[j]; final int d = G.getWeight(next, v); if (dist[v] &gt; d) { dist[v] = d; pred[v] = next; } } } return pred; }</p>
+<p>/** * @param: Uzaklık dizisi * @param: Gezilme durumu dizisi * @return: Gezilmeyen en yakın düğüm * @see http://www.cs.fit.edu/~ryan/java/programs/graph/Dijkstra-java.html <em>/ private static int minVertex(int[] dist, boolean[] v) { int x = Integer.MAX_VALUE; int y = -1; for (int i = 0; i &lt; dist.length; i++) { if (!v[i] &amp;&amp; dist[i] &lt; x) { y = i; x = dist[i]; } } return y; } /</em>* * @param: Ağırlıklı çizge * @param: En kısa yol bilgilerini içeren dizi * @param: Başlangıç düğümü * @param: Bitiş düğümü * @return: Başlangıç ile bitiş arasındaki düğüm adları vektörü * @author: Özlem */ public static Vector&lt;String&gt; path(WeightedGraph G, int[] pred, int s, int e) { final Vector&lt;String&gt; path = new Vector&lt;String&gt;(); int x = e; while (x != s) { path.add(0, G.getLabel(x)); x = pred[x]; } path.add(0, G.getLabel(s)); return path; }</p>
+<p>/** * @param: Ağırlıklı çizge * @return: Çizgenin yönlü olup olmadığı * @author: Hüss */ public static boolean isDirected(WeightedGraph G) { for (int i = 0; i &lt; G.size(); i++) { for (int x = 0; x &lt; G.size(); x++) { if (G.getWeight(i, x) != G.getWeight(x, i)) { return true; } } } return false; }</p>
+<p>/** * @param: Ağırlıklı çizge * @param: Başlangıç düğüm numarası * @return: BFS ile gezilince oluşacak düğüm sırası * @author: Didem */ public static int[] bfs(WeightedGraph w, int startNode) { BListe kuyruk = new BListe(); boolean gezildi[] = new boolean[w.size()]; int sonuc[] = new int[w.size()];</p>
+<p>for (int i = 1; i &lt; w.size(); i++) { sonuc[i] = -1; /* Eğer çizge bağlı değilse, yollar -1 kalır. */ gezildi[i] = false; }</p>
+<p>kuyruk.ekle(startNode); gezildi[startNode] = true; int indis = 0; while (!kuyruk.bosMu()) { sonuc[indis] = kuyruk.cikar(); int b[] = w.neighbors(sonuc[indis]); for (int a = 0; a &lt; b.length; a++) { if (!gezildi[b[a]]) { kuyruk.ekle(b[a]); } gezildi[b[a]] = true;</p>
+<p>} indis++; }</p>
+<p>return sonuc; } }</p>
+<pre><code>
+*BListe.java* ```java
+ /** BListe * @author: UB * * Kuyruk oluşturmak için kullanılan sınıftır. * Banka kuyruğu ödevinden hazır alınıp üzerinde * oynamalar yapılmıştır. */
+
+public class BListe { private BListeNode bas; // Kuyruğun ilk elemanının referansı private BListeNode son; // Kuyruğun son elemanının referansı
+
+/* İlk yaratıldığında boş olan bir kuyruk */ public BListe() { bas = null; son = null; }
+
+public void ekle(int node) { BListeNode yeni = new BListeNode(node); if (son != null) { son.sonraki = yeni; son = yeni; } else { bas = yeni; son = yeni; } }
+
+public int cikar() { BListeNode dondurulecek = bas; if (bas != null) { bas = bas.sonraki; } if (bas == null) { son = null; } if(dondurulecek == null) { return -1; } return dondurulecek.node; }
+
+/* Kuyruğun bitip bitmediğini döndürür. */ public boolean bosMu() { return (bas == null ? true : false); }
+
+}
+</code></pre>
+<p><em>BListeNode.java</em> ```java
+public class BListeNode { public int node; public BListeNode sonraki; public BListeNode (int node) { this.node = node; sonraki = null; } }</p>
+<pre><code>
+*Gorsel.java* ```java
+ import javax.swing.JPanel; import javax.swing.JFrame; import java.awt.Dimension; import java.awt.TextArea; import java.awt.Rectangle; import java.awt.Label; import java.awt.TextField; import javax.swing.JButton; import java.awt.Point;
+
+public class Gorsel extends JFrame {
+
+private static final long serialVersionUID = 1L; private JPanel jContentPane = null; private TextArea textMatris = null; private Label etiketMatris = null; private Label etiketDugumBilgiler = null; private TextField textDugumNo = null; private JButton butonGoster = null; private TextArea textDugumBilgi = null; private TextField textDij1 = null; private Label labeldij1 = null; private TextField textDij2 = null; private Label etiketDij2 = null; private JButton butonDij = null; private JButton butonBreFirst = null; private Label etiletBre2 = null; private TextField textBre = null; private JButton butonMST = null; private Label etkiketMST = null; private TextArea textResult = null; private JButton butonYenile = null; private Label etiketFile = null; private TextField textPrim = null; /** * This is the default constructor */ public Gorsel() { super(); initialize(); }
+
+/** * This method initializes this * * @return void */ private void initialize() { this.setSize(640, 510); this.setResizable(false); this.setContentPane(getJContentPane()); this.setTitle(&quot;Proje 4 [ÇBS]&quot;); textMatris.setText(Main.maliyetDiziScreen()); }
+
+/** * This method initializes jContentPane * * @return javax.swing.JPanel */ private JPanel getJContentPane() { if (jContentPane == null) { etiketFile = new Label(); etiketFile.setBounds(new Rectangle(377, 461, 154, 15)); etiketFile.setText(&quot;Dosyaları tekrardan okuyun&quot;); etkiketMST = new Label(); etkiketMST.setBounds(new Rectangle(237, 294, 294, 16)); etkiketMST.setText(&quot;şehrini kök düğüm alarak Prim algortiması ile MST'yi&quot;); etiletBre2 = new Label(); etiletBre2.setBounds(new Rectangle(151, 265, 381, 18)); etiletBre2.setText(&quot;nolu/isimli şehirden başlayarak önce genişliğine (breath first) dolaş&quot;); etiketDij2 = new Label(); etiketDij2.setBounds(new Rectangle(375, 242, 154, 15)); etiketDij2.setText(&quot;arasındaki en kısa yolu bul!&quot;); labeldij1 = new Label(); labeldij1.setBounds(new Rectangle(151, 244, 111, 15)); labeldij1.setName(&quot;label2&quot;); labeldij1.setText(&quot;nolu/isimli şehir ile&quot;); etiketDugumBilgiler = new Label(); etiketDugumBilgiler.setBounds(new Rectangle(384, 11, 146, 15)); etiketDugumBilgiler.setText(&quot;no/isimli şehrin bilgilerini&quot;); etiketMatris = new Label(); etiketMatris.setBounds(new Rectangle(10, 11, 290, 14)); etiketMatris.setText(&quot;Ağırlık matrisi: (0 bağlantısız anlamına gelir.)&quot;); jContentPane = new JPanel(); jContentPane.setLayout(null); jContentPane.add(getTextMatris(), null); jContentPane.add(etiketMatris, null); jContentPane.add(etiketDugumBilgiler, null); jContentPane.add(getTextDugumNo(), null); jContentPane.add(getButonGoster(), null); jContentPane.add(getTextDugumBilgi(), null); jContentPane.add(getTextDij1(), null); jContentPane.add(labeldij1, null); jContentPane.add(getTextDij2(), null); jContentPane.add(etiketDij2, null); jContentPane.add(getButonDij(), null); jContentPane.add(getButonBreFirst(), null); jContentPane.add(etiletBre2, null); jContentPane.add(getTextBre(), null); jContentPane.add(getButonMST(), null); jContentPane.add(etkiketMST, null); jContentPane.add(getTextResult(), null); jContentPane.add(getButonYenile(), null); jContentPane.add(etiketFile, null); jContentPane.add(getTextPrim(), null); } return jContentPane; }
+
+/** * This method initializes textMatris * * @return java.awt.TextArea */ private TextArea getTextMatris() { if (textMatris == null) { textMatris = new TextArea(); textMatris.setBounds(new Rectangle(10, 29, 291, 200)); textMatris.setEditable(false); } return textMatris; }
+
+/** * This method initializes textDugumNo * * @return java.awt.TextField */ private TextField getTextDugumNo() { if (textDugumNo == null) { textDugumNo = new TextField(); textDugumNo.setBounds(new Rectangle(320, 9, 60, 18)); textDugumNo.setText(&quot;0&quot;); } return textDugumNo; }
+
+/** * This method initializes butonGoster * * @return javax.swing.JButton */ private JButton getButonGoster() { if (butonGoster == null) { butonGoster = new JButton(); butonGoster.setBounds(new Rectangle(535, 7, 85, 20)); butonGoster.setText(&quot;göster&quot;); butonGoster.addActionListener(new java.awt.event.ActionListener() { public void actionPerformed(java.awt.event.ActionEvent e) { if(Main.isParsableToInt(textDugumNo.getText())) { textDugumBilgi.setText(Main.getNodeDetails(Integer.parseInt(textDugumNo.getText()))); } else { if(Main.wg.labelToVertex(textDugumNo.getText()) != -1) { textDugumBilgi.setText(Main.getNodeDetails(Main.wg.labelToVertex(textDugumNo.getText()))); } else { textDugumBilgi.setText(&quot;Böyle bir şehir yok.&quot;); } } } }); } return butonGoster; }
+
+/** * This method initializes textDugumBilgi * * @return java.awt.TextArea */ private TextArea getTextDugumBilgi() { if (textDugumBilgi == null) { textDugumBilgi = new TextArea(); textDugumBilgi.setBounds(new Rectangle(320, 30, 301, 200)); textDugumBilgi.setEditable(false); } return textDugumBilgi; }
+
+/** * This method initializes textDij1 * * @return java.awt.TextField */ private TextField getTextDij1() { if (textDij1 == null) { textDij1 = new TextField(); textDij1.setBounds(new Rectangle(45, 238, 97, 22)); textDij1.setText(&quot;0&quot;); } return textDij1; }
+
+/** * This method initializes textDij2 * * @return java.awt.TextField */ private TextField getTextDij2() { if (textDij2 == null) { textDij2 = new TextField(); textDij2.setBounds(new Rectangle(269, 239, 98, 20)); textDij2.setText(&quot;tüm şehirler&quot;); } return textDij2; }
+
+/** * This method initializes butonDij * * @return javax.swing.JButton */ private JButton getButonDij() { if (butonDij == null) { butonDij = new JButton(); butonDij.setBounds(new Rectangle(536, 237, 85, 21)); butonDij.setText(&quot;Dijkstra!&quot;); butonDij.addActionListener(new java.awt.event.ActionListener() { public void actionPerformed(java.awt.event.ActionEvent e) { int d1=-1,d2=-1; if(!Main.isParsableToInt(textDij1.getText())) { if(Main.wg.labelToVertex(textDij1.getText()) != -1) { d1 = Main.wg.labelToVertex(textDij1.getText()); } else { textResult.setText(&quot;Birinci şehir yok.&quot;); } } else { d1 = Integer.parseInt(textDij1.getText()); }
+
+if(!Main.isParsableToInt(textDij2.getText())) { if(Main.wg.labelToVertex(textDij2.getText()) != -1) { d2 = Main.wg.labelToVertex(textDij2.getText()); } else if (textDij2.getText().equalsIgnoreCase(&quot;tüm şehirler&quot;)) { textResult.setText(Main.dijkstra(d1,-1)); } else { textResult.setText(&quot;İkinci şehir yok.&quot;); } } else { d2 = Integer.parseInt(textDij2.getText()); } textResult.setText(Main.dijkstra(d1,d2));
+
+} }); } return butonDij; }
+
+/** * This method initializes butonBreFirst * * @return javax.swing.JButton */ private JButton getButonBreFirst() { if (butonBreFirst == null) { butonBreFirst = new JButton(); butonBreFirst.setText(&quot;Dolaş&quot;); butonBreFirst.setSize(new Dimension(85, 21)); butonBreFirst.setLocation(new Point(537, 264)); butonBreFirst.addActionListener(new java.awt.event.ActionListener() { public void actionPerformed(java.awt.event.ActionEvent e) { if(Main.isParsableToInt(textBre.getText())) { textResult.setText(Main.bfs(Integer.parseInt(textBre.getText()))); } else { if(Main.wg.labelToVertex(textBre.getText()) != -1) { textResult.setText(Main.bfs(Main.wg.labelToVertex(textBre.getText()))); } else { textResult.setText(&quot;Böyle bir şehir yok.&quot;); } } } }); } return butonBreFirst; }
+
+/** * This method initializes textBre * * @return java.awt.TextField */ private TextField getTextBre() { if (textBre == null) { textBre = new TextField(); textBre.setBounds(new Rectangle(45, 264, 98, 20)); textBre.setText(&quot;0&quot;); } return textBre; }
+
+/** * This method initializes butonMST * * @return javax.swing.JButton */ private JButton getButonMST() { if (butonMST == null) { butonMST = new JButton(); butonMST.setText(&quot;Bul&quot;); butonMST.setSize(new Dimension(85, 21)); butonMST.setLocation(new Point(537, 292)); butonMST.addActionListener(new java.awt.event.ActionListener() { public void actionPerformed(java.awt.event.ActionEvent e) { if(Main.isParsableToInt(textPrim.getText())) { textResult.setText(&quot;Kolay karşılaştırılması için sonuçlar sağ üst kutudadır.&quot;); textDugumBilgi.setText(Main.mst(Integer.parseInt(textPrim.getText()))); } else { textResult.setText(&quot;Kolay karşılaştırılması için sonuçlar sağ üst kutudadır.&quot;); textDugumBilgi.setText(Main.mst(Main.wg.labelToVertex(textPrim.getText()))); } } }); } return butonMST; }
+
+/** * This method initializes textResult * * @return java.awt.TextArea */ private TextArea getTextResult() { if (textResult == null) { textResult = new TextArea(); textResult.setBounds(new Rectangle(9, 321, 612, 126)); textResult.setEditable(false); textResult.setText(&quot;Sonuçlar burada görüntülenecek.&quot;); } return textResult; }
+
+/** * This method initializes butonYenile * * @return javax.swing.JButton */ private JButton getButonYenile() { if (butonYenile == null) { butonYenile = new JButton(); butonYenile.setText(&quot;Yenile&quot;); butonYenile.setSize(new Dimension(85, 21)); butonYenile.setLocation(new Point(533, 454)); butonYenile.addActionListener(new java.awt.event.ActionListener() { public void actionPerformed(java.awt.event.ActionEvent e) { Main.load(); textMatris.setText(Main.maliyetDiziScreen()); } }); } return butonYenile; }
+
+/** * This method initializes textPrim * * @return java.awt.TextField */ private TextField getTextPrim() { if (textPrim == null) { textPrim = new TextField(); textPrim.setBounds(new Rectangle(147, 290, 86, 21)); textPrim.setText(&quot;0&quot;); } return textPrim; }
+
+} // @jve:decl-index=0:visual-constraint=&quot;10,10&quot;
+</code></pre>
+<p><em>Main.java</em> ```java
+import java.io.BufferedReader; import java.io.DataInputStream; import java.io.FileInputStream; import java.io.InputStreamReader; import java.util.StringTokenizer; import java.util.Vector;</p>
+<p>public class Main { public static WeightedGraph wg;</p>
+<p>/** * Dosyadan veri okur. * * @author: UB * @link: http://www.roseindia.net/java/beginners/java-read-file-line-by-line.shtml <em>/ public static void load() { /</em> * iller.txt okunması * * iller.txt illerin adını (ve belki de sayısını) tutan dosyadır. * Dosyanın aşağıdaki iki formattan birinde olması gerekir: * * FORMAT 1: 5 Antalya İzmir Manisa Ankara İstanbul Paris * * (beş şehir olması gerekmemektedir, 5 sayısal ifadesi görmezden * gelinecektir.) * * FORMAT 2: Antalya İzmir Manisa Ankara İstanbul Hakkari */ Vector&lt;String&gt; sehirAdlari = new Vector&lt;String&gt;(); try { FileInputStream fstream = new FileInputStream(&quot;iller.txt&quot;);</p>
+<p>DataInputStream in = new DataInputStream(fstream); BufferedReader br = new BufferedReader(new InputStreamReader(in)); String strLine; /* * İlk satırda şehrin adı yerine şehir sayısı verildiyse sisteme * ekleme. <em>/ /</em> * Böylece hem şehir sayısı verilen hem verilmeyen dosyalar için * uyumluluk sağlanır. */ if ((strLine = br.readLine()) != null) { if (!isParsableToInt(strLine)) { sehirAdlari.add(strLine); } } while ((strLine = br.readLine()) != null) { sehirAdlari.add(strLine); } in.close(); } catch (Exception e) { System.out.println(&quot;iller.txt okunamadı.&quot;); }</p>
+<p>/* * maliyet.txt okunması * * maliyet.txt iller arasındaki maliyetleri tutan dosyadır. Eğer iller * arasında bağlantı yoksa -1 kullanılmalıdır. Dosyada ilsayısı^2 tane * sayısal (bu projede integer) değer olmalıdır. Daha az olduğu durumda * program kalan değerleri -1 olarak değerlendirecektir. Ay şekilde * dosya okunamadığında da hiçbir il arasında bağlantı olmadığı * düşünülecektir. Eğer ilsayısı^2'den fazla değer varsa sondaki * değerler ihmal edilecektir. Değerlerin satırlara doğru yerleşmesinin * ya da arada fazla boşluk olmasının bir anlamı yoktur. Aralarda * geçersiz değerler varsa (örnek 1 2 3 SFGSG 45) bu değerler -1 olarak * değerlendirilecektir. */ wg = new WeightedGraph(sehirAdlari.size()); for (int i = 0; i &lt; sehirAdlari.size(); i++) { wg.setLabel(i, sehirAdlari.elementAt(i)); }</p>
+<p>String maliyetData = &quot;&quot;; try { FileInputStream fstream = new FileInputStream(&quot;maliyet.txt&quot;); DataInputStream in = new DataInputStream(fstream); BufferedReader br = new BufferedReader(new InputStreamReader(in)); String strLine;</p>
+<p>/* * Tüm dosya satır satır okunur. Böylece satır sonu karakterlerinden * (CR LF) kurtulunmuş olur. <em>/ while ((strLine = br.readLine()) != null) { maliyetData = maliyetData + strLine + ' '; /</em> * Eğer sona boşluk eklenmezse alt satıra alt satır ile üst * satır birleşik kabul edilir. */ } in.close(); } catch (Exception e) { System.out.println(&quot;maliyet.txt okunamadı.&quot;); }</p>
+<p>StringTokenizer st = new StringTokenizer(maliyetData);</p>
+<p>for (int x = 0; x &lt; sehirAdlari.size(); x++) { for (int y = 0; y &lt; sehirAdlari.size(); y++) { String temp; if (st.hasMoreTokens()) { temp = st.nextToken(); if (isParsableToInt(temp) &amp;&amp; Integer.parseInt(temp) &gt; 0) { wg.addEdge(x, y, Integer.parseInt(temp)); } } } } }</p>
+<p>/** * @author: Didem */ public static void main(String[] args) {</p>
+<p>load();</p>
+<p>Gorsel g = new Gorsel(); g.setVisible(true);</p>
+<p>}</p>
+<p>/** * Ekrana yazdırılmaya uygun bir dizaynda maliyet dizisinin içindeki * bilgileri gönderir. * * @author Didem * @return String */ public static String maliyetDiziScreen() { String cikti = &quot;&quot;;</p>
+<p>for (int i = 0; i &lt; wg.size(); i++) { cikti = cikti + wg.getLabel(i) + &quot;tt&quot;; for (int x = 0; x &lt; wg.size(); x++) { cikti = cikti + wg.getWeight(i, x) + &quot;t&quot;; } cikti = cikti + &quot;n&quot;;</p>
+<p>}</p>
+<p>return cikti; }</p>
+<p>/** * Düğümün içindeki bilgileri ekrana yazılmaya uygun formatta * gönderir. * @param: Düğüm no * @return: String * @author: Didem */ public static String getNodeDetails(int nid) { if (nid &lt; 0 || nid &gt;= wg.size()) { return &quot;Geçersiz düğüm numarası.&quot;; }</p>
+<p>String cikti = &quot;&quot;;</p>
+<p>cikti = cikti + &quot;Köşe numarası: &quot; + nid + &quot;n&quot;; cikti = cikti + &quot;Şehir adı: &quot; + wg.getLabel(nid) + &quot;n&quot;; cikti = cikti + &quot;Giden bağlantılar: (&quot; + wg.neighbors(nid).length + &quot;)n&quot;; for (int a = 0; a &lt; wg.neighbors(nid).length; a++) { cikti = cikti + &quot;(&quot; + wg.neighbors(nid)[a] + &quot;) &quot; + wg.getLabel(wg.neighbors(nid)[a]) + &quot;: &quot; + wg.getWeight(nid, wg.neighbors(nid)[a]) + &quot;n&quot;; }</p>
+<p>cikti = cikti + &quot;Gelen bağlantılar: (&quot; + wg.incoming(nid).length + &quot;)n&quot;; for (int a = 0; a &lt; wg.incoming(nid).length; a++) { cikti = cikti + &quot;(&quot; + wg.incoming(nid)[a] + &quot;) &quot; + wg.getLabel(wg.incoming(nid)[a]) + &quot;: &quot; + wg.getWeight(wg.incoming(nid)[a], nid) + &quot;n&quot;; }</p>
+<p>return cikti;</p>
+<p>}</p>
+<p>/** * @param: Başlangıç düğüm no * @return: String * @author: Özlem */ public static String bfs(int start) { if (start &lt; 0 || start &gt;= wg.size()) { return &quot;Geçersiz düğüm numarası.&quot;; } String cikti = &quot;&quot;; int sonuc[] = Algorithms.bfs(wg, start); for (int n = 0; n &lt; sonuc.length; n++) { if (sonuc[n] == -1) { cikti = cikti + &quot;Çizgenin devamına bağlantı bulunamadı.&quot;; break; } else { cikti = cikti + &quot;[&quot; + wg.getLabel(sonuc[n]) + &quot;]n&quot;; } } return cikti; }</p>
+<p>/** * @param: Başlangıç düğüm no * @return: String * @author: UB */ public static String mst(int start) { if (start &lt; 0 || start &gt;= wg.size()) { return &quot;Geçersiz düğüm numarası.&quot;; } String cikti = &quot;&quot;; if (Algorithms.isDirected(wg)) { return &quot;Prim algoritması sadece yönsüz algoritmalardançalışır. &quot; + &quot;Edmonds algoritması ne kadarnyapılmaya çalışıldıysa da,n&quot; + &quot;pek başarılı olduğumuznsöylenemez.&quot;; }</p>
+<p>int sonuc[] = Algorithms.prim(wg, start); if (sonuc[0] == -1) { return &quot;Yol yok&quot;; } for (int i = 0; i &lt; wg.size(); i++) { cikti = cikti + wg.getLabel(i) + &quot;tt&quot;; for (int x = 0; x &lt; wg.size(); x++) { cikti = cikti + ((sonuc[i] == x || sonuc[x] == i) &amp;&amp; (i != x) ? wg .getWeight(i, x) : &quot;0&quot;) + &quot;t&quot;; } cikti = cikti + &quot;n&quot;; }</p>
+<p>return cikti; }</p>
+<p>/** * @param: Başlangıç düğüm no * @param: Bitiş düğüm no (-1 hepsi) * @return: String * @author: Özlem */ public static String dijkstra(int start, int finish) { if (start &lt; 0 || start &gt;= wg.size()) { return &quot;Geçersiz birinci düğüm numarası.&quot;; } if (finish &lt; -1 || finish &gt;= wg.size()) { return &quot;Geçersiz ikinci düğüm numarası.&quot;; }</p>
+<p>String cikti = &quot;&quot;; Vector&lt;String&gt; Sehirler = new Vector&lt;String&gt;(); int yol[] = Algorithms.dijkstra(wg, start, finish); if (yol[0] == -1) { return &quot;Yol yok&quot;; } if (finish == -1) { for (int n = 0; n &lt; wg.size(); n++) { if (n == start) { continue; } Sehirler = Algorithms.path(wg, yol, start, n);</p>
+<p>for (String x : Sehirler) { cikti = cikti + &quot;[&quot; + x + &quot;] &quot;; } cikti = cikti + &quot;n&quot;; } } else { Sehirler = Algorithms.path(wg, yol, start, finish); for (String x : Sehirler) { cikti = cikti + &quot;[&quot; + x + &quot;] &quot;; } cikti = cikti + &quot;n&quot;; }</p>
+<p>return cikti; }</p>
+<p>/** * @param: String bir değer * @return: Stringin bir tam sayı olup olmadığı */ public static boolean isParsableToInt(String in) { try { Integer.parseInt(in); return true; } catch (Exception e) { return false; } }</p>
+<p>}</p>
+<pre><code>
+*WeightedGraph.java* ```java
+ /** * @see: http://www.cs.fit.edu/~ryan/java/programs/graph/WeightedGraph-java.html */ public class WeightedGraph implements Cloneable { /* Kaynak kodunda değişiklikler ve eklemeler yapılmıştır. */ private int[][] edges; private String[] labels; /** * Referans değil, çizgenin tamamını bire bir kopyalamaya çalışan * bir metotdur. * @deprecated * @author: UB */ public Object clone() { Cloneable theClone = new WeightedGraph(this.edges.clone(), this.labels.clone()); return theClone; }
+
+public WeightedGraph(int n) { edges = new int[n][n]; labels = new String[n]; } public WeightedGraph(int[][] egdes, String[] labels) { this.edges = egdes; this.labels = labels; }
+
+public int size() { return labels.length; }
+
+public void setLabel(int vertex, String label) { labels[vertex] = label; }
+
+public String getLabel(int vertex) { return labels[vertex]; }
+
+public void addEdge(int source, int target, int w) { edges[source][target] = w; }
+
+public void removeEdge(int source, int target) { edges[source][target] = 0; }
+
+public int getWeight(int source, int target) { return edges[source][target]; }
+
+public int[] neighbors(int vertex) { int count = 0; for (int i = 0; i &lt; edges[vertex].length; i++) { if (edges[vertex][i] &gt; 0) count++; } final int[] answer = new int[count]; count = 0; for (int i = 0; i &lt; edges[vertex].length; i++) { if (edges[vertex][i] &gt; 0) answer[count++] = i; } return answer; } /** Bir köşeye gelen bağlantıları bulur. * @author Hüss * @param vertex number * @return incoming links */ public int[] incoming(int vertex) { int count = 0; for (int i=0;i&lt;labels.length;i++) { if(edges[i][vertex] &gt; 0) { count++; } } final int[] answer = new int[count]; count = 0; for (int i=0;i&lt;labels.length;i++) { if(edges[i][vertex] &gt; 0) { answer[count++] = i; } } return answer; } /**Etiketin köşe numrasını bulur. Bulamazsa -1 gönderir. * @author Hüss * @param vertex label * @return vertex number */ public int labelToVertex(String name) { for(int i=0;i&lt;labels.length;i++) { if(labels[i].equalsIgnoreCase(name)) { return i; } } return -1; } }
+</code></pre>
+</div></div></article><div class="card comments main-container__items"><div class="card__contents" id="disqus_thread"></div></div></div><div class="sidebar main-content__sidebar"><div class="about"><img class="about__image" src="/img/profile.jpg"/><h1 class="about__name">Umut Benzer</h1><h2 class="about__mini-bio">Software Engineer in Berlin</h2></div></div></div><div class="main-container"><div class="footer"><div class="footer__copyright-holder"><p><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license noopener noreferrer" target="_blank"><img alt="Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License" src="/img/cclicense.png"/></a></p><p><span>Bu sitedeki tüm yazı ve görseller </span><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license noopener noreferrer" target="_blank">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a><span> ile lisanslanmıştır.</span></p></div><div class="footer__generator"><span>Bu sayfa </span><span>9 Nisan 2017</span><span> tarihinde </span><a href="https://github.com/ubenzer/fil" target="_blank">Fil</a><span> ile yaratılmıştır.</span></div></div></div></div>
+        <script src="/template/app.js" type="text/javascript"></script><script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = "https://ubenzer.com/2009/01/veri-yapilari-proje-4";
+          this.page.identifier = "post@/2009/01/veri-yapilari-proje-4";
+        };
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = 'https://ubenzer.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+        </script>
+      </body>
+    </html>
+  

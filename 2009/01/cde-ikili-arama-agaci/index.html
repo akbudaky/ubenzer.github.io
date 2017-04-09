@@ -1,0 +1,70 @@
+<!doctype html>
+    <html lang="tr">
+      <head>
+        <title>C&#x27;de İkili Arama Ağacı - UBenzer</title>
+        <meta content="utf-8" name="charset"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="#2196F3" name="theme-color"/>
+        <link href="/template/ui.css" media="screen" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i&amp;amp;subset=latin-ext" media="screen" rel="stylesheet" type="text/css"/><link href="/img/favicon/apple-touch-icon-57x57.png" rel="apple-touch-icon-precomposed" sizes="57x57"/><link href="/img/favicon/apple-touch-icon-60x60.png" rel="apple-touch-icon-precomposed" sizes="60x60"/><link href="/img/favicon/apple-touch-icon-72x72.png" rel="apple-touch-icon-precomposed" sizes="72x72"/><link href="/img/favicon/apple-touch-icon-76x76.png" rel="apple-touch-icon-precomposed" sizes="76x76"/><link href="/img/favicon/apple-touch-icon-114x114.png" rel="apple-touch-icon-precomposed" sizes="114x114"/><link href="/img/favicon/apple-touch-icon-120x120.png" rel="apple-touch-icon-precomposed" sizes="120x120"/><link href="/img/favicon/apple-touch-icon-152x152.png" rel="apple-touch-icon-precomposed" sizes="152x152"/><link href="/img/favicon/favicon-196x196.png" rel="icon" sizes="196x196"/><link href="/img/favicon/favicon-128x128.png" rel="icon" sizes="128x128"/><link href="/img/favicon/favicon-96x96.png" rel="icon" sizes="96x96"/><link href="/img/favicon/favicon-32x32.png" rel="icon" sizes="32x32"/><link href="/img/favicon/favicon-16x16.png" rel="icon" sizes="16x16"/>
+      </head>
+      <body>
+        <div><header class="header"><div class="app-bar"><h1 class="app-bar__title"><a class="app-bar__title-link" href="/">UBenzer</a></h1></div></header><div class="main-container"><div class="main-content"><article class="card main-container__items"><div class="card__contents blog-post"><div class="blog-post__date">4 Ocak 2009</div><h1><a class="blog-post__title" href="/2009/01/cde-ikili-arama-agaci">C&#x27;de İkili Arama Ağacı</a></h1><div class="markdown-content blog-post__body blog-post__content"><p><a href="/2009/01/cde-ikili-arama-agaci/binary-search-tree.jpg" target="_blank"><img src="/2009/01/cde-ikili-arama-agaci/binary-search-tree.jpg" title="binary-search-tree" alt="binary-search-tree"  width="170" height="170" srcset="/2009/01/cde-ikili-arama-agaci/binary-search-tree.jpg 170w"></a>{left}Bu yazıda ikili arama ağacının C dilinde nasıl kodlanabileceğine dair basit bir örnek göreceksiniz. Yazmış olduğum program ikili bir arama ağacı oluşturur. Daha sonra kullanıcıdan bir değer alarak, bu değer kadar rastgele sayı oluşturur ve bunları arama ağacına ekler. Ekleme tamamlandıktan sonra ağacı inorder (kök ortada) dolaşarak rastgele yaratıp ağaca eklediği tüm sayıları listeler.</p>
+<p>Kullanıcı daha sonra ağaçta bu sayıları arayabilir. Eğer sayı bulunursa ve bulunan sayı yaprak düğümdeyse <em>(leaf node)</em> girdi silinir. Eğer yaprak düğümde değilse sadece ekrana sayının bulunduğunu belirten bir yazı yazdırılır.</p>
+<p>Bu kod ağaç yapısının C’de nasıl modellenebileceğini gösteren basit bir koddur. İkili arama ağacı hakkında daha gelişmiş bir örnek arıyorsanız <a href="/2009/01/cde-ikili-arama-agaci/2008/12/veri-yapilari-proje-3" >şuradaki programın içinde</a> JAVA dilinde kodlanmış bir ikili arama ağacı geçmektedir. <em>(dengeleme işlemi yoktur)</em></p>
+<p>Ağaç nedir ne değildir, bunu öğrenmek için kutsal bilgi kaynağımız Wikipedia’ya <a href="http://en.wikipedia.org/wiki/Binary_search_tree" rel="noopener noreferrer" target="_blank">buradan gidebilirsiniz</a>.</p>
+<pre><code class="language-c"> #include &lt;stdio.h&gt; #include &lt;stdlib.h&gt;
+
+struct tree_el { int deger; char karakter; struct tree_el * sag, * sol; };
+
+typedef struct tree_el dugum;
+
+void beklet(); void ekle(dugum**,dugum*); void inorder(dugum*); void preorder(dugum*); void postorder(dugum*); int ara(int,dugum*,dugum*); void ikili_agac(); int main();
+
+void beklet() { /* Bu fonksiyonun tek amaci kullaniciyi bir tusa basana kadar bekletmek, ve sonra ekrani silmektir. */ printf(&quot;\nDevam etmek icin bir tusa basin.&quot;); getche(); system (&quot;cls&quot;); }
+
+void ekle(dugum **tree, dugum *item) { if(!(*tree)) { *tree = item; return; } if(item-&gt;deger&lt;(*tree)-&gt;deger) ekle(&amp;(*tree)-&gt;sol, item); else if(item-&gt;deger&gt;(*tree)-&gt;deger) ekle(&amp;(*tree)-&gt;sag, item); }
+
+void inorder(dugum *tree) { if(tree == NULL) { printf(&quot;Agac bos.&quot;); return; } if(tree-&gt;sol) inorder(tree-&gt;sol); printf(&quot;%d\n&quot;,tree-&gt;deger); if(tree-&gt;sag) inorder(tree-&gt;sag); }
+
+void preorder(dugum *tree) { if(tree == NULL) { printf(&quot;Agac bos.&quot;); return; } printf(&quot;%d\n&quot;,tree-&gt;deger); if(tree-&gt;sol) preorder(tree-&gt;sol); if(tree-&gt;sag) preorder(tree-&gt;sag); }
+
+void postorder(dugum *tree) { if(tree == NULL) { printf(&quot;Agac bos.&quot;); return; } if(tree-&gt;sol) postorder(tree-&gt;sol); if(tree-&gt;sag) postorder(tree-&gt;sag); printf(&quot;%d\n&quot;,tree-&gt;deger); }
+
+int ara(int aranacak, dugum *d, dugum *onceki) { if(d-&gt;deger == aranacak) { printf(&quot;Buldum.\n&quot;); if(d-&gt;sol == NULL &amp;&amp; d-&gt;sag == NULL) { if(onceki) { if (onceki-&gt;sol == d) { onceki-&gt;sol = NULL; } if (onceki-&gt;sag == d) { onceki-&gt;sag = NULL; } } else { printf(&quot;Kok dugumu de sildim, her sey bitti!\n&quot;); free(d); return -1; } free(d); printf(&quot;Bulunan deger yaprakta. Sildim.\n&quot;); } else { printf(&quot;Bulunan deger yaprakta degil.\n&quot;); } return 1; } else if (d-&gt;deger &gt; aranacak) { onceki = d; d = d-&gt;sol; } else { onceki = d; d = d-&gt;sag; }
+
+if (d == NULL) { printf(&quot;Bulamadim.\n&quot;); return; } else { ara(aranacak, d, onceki); }
+
+return 1; }
+
+void ikili_agac() { srand((unsigned) time(NULL));
+
+/* Agac icin gerekli tanimlamalar */ dugum *simdiki, *kok; int i, aranacak,durum = 1; int agactaki_eleman_sayisi;
+
+printf(&quot;Agaca kac tane rastgele sayi yerlesmesini isterseniz? &quot;); scanf(&quot;%d&quot;,&amp;agactaki_eleman_sayisi);
+
+kok = NULL; /* Boylece bos bir agac tanimlanir. */
+
+/* Agaca rastgele sayilar eklenir. */ for(i=1;i&lt;=agactaki_eleman_sayisi;i++) { simdiki = (dugum*)malloc(sizeof(dugum)); /* Bellekte dugume yer acilir. */ simdiki-&gt;sol = simdiki-&gt;sag = NULL; /* Dugumun yaprak olmasi saglanir. */ simdiki-&gt;deger = rand()%100; /* Dugume rastgele bir deger atanir. */ ekle(&amp;kok, simdiki); /* Dugum eklenir. */ }
+
+if (kok == NULL) { printf(&quot;Agaca eleman eklenmedi.&quot;); return; } /* Agac ekrana yazdirilir. (inorder gezilerek) */ while(durum == 1) { if (durum != 1) { printf(&quot;Agac bos&quot;); return; } inorder(kok);
+
+/* Aranacak bir deger ister. -1 ile programi sonlandirabilirsiniz. */ printf(&quot;Yukaridaki degerler rastgele yaratildi ve agactalar.\nCikis icin -1 yazabilirsiniz.\nAranacak bir deger giriniz: &quot;); scanf(&quot;%d&quot;,&amp;aranacak); if(aranacak == -1) { return; } system(&quot;cls&quot;);
+
+/* Elelani arar ve gerekli islemleri yapar. Eger agac bosalmisa -1 dondurur. */ durum = ara(aranacak, kok, NULL); } }
+
+int main() { ikili_agac(); beklet(); return 0; }
+</code></pre>
+</div></div></article><div class="card comments main-container__items"><div class="card__contents" id="disqus_thread"></div></div></div><div class="sidebar main-content__sidebar"><div class="about"><img class="about__image" src="/img/profile.jpg"/><h1 class="about__name">Umut Benzer</h1><h2 class="about__mini-bio">Software Engineer in Berlin</h2></div></div></div><div class="main-container"><div class="footer"><div class="footer__copyright-holder"><p><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license noopener noreferrer" target="_blank"><img alt="Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License" src="/img/cclicense.png"/></a></p><p><span>Bu sitedeki tüm yazı ve görseller </span><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license noopener noreferrer" target="_blank">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a><span> ile lisanslanmıştır.</span></p></div><div class="footer__generator"><span>Bu sayfa </span><span>9 Nisan 2017</span><span> tarihinde </span><a href="https://github.com/ubenzer/fil" target="_blank">Fil</a><span> ile yaratılmıştır.</span></div></div></div></div>
+        <script src="/template/app.js" type="text/javascript"></script><script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = "https://ubenzer.com/2009/01/cde-ikili-arama-agaci";
+          this.page.identifier = "post@/2009/01/cde-ikili-arama-agaci";
+        };
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = 'https://ubenzer.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+        </script>
+      </body>
+    </html>
+  

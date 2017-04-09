@@ -1,0 +1,174 @@
+<!doctype html>
+    <html lang="tr">
+      <head>
+        <title>Veri Yapıları: Proje 1 - UBenzer</title>
+        <meta content="utf-8" name="charset"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="#2196F3" name="theme-color"/>
+        <link href="/template/ui.css" media="screen" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i&amp;amp;subset=latin-ext" media="screen" rel="stylesheet" type="text/css"/><link href="/img/favicon/apple-touch-icon-57x57.png" rel="apple-touch-icon-precomposed" sizes="57x57"/><link href="/img/favicon/apple-touch-icon-60x60.png" rel="apple-touch-icon-precomposed" sizes="60x60"/><link href="/img/favicon/apple-touch-icon-72x72.png" rel="apple-touch-icon-precomposed" sizes="72x72"/><link href="/img/favicon/apple-touch-icon-76x76.png" rel="apple-touch-icon-precomposed" sizes="76x76"/><link href="/img/favicon/apple-touch-icon-114x114.png" rel="apple-touch-icon-precomposed" sizes="114x114"/><link href="/img/favicon/apple-touch-icon-120x120.png" rel="apple-touch-icon-precomposed" sizes="120x120"/><link href="/img/favicon/apple-touch-icon-152x152.png" rel="apple-touch-icon-precomposed" sizes="152x152"/><link href="/img/favicon/favicon-196x196.png" rel="icon" sizes="196x196"/><link href="/img/favicon/favicon-128x128.png" rel="icon" sizes="128x128"/><link href="/img/favicon/favicon-96x96.png" rel="icon" sizes="96x96"/><link href="/img/favicon/favicon-32x32.png" rel="icon" sizes="32x32"/><link href="/img/favicon/favicon-16x16.png" rel="icon" sizes="16x16"/>
+      </head>
+      <body>
+        <div><header class="header"><div class="app-bar"><h1 class="app-bar__title"><a class="app-bar__title-link" href="/">UBenzer</a></h1></div></header><div class="main-container"><div class="main-content"><article class="card main-container__items"><div class="card__contents blog-post"><div class="blog-post__date">19 Kasım 2008</div><h1><a class="blog-post__title" href="/2008/11/veri-yapilari-proje-1">Veri Yapıları: Proje 1</a></h1><div class="markdown-content blog-post__body blog-post__content"><p>Bu sene Veri Yapıları dersi alıyoruz. Veri yapılarının uygulamalarını JAVA’da yaptığımız için JAVA’ya ve nesneye yönelik programlamaya ısınmak zorundayız.</p>
+<p>Senenin birinci veri yapıları ödevi de tam olarak bunu amaçlanarak verilmiş bize.</p>
+<ul>
+<li><a href="/2008/11/veri-yapilari-proje-1/veri-yapilari-proje-1.pdf" >Ödev metni</a></li>
+<li><a href="/2008/11/veri-yapilari-proje-1/proje-1-java.7z" >Ödevin çözümü</a>_<br>
+(Eclipse projesi halinde, sıkıştırılmış biçimde)_</li>
+<li><a href="/2008/11/veri-yapilari-proje-1/proje-1.pdf" >Ödevin raporu</a>_<br>
+(İşleyişi hakkında bilgi sahibi olmanızı kolaylaştıracaktır.)_</li>
+</ul>
+<p>Veri yapıları ödevlerini dört kişilik bir ekip olarak yapmaktayız. Kaynak kodlarını örnek almak, fikir edinmek ve bilgi sahibi olma amaçlı kullanabilirsiniz. Eğer projenin kodlarını indirmeden incelemek isterseniz, yazının devamında kodları bulabilirsiniz. Elipse kurulumu hakkında yardıma ihtiyacınız varsa <a href="/2008/11/veri-yapilari-proje-1/2008/11/eclipse-ganymede-34-surumunde-gorsel-editor-kullanmak" >şu yazım</a> işinize yarayabilir.</p>
+<h2>Sınav Dağılımı</h2>
+<p><em>SinavDagilim.java</em> ```java
+import java.util.Scanner;</p>
+<p>/* class SinavDagilim * Authors: Özlem Gürses, Hüseyin Yaşar, Didem Kayalı * Beta Tester: Umut Benzer <em>/ public class SinavDagilim { /</em> function kacSinirKullanilacak * Author: Hüseyin Yaşar * * @param: Öğrenci sayısı ve sınıf kapasiteleri * @return: Öğrencilerin kaç sınıfa yerleştirileceği <em>/ private static int kacSinifKullanilacak(int ogrSayi, int sinifKapasite[]) { int kapasitelerToplami = 0; int kullanilacakSinifSayisi = 0; for (int i = 0; i &lt; 5; i++) { kapasitelerToplami+=sinifKapasite[i]; kullanilacakSinifSayisi++; if(kapasitelerToplami&gt;=ogrSayi) break; } return kullanilacakSinifSayisi; } /</em> function dagilimBul * Author: Hüseyin Yaşar * * @param: Sıralanmış sınıf kapasiteleri, öğrenci sayısı, boş sınıf mevcudu dizisi * @return: Sınıflara kaçar kişi koyulacağının bilgisi */ private static void dagilimBul(int sinifKapasite[], int ogrSayi, int sinifMevcut[]) { int kapasitelerToplami = 0; int a = kacSinifKullanilacak(ogrSayi, sinifKapasite); float[] sinifMevcutOndalikli = new float[a]; float kusuratlarToplami = 0; for (int i = 0; i &lt; a; i++) { kapasitelerToplami += sinifKapasite[i]; } for (int i = 0; i &lt; a; i++) { sinifMevcutOndalikli[i] = sinifKapasite[i] * ((float) ogrSayi / (float) kapasitelerToplami); sinifMevcut[i] = (int) sinifMevcutOndalikli[i]; kusuratlarToplami += sinifMevcutOndalikli[i] - sinifMevcut[i]; }</p>
+<p>if (kusuratlarToplami &gt; 0) { for (int i = 0; i &lt; a; i++) { sinifMevcut[i]++; kusuratlarToplami--; if (kusuratlarToplami &lt;= 0) break; /* küsüratların toplamı olan tamsayıyı soldan sağa * birer birer bitene kadar dağıtır * kusuratlar toplamı daima tamsayı gelmesi gereken bir * sayıdır, örneğin 0.2 ve 0.8 gibi artanlar olur, * bunların toplamı daima tamsayıdır, ama bazen bölümlerde * 0.19999999 ve 0.7999999999 gibi sayılar gelebilir, * bunların toplamları 0.999999 gibi sayılardır, dolayısıyla * 1 eksildiği zaman 0'ın altına düşer, bu yüzden if satırında * küçüktür ibaresi kullanılmıştır. <em>/ } } } /</em> function sirala * Author: Didem Kayalı * * @param: Sıralanacak integer dizisi * @return: Sıralanmış integer dizisi (büyükten küçüğe) * * Dizi referans olarak gönderileceğinden void döndürmesi * yeterlidir. Asıl değişiklikler asıl diziye yansıtılır. <em>/ private static void sirala(int sinifKapasite[]) { /</em> Standart Bubble Sort Algoritması <em>/ for (int i = 0; i &lt; sinifKapasite.length - 1; i++) { for (int j = i + 1; j &lt; sinifKapasite.length; j++) { if (sinifKapasite[j] &gt; sinifKapasite[i]) { int b = sinifKapasite[j]; sinifKapasite[j] = sinifKapasite[i]; sinifKapasite[i] = b; } } } } /</em> function dagit * Author: Özlem Gürses * * @param: Sıralanmış sınıf kapasiteleri, içerilerine yerleştirilecek öğrenci sayısı</p>
+<ul>
+<li>@return: Ekrana çıktı <em>/ private static void dagit(int sinifKapasite[], int sinifMevcut[]) { String ad[] = { &quot;umut&quot;, &quot;didem&quot;, &quot;özlem&quot;, &quot;hüseyin&quot;, &quot;hülya&quot;, &quot;banu&quot;, &quot;ajdar&quot;,&quot;ayşe&quot;,&quot;mehmet&quot;,&quot;hüsnü&quot;,&quot;canan&quot;,&quot;metin&quot;,&quot;okşan&quot; }; String soyad[] = { &quot;benzer&quot;, &quot;kayalı&quot;, &quot;gürses&quot;, &quot;yaşar&quot;, &quot;avşar&quot;, &quot;alkan&quot;, &quot;anık&quot;,&quot;sert&quot;,&quot;andıç&quot;,&quot;yılmaz&quot;,&quot;şahin&quot;,&quot;kurt&quot;,&quot;çelik&quot;, &quot;boya&quot;,&quot;hüyük&quot;,&quot;güler&quot;,&quot;sever&quot;,&quot;ceylan&quot;}; /</em> * &quot;&quot; sayısının fazla olması, daha az ek seçilmesini sağlamaya * yöneliktir. */ String ekleAd[] = { &quot;can&quot;, &quot;gül&quot;, &quot;nur&quot;, &quot;su&quot;, &quot;&quot;,&quot;&quot;,&quot;&quot; }; String ekleSoyad[] = { &quot;oğlu&quot;, &quot;gil&quot;, &quot;öz&quot;, &quot;&quot;,&quot;&quot;,&quot;&quot;,&quot;&quot; };</li>
+</ul>
+<p>for (int i = 0; i &lt;= sinifKapasite.length-1; i++) { /* UBenzer düzenleme */ if(sinifKapasite[i]==0) { System.out.print((i+1)+&quot;. sınıf boş sınıftır.\n&quot;); } else if(sinifMevcut[i]==0){ System.out.print(sinifKapasite[i]+&quot; kişilik sınıfa öğrenci yerleştirilmemiştir.\n&quot;); } else { float ort = (float) 100 * sinifMevcut[i] / sinifKapasite[i]; System.out.println(&quot;\n\n&quot; + sinifKapasite[i] + &quot; kişilik sınıfa &quot; + sinifMevcut[i] + &quot; kişi yerleştirildi.\nsınıfın doluluk oranı: &quot; + ort + &quot; %dır.&quot;); for (int k = 0; k &lt; sinifMevcut[i]; k++) { String yeniIsim = ad[(int) (Math.random() * ad.length)] .concat(ekleAd[(int) (Math.random() * ekleAd.length)]); String yeniSoyisim = soyad[(int) (Math.random() * soyad.length)] .concat(ekleSoyad[(int) (Math.random() * ekleSoyad.length)]); int yil = (int) (Math.random() * 8); System.out.print((k+1) + &quot;. 05-0&quot; + yil + &quot;-&quot; + (int) (Math.random() * 9) + (int) (Math.random() * 9) + (int) (Math.random() * 9) + (int) (Math.random() * 9) + &quot; &quot;+yeniIsim + &quot; &quot; + yeniSoyisim+&quot;\n&quot;); } } }</p>
+<p>} /* function main * Author: Hüseyin Yaşar <em>/ public static void main(String[] args) { int[] sinifKapasite = new int[5]; int[] sinifMevcut = new int[5]; int ogrSayi; int top; int kntrl = 0; Scanner str = new Scanner(System.in); do { top=0; if(kntrl==1) System.out.println(&quot;Hatalı giriş.&quot;); System.out.println(&quot;Yerlestirilecek ogrenci sayisini giriniz: &quot;); ogrSayi = str.nextInt(); if(ogrSayi &lt; 100 || ogrSayi &gt; 200){ kntrl = 1; continue; } for(int i=0; i&lt;sinifKapasite.length; i++){ System.out.println((i+1)+&quot;. sinifin kapasitesini giriniz: &quot;); sinifKapasite[i]=str.nextInt(); if(sinifKapasite[i]&lt;0) { kntrl = 1; break; } top+=sinifKapasite[i]; } if(top &lt; ogrSayi) { kntrl = 1; } else { kntrl = 0; } } while(kntrl==1); sirala(sinifKapasite); dagilimBul(sinifKapasite, ogrSayi, sinifMevcut); /</em> Hata ayıklama */ System.out.println(sinifMevcut[0] + &quot; &quot; + sinifMevcut[1] + &quot; &quot; + sinifMevcut[2] + &quot; &quot; + sinifMevcut[3] + &quot; &quot; + sinifMevcut[4] + &quot; &quot; ); dagit(sinifKapasite, sinifMevcut); } }</p>
+<pre><code>
+## IMKB Endeksi
+
+*IMKB.java* ```java
+ /* class IMKB * Authors: Umut Benzer, Özlem Gürses, Hüseyin Yaşar, Didem Kayalı * */
+
+public class IMKB { /* function main * Author: Umut Benzer */ public static void main(String[] args) {
+
+System.out.println(&quot;Çökmez Bilişim Sistemleri Gururla Sunar :)\n&quot; + &quot;Veri Yapıları Proje 1.2\n&quot; + &quot;IMKB Endeks 0.2\n\n&quot; + &quot;05-06-7657 Hüseyin YAŞAR\n&quot; + &quot;05-06-7669 Didem KAYALI\n&quot; + &quot;05-06-7670 Umut BENZER\n&quot; + &quot;05-07-8496 Özlem GÜRSES\n\n&quot;);
+
+int ay = 1; float toplamIMKBDeger = 0; int toplamIMKBSayi = 0; float gecenAyIMKBDeger = deger(0);
+
+int oncekiIMKBSeans = 0;
+
+/* En yüksek üç değerin ve seans numaralarının tutulacağı yapı. */ float IMKBEnYuksekDeger[] = { -1, -1, -1 }; int IMKBEnYuksekSeans[] = { -1, -1, -1 };
+
+/* En düşük üç değerin ve seans numaralarının tutulacağı yapı. */ float IMKBEnDusukDeger[] = { -1, -1, -1 }; int IMKBEnDusukSeans[] = { -1, -1, -1 };
+
+for (int sayac = 1; sayac &lt;= 730; sayac++) { /* * Bu yılın her seansı için işlem tekrarlanır. */
+
+if (deger(sayac) != -1) { /* Eğer tatil gününe denk gelmediysek */
+
+/* Her seans için değişim farkı bulunup ekrana yazdırılır */ System.out .println(((oncekiIMKBSeans == 0) ? &quot;Bir önceki yılın son günü &quot; : hangiAy(oncekiIMKBSeans) + &quot;. ayın &quot; + hangiGun(oncekiIMKBSeans) + &quot;. günü &quot;) + ((sayac % 2 == 0) ? &quot;1&quot; : &quot;2&quot;) + &quot;. seans ile &quot; + hangiAy(sayac) + &quot;.ayın &quot; + hangiGun(sayac) + &quot;. günü &quot; + ((sayac % 2 == 0) ? &quot;2&quot; : &quot;1&quot;) + &quot;. seansı arası değişim oranı: &quot; + degisimOrani(deger(oncekiIMKBSeans), deger(sayac)) + &quot;%&quot;);
+
+/* * Değişim oranlarını hesaplarken tatil günlerinde hata olmaması * için bir önceki seansın değeri bu değişkende tutulur. */ oncekiIMKBSeans = sayac;
+
+/* * O ayın seans verileri toplamIMKBDeger değişkenine eklenir. * Ayda kaç seans olduğu toplamIMKBSayi ile hatırlanır., */ toplamIMKBDeger += deger(sayac); toplamIMKBSayi++;
+
+/* * En düşük değer olup olmadığını araştır. IMKBEnDusuk[2] küçük * değerlerin en büyüğünü, IMKBEnDusuk[0] küçük değerlerin en * küçüğünü saklar. */ if ((deger(sayac) &lt;= IMKBEnDusukDeger[2]) || IMKBEnDusukDeger[2] == -1) { if ((deger(sayac) &lt;= IMKBEnDusukDeger[1]) || IMKBEnDusukDeger[1] == -1) { if ((deger(sayac) &lt;= IMKBEnDusukDeger[0]) || IMKBEnDusukDeger[0] == -1) { /* Şimdiye kadarki en küçük değeri bulduk! */ IMKBEnDusukDeger[2] = IMKBEnDusukDeger[1]; IMKBEnDusukSeans[2] = IMKBEnDusukSeans[1];
+
+IMKBEnDusukDeger[1] = IMKBEnDusukDeger[0]; IMKBEnDusukSeans[1] = IMKBEnDusukSeans[0];
+
+IMKBEnDusukDeger[0] = deger(sayac); IMKBEnDusukSeans[0] = sayac; } else { /* Şimdiye kadarki en küçük ikinci değeri bulduk! */ IMKBEnDusukDeger[2] = IMKBEnDusukDeger[1]; IMKBEnDusukSeans[2] = IMKBEnDusukSeans[1];
+
+IMKBEnDusukDeger[1] = deger(sayac); IMKBEnDusukSeans[1] = sayac; } } else { /* Şimdiye kadarki en küçük üçüncü değeri bulduk! */ IMKBEnDusukDeger[2] = deger(sayac); IMKBEnDusukSeans[2] = sayac; } }
+
+/* * En yüksek değer olup olmadığını araştır. IMKBEnYuksek[2] * büyük değerlerin en küçüğünü, IMKBEnYuksek[0] büyük * değerlerin en büyüğünü saklar. */ if ((deger(sayac) &gt;= IMKBEnYuksekDeger[2]) || IMKBEnYuksekDeger[2] == -1) { if ((deger(sayac) &gt;= IMKBEnYuksekDeger[1]) || IMKBEnYuksekDeger[1] == -1) { if ((deger(sayac) &gt;= IMKBEnYuksekDeger[0]) || IMKBEnYuksekDeger[0] == -1) { /* Şimdiye kadarki en büyük değeri bulduk! */ IMKBEnYuksekDeger[2] = IMKBEnYuksekDeger[1]; IMKBEnYuksekSeans[2] = IMKBEnYuksekSeans[1];
+
+IMKBEnYuksekDeger[1] = IMKBEnYuksekDeger[0]; IMKBEnYuksekSeans[1] = IMKBEnYuksekSeans[0];
+
+IMKBEnYuksekDeger[0] = deger(sayac); IMKBEnYuksekSeans[0] = sayac; } else { /* Şimdiye kadarki en küçük ikinci değeri bulduk! */ IMKBEnYuksekDeger[2] = IMKBEnYuksekDeger[1]; IMKBEnYuksekSeans[2] = IMKBEnYuksekSeans[1];
+
+IMKBEnYuksekDeger[1] = deger(sayac); IMKBEnYuksekSeans[1] = sayac; } } else { /* Şimdiye kadarki en küçük üçüncü değeri bulduk! */ IMKBEnYuksekDeger[2] = deger(sayac); IMKBEnYuksekSeans[2] = sayac; } }
+
+/* Ayın son seansına gelmişsek */ if (hangiAy(sayac + 1) != ay) { System.out.println(&quot;\n&quot; + ay + &quot;.ay için endeks ortalaması: &quot; + (toplamIMKBDeger / toplamIMKBSayi)); System.out.println(((ay == 1) ? &quot;Geçen yılın son ayı&quot; : (ay - 1) + &quot;. ay&quot;) + &quot; ile &quot; + ay + &quot;. ay arasındaki değişim oranı: &quot; + degisimOrani(gecenAyIMKBDeger, deger(sayac)) + &quot;%\n&quot;); gecenAyIMKBDeger = deger(sayac); toplamIMKBDeger = 0; toplamIMKBSayi = 0; ay++; } } }
+
+System.out.println(&quot;\n\nEndeksin en düşük olduğu üç gün:&quot;);
+
+for (int sayac = 0; sayac &lt; 3; sayac++) { System.out.println(hangiAy(IMKBEnDusukSeans[sayac]) + &quot;. ayın &quot; + hangiGun(IMKBEnDusukSeans[sayac]) + &quot;. gününün &quot; + ((IMKBEnDusukSeans[sayac] % 2 == 0) ? &quot;2&quot; : &quot;1&quot;) + &quot;. seansı. (Puan: &quot; + IMKBEnDusukDeger[sayac] + &quot;)&quot;); }
+
+System.out.println(&quot;\n\nEndeksin en yüksek olduğu üç gün:&quot;);
+
+for (int sayac = 0; sayac &lt; 3; sayac++) { System.out.println(hangiAy(IMKBEnYuksekSeans[sayac]) + &quot;. ayın &quot; + hangiGun(IMKBEnYuksekSeans[sayac]) + &quot;. gününün &quot; + ((IMKBEnYuksekSeans[sayac] % 2 == 0) ? &quot;2&quot; : &quot;1&quot;) + &quot;. seansı. (Puan: &quot; + IMKBEnYuksekDeger[sayac] + &quot;)&quot;); }
+
+}
+
+/* function hangiGun * Author: Didem Kayalı * * @param: Seans numarası * @return: Ayın bir günü (1-31) Seansın ayın hangi * gününe ait olduğunu döndürür. */ private static int hangiGun(int seansno) { int kalan = seansno % 2;
+
+if ((seansno &gt;= 1) &amp;&amp; (seansno &lt;= 62)) { if (kalan == 1) return ((seansno / 2) + 1); else return (seansno / 2); } else if ((seansno &gt;= 63) &amp;&amp; (seansno &lt;= 118)) { if (kalan == 1) return (((seansno - 62) / 2) + 1); else return ((seansno - 62) / 2);
+
+} else if ((seansno &gt;= 119) &amp;&amp; (seansno &lt;= 180)) { if (kalan == 1) return (((seansno - 118) / 2) + 1); else return ((seansno - 118) / 2); } else if ((seansno &gt;= 181) &amp;&amp; (seansno &lt;= 240)) { if (kalan == 1) return (((seansno - 180) / 2) + 1); else return ((seansno - 180) / 2); } else if ((seansno &gt;= 241) &amp;&amp; (seansno &lt;= 302)) { if (kalan == 1) return (((seansno - 240) / 2) + 1); else return ((seansno - 240) / 2); } else if ((seansno &gt;= 303) &amp;&amp; (seansno &lt;= 362)) { if (kalan == 1) return (((seansno - 302) / 2) + 1); else return ((seansno - 302) / 2); } else if ((seansno &gt;= 363) &amp;&amp; (seansno &lt;= 424)) { if (kalan == 1) return (((seansno - 362) / 2) + 1); else return ((seansno - 362) / 2); } else if ((seansno &gt;= 425) &amp;&amp; (seansno &lt;= 486)) { if (kalan == 1) return (((seansno - 424) / 2) + 1); else return ((seansno - 424) / 2); } else if ((seansno &gt;= 487) &amp;&amp; (seansno &lt;= 546)) { if (kalan == 1) return (((seansno - 486) / 2) + 1); else return ((seansno - 486) / 2); } else if ((seansno &gt;= 547) &amp;&amp; (seansno &lt;= 608)) { if (kalan == 1) return (((seansno - 546) / 2) + 1); else return ((seansno - 546) / 2); } else if ((seansno &gt;= 609) &amp;&amp; (seansno &lt;= 668)) { if (kalan == 1) return (((seansno - 608) / 2) + 1); else return ((seansno - 608) / 2); } else if ((seansno &gt;= 669) &amp;&amp; (seansno &lt;= 730)) { if (kalan == 1) return (((seansno - 668) / 2) + 1); else return ((seansno - 668) / 2); } else return -1; }
+
+/* function hangiAy * Author: Didem Kayalı * * @param: Seans numarası * @return: Yılın bir ayı (1-12) Seansın ayın hangi * aya ait olduğunu döndürür. */ private static int hangiAy(int seansno) { /* Didem */ /* Eğer 730'dan fazlaysa -1 döndürmeli */ if ((seansno &gt;= 1) &amp;&amp; (seansno &lt;= 62)) return 1;
+
+else if ((seansno &gt;= 63) &amp;&amp; (seansno &lt;= 118))
+
+return 2;
+
+else if ((seansno &gt;= 119) &amp;&amp; (seansno &lt;= 180))
+
+return 3;
+
+else if ((seansno &gt;= 181) &amp;&amp; (seansno &lt;= 240))
+
+return 4;
+
+else if ((seansno &gt;= 241) &amp;&amp; (seansno &lt;= 302))
+
+return 5;
+
+else if ((seansno &gt;= 303) &amp;&amp; (seansno &lt;= 362))
+
+return 6;
+
+else if ((seansno &gt;= 363) &amp;&amp; (seansno &lt;= 424))
+
+return 7;
+
+else if ((seansno &gt;= 425) &amp;&amp; (seansno &lt;= 486))
+
+return 8;
+
+else if ((seansno &gt;= 487) &amp;&amp; (seansno &lt;= 546))
+
+return 9;
+
+else if ((seansno &gt;= 547) &amp;&amp; (seansno &lt;= 608))
+
+return 10;
+
+else if ((seansno &gt;= 609) &amp;&amp; (seansno &lt;= 668))
+
+return 11;
+
+else if ((seansno &gt;= 669) &amp;&amp; (seansno &lt;= 730))
+
+return 12;
+
+else
+
+return -1; }
+
+/* function degisimOrani * Author: Didem Kayalı * * @param: İlk seansın değeri * @param: İkinci seansın değeri * @return: Seanslar arası değişim oranı * * Seanslar arasındaki değişim oranını % * cinsinden döndürür. */ private static float degisimOrani(float ilkyuzde, float sonyuzde) { return (100 * (sonyuzde - ilkyuzde)) / ilkyuzde; }
+
+/* function tatilMi * Author: Özlem Gürses * * @param: Seans numarası * @return: Seansın olması gerektiği günün tatil olup * olmadığı */ private static boolean tatilMi(int no) { int yil[] = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }; int ay = hangiAy(no); int gun = 0; for (int i = 0; i &lt; ay; i++) { gun += yil[i]; } gun += hangiGun(no);
+
+/* * JOptionPane.showMessageDialog(null, &quot;Gün: &quot; + gun + &quot;\n&quot; + &quot;No&quot; + no + * &quot;\nAy =&quot; + ay + &quot;\nhangigun(no) &quot; + hangiGun(no), * &quot;tatilMi&quot;,JOptionPane.PLAIN_MESSAGE); */
+
+if (gun % 7 == 0 || gun % 7 == 6) return true; else return false;
+
+}
+
+/* function deger * Author: Hüseyin Yaşar * * @param: Seans numarası * @return: Eğer seans tatil gününe denk gelmiyorsa * rastgele bir seans değeri üretir. Tatil günleri için -1 döndürür. */ private static float deger(int seansno) { if (tatilMi(seansno)) return -1;
+
+float IMKBdegeri; IMKBdegeri = 30000 + 20000 * randomFonksiyon(seansno); return IMKBdegeri; }
+
+private static float randomFonksiyon(int x) { float y; y = (float) Math.sin(x) + (float) Math.sin(x / 2) + 2 + parcaliFonksiyon(x); // Math.sin(double x) metodu double döndürdüğü için her kullanımından // önce floata çevrilir. y /= 4; return y; }
+
+private static float parcaliFonksiyon(int a) { float x, y; x = a; if (0 &lt;= x &amp;&amp; x &lt; 70) y = 0; else if (70 &lt;= x &amp;&amp; x &lt; 315) y = -x / 180 + 1; else if (315 &lt;= x &amp;&amp; x &lt; 450) y = 1; else if (450 &lt;= x &amp;&amp; x &lt; 720) y = x / 360 + 2; else if (720 &lt;= x) y = 0; else { System.out.println(&quot;Random hatası&quot;); return -1; } return y; } }
+</code></pre>
+</div></div></article><div class="card comments main-container__items"><div class="card__contents" id="disqus_thread"></div></div></div><div class="sidebar main-content__sidebar"><div class="about"><img class="about__image" src="/img/profile.jpg"/><h1 class="about__name">Umut Benzer</h1><h2 class="about__mini-bio">Software Engineer in Berlin</h2></div></div></div><div class="main-container"><div class="footer"><div class="footer__copyright-holder"><p><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license noopener noreferrer" target="_blank"><img alt="Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License" src="/img/cclicense.png"/></a></p><p><span>Bu sitedeki tüm yazı ve görseller </span><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license noopener noreferrer" target="_blank">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a><span> ile lisanslanmıştır.</span></p></div><div class="footer__generator"><span>Bu sayfa </span><span>9 Nisan 2017</span><span> tarihinde </span><a href="https://github.com/ubenzer/fil" target="_blank">Fil</a><span> ile yaratılmıştır.</span></div></div></div></div>
+        <script src="/template/app.js" type="text/javascript"></script><script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = "https://ubenzer.com/2008/11/veri-yapilari-proje-1";
+          this.page.identifier = "post@/2008/11/veri-yapilari-proje-1";
+        };
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = 'https://ubenzer.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+        </script>
+      </body>
+    </html>
+  

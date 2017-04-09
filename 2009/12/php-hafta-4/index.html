@@ -1,0 +1,74 @@
+<!doctype html>
+    <html lang="tr">
+      <head>
+        <title>PHP: Hafta 4 - UBenzer</title>
+        <meta content="utf-8" name="charset"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="#2196F3" name="theme-color"/>
+        <link href="/template/ui.css" media="screen" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i&amp;amp;subset=latin-ext" media="screen" rel="stylesheet" type="text/css"/><link href="/img/favicon/apple-touch-icon-57x57.png" rel="apple-touch-icon-precomposed" sizes="57x57"/><link href="/img/favicon/apple-touch-icon-60x60.png" rel="apple-touch-icon-precomposed" sizes="60x60"/><link href="/img/favicon/apple-touch-icon-72x72.png" rel="apple-touch-icon-precomposed" sizes="72x72"/><link href="/img/favicon/apple-touch-icon-76x76.png" rel="apple-touch-icon-precomposed" sizes="76x76"/><link href="/img/favicon/apple-touch-icon-114x114.png" rel="apple-touch-icon-precomposed" sizes="114x114"/><link href="/img/favicon/apple-touch-icon-120x120.png" rel="apple-touch-icon-precomposed" sizes="120x120"/><link href="/img/favicon/apple-touch-icon-152x152.png" rel="apple-touch-icon-precomposed" sizes="152x152"/><link href="/img/favicon/favicon-196x196.png" rel="icon" sizes="196x196"/><link href="/img/favicon/favicon-128x128.png" rel="icon" sizes="128x128"/><link href="/img/favicon/favicon-96x96.png" rel="icon" sizes="96x96"/><link href="/img/favicon/favicon-32x32.png" rel="icon" sizes="32x32"/><link href="/img/favicon/favicon-16x16.png" rel="icon" sizes="16x16"/>
+      </head>
+      <body>
+        <div><header class="header"><div class="app-bar"><h1 class="app-bar__title"><a class="app-bar__title-link" href="/">UBenzer</a></h1></div></header><div class="main-container"><div class="main-content"><article class="card main-container__items"><div class="card__contents blog-post"><div class="blog-post__date">9 Aralık 2009</div><h1><a class="blog-post__title" href="/2009/12/php-hafta-4">PHP: Hafta 4</a></h1><div class="markdown-content blog-post__body blog-post__content"><p><a href="/2009/12/php-hafta-4/php-logo.jpg" target="_blank"><img src="/2009/12/php-hafta-4/php-logo.jpg" title="php-logo" alt="php-logo"  width="95" height="60" srcset="/2009/12/php-hafta-4/php-logo.jpg 95w"></a>{right}PHP kursunun 4. haftasında Sessions konusuna yoğunlaştık. $_SESSIONS, en kaba anlatımla PHP’nin iki çalışması arasında bilgi tutmaya yarayan PHP’nin kendi içerisine gömülü bir çeşit mekanizmadır.</p>
+<p>Bu mekanizmanın nasıl kullanıldığı, mekanizmaya neden ihtiyaç kullanıldığı ve arka planda neler döndüğü konusunda durduk bu hafta. Yetmedi, bu mekanizma üzerinden çıkabilecek güvenlik açıklarını uygulamalarıyla birlikte gördük, önlemimizi aldık.</p>
+<p>Bu haftanın slaytına ve kod örneklerine bu yazının sonundan ulaşabilirsiniz. Gelecek hafta PHP’de veri tabanı kullanımı ile derse devam edeceğiz.</p>
+<h2>Dönem Sonu Projesi</h2>
+<p>Daha önce duyurusunu yapmış olduğum bitirme projesini de bu yazıya koyuyorum. Açıklamaları içinde mevcut. Daha fazla ayrıntı istemeniz halinde derste konuşuruz.</p>
+<p>Herkese iyi günler.</p>
+<h2>Dosyalar</h2>
+<ul>
+<li><a href="/2009/12/php-hafta-4/php-sessions.pdf" >Günün Sunumu</a>
+<a href="/2009/12/php-hafta-4/php-sessions.pdf" ></a></li>
+<li><a href="/2009/12/php-hafta-4/php-sessions.pdf" ></a><a href="/2009/12/php-hafta-4/php-sessions-ornek-kod.zip" >Örnek Kaynak Kodları</a></li>
+<li><a href="/2009/12/php-hafta-4/php-donem-sonu.pdf" >Dönem Sonu Projesi</a></li>
+</ul>
+<h2>Kodlar</h2>
+<p>Örnek kaynak kodlarını doğrudan web sitesinden incelemek isteyenler yazının devamına bakabilirler.</p>
+<h3>example-sessions.php</h3>
+<pre><code class="language-php"> &lt;?php session_start(); if(isset($_SESSION['views'])) { $_SESSION['views'] = $_SESSION['views']+ 1; } else { $_SESSION['views'] = 1; } echo &quot;views = &quot;. $_SESSION['views']; ?&gt;
+</code></pre>
+<h3>example-sessions-security.php</h3>
+<pre><code class="language-php"> &lt;?php /* ÖNEMLİ: Bu program parçası güvenlik açığı içerir, sadece eğitim amaçlı kullanılmalıdır! */ ini_set (&quot;session.use_only_cookies&quot;, &quot;0&quot;); session_start(); if(isset($_SESSION['views'])) { $_SESSION['views'] = $_SESSION['views']+ 1; } else { $_SESSION['views'] = 1; } echo &quot;views = &quot;. $_SESSION['views']; ?&gt;
+</code></pre>
+<h3>example-sessions-starting.php</h3>
+<pre><code class="language-php"> &lt;?php ob_start();
+
+$_SESSION[&quot;deneme&quot;] = 'session_start kullanmadan önce bir değer atamak istiyorum. Ama bu nereye kaydolacak?';
+
+/* Session ID ile id ataması session_starttan önce yapılmalıdır. Eğer böyle bir atama yapılmazsa (ki ne gerek var?) PHP rastgele bir değer atacaktır. */ echo &quot;&amp;lt;br /&amp;gt;Session ID: &quot;. session_id(); /* Bu satır henüz session başlamadığı için bir veri döndürmez. */
+
+echo &quot;&lt;br /&gt;Session Name:&quot;. session_name(&quot;SEMSIPASAPASAJI&quot;); /* Bu satır ile varsayılan PHPSESSID değerini değiştirmek mümkündür. Bu değişiklik session_starttan önce yapılmalıdır. */
+
+echo &quot;&lt;br /&gt;&quot;; echo &quot;&lt;br /&gt; Session Başladı&quot;;
+
+session_start(); /* Kullanıcı için bir kimlik numarası belirlenir. (eğer session_id ile belirlenmişse, bu değer kullanılır.) Bu kimlik numarası kullanıcıya gönderilmek üzere cookielere eklenir. Sessionların sunucu üzerinde tutalacağı klasörde session bilgilerini tutacak bir dosya oluşturularak $_SESSIONS süper değişkeni ilklenir. */
+
+/* Bu noktadan sonra aşağıdaki iki fonksiyon ile sadece değer öğrenilir. Değişiklik yapılamaz. */ echo &quot;&lt;br /&gt;Session ID:&quot;. session_id(); echo &quot;&lt;br /&gt;Session Name:&quot;. session_name();
+
+echo &quot;&lt;br /&gt;&quot;; echo &quot;&lt;br /&gt;&quot;;
+
+if(isset($_SESSION['views'])) { $_SESSION['views'] = $_SESSION['views']+ 1; } else { $_SESSION['views'] = 1; } echo &quot;views = &quot;. $_SESSION['views'];
+
+echo '$_SESSION[&quot;deneme&quot;]:' . $_SESSION[&quot;deneme&quot;];
+
+echo &quot;Vardump: &quot; . var_dump($_SESSION);
+
+echo &quot;Vardump: &quot; . var_dump($_SERVER);
+
+/* session_unset(); // Deneyin. echo &quot;&lt;br /&gt;views = &quot;. $_SESSION['views']; */
+
+ob_end_flush(); ?&gt;
+</code></pre>
+</div></div></article><div class="card comments main-container__items"><div class="card__contents" id="disqus_thread"></div></div></div><div class="sidebar main-content__sidebar"><div class="about"><img class="about__image" src="/img/profile.jpg"/><h1 class="about__name">Umut Benzer</h1><h2 class="about__mini-bio">Software Engineer in Berlin</h2></div></div></div><div class="main-container"><div class="footer"><div class="footer__copyright-holder"><p><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license noopener noreferrer" target="_blank"><img alt="Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License" src="/img/cclicense.png"/></a></p><p><span>Bu sitedeki tüm yazı ve görseller </span><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license noopener noreferrer" target="_blank">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a><span> ile lisanslanmıştır.</span></p></div><div class="footer__generator"><span>Bu sayfa </span><span>9 Nisan 2017</span><span> tarihinde </span><a href="https://github.com/ubenzer/fil" target="_blank">Fil</a><span> ile yaratılmıştır.</span></div></div></div></div>
+        <script src="/template/app.js" type="text/javascript"></script><script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = "https://ubenzer.com/2009/12/php-hafta-4";
+          this.page.identifier = "post@/2009/12/php-hafta-4";
+        };
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = 'https://ubenzer.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+        </script>
+      </body>
+    </html>
+  

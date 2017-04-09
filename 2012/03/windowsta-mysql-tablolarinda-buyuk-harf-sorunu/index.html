@@ -1,0 +1,38 @@
+<!doctype html>
+    <html lang="tr">
+      <head>
+        <title>Windows’ta MySQL tablolarında büyük harf sorunu - UBenzer</title>
+        <meta content="utf-8" name="charset"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="#2196F3" name="theme-color"/>
+        <link href="/template/ui.css" media="screen" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i&amp;amp;subset=latin-ext" media="screen" rel="stylesheet" type="text/css"/><link href="/img/favicon/apple-touch-icon-57x57.png" rel="apple-touch-icon-precomposed" sizes="57x57"/><link href="/img/favicon/apple-touch-icon-60x60.png" rel="apple-touch-icon-precomposed" sizes="60x60"/><link href="/img/favicon/apple-touch-icon-72x72.png" rel="apple-touch-icon-precomposed" sizes="72x72"/><link href="/img/favicon/apple-touch-icon-76x76.png" rel="apple-touch-icon-precomposed" sizes="76x76"/><link href="/img/favicon/apple-touch-icon-114x114.png" rel="apple-touch-icon-precomposed" sizes="114x114"/><link href="/img/favicon/apple-touch-icon-120x120.png" rel="apple-touch-icon-precomposed" sizes="120x120"/><link href="/img/favicon/apple-touch-icon-152x152.png" rel="apple-touch-icon-precomposed" sizes="152x152"/><link href="/img/favicon/favicon-196x196.png" rel="icon" sizes="196x196"/><link href="/img/favicon/favicon-128x128.png" rel="icon" sizes="128x128"/><link href="/img/favicon/favicon-96x96.png" rel="icon" sizes="96x96"/><link href="/img/favicon/favicon-32x32.png" rel="icon" sizes="32x32"/><link href="/img/favicon/favicon-16x16.png" rel="icon" sizes="16x16"/>
+      </head>
+      <body>
+        <div><header class="header"><div class="app-bar"><h1 class="app-bar__title"><a class="app-bar__title-link" href="/">UBenzer</a></h1></div></header><div class="main-container"><div class="main-content"><article class="card main-container__items"><div class="card__contents blog-post"><div class="blog-post__date">18 Mart 2012</div><h1><a class="blog-post__title" href="/2012/03/windowsta-mysql-tablolarinda-buyuk-harf-sorunu">Windows’ta MySQL tablolarında büyük harf sorunu</a></h1><div class="markdown-content blog-post__body blog-post__content"><p><a href="/2012/03/windowsta-mysql-tablolarinda-buyuk-harf-sorunu/logo-mysql.jpg" target="_blank"><img src="/2012/03/windowsta-mysql-tablolarinda-buyuk-harf-sorunu/logo-mysql.jpg" title="logo-mysql" alt="logo-mysql"  width="150" height="110" srcset="/2012/03/windowsta-mysql-tablolarinda-buyuk-harf-sorunu/logo-mysql.jpg 150w"></a>{right}Windows ortamında çalışan  MySQL’in tablolarında büyük küçük harf ayrımı yoktur. Başka bir deyişle, “<code>SiparisBilgileri</code>” tablosu ile “<code>siparisbilgileri</code>” tablosu aynı anlama gelir. İkisi de çalışır.</p>
+<p>Bu iyi bir şey gibi gözükebilir. Öyledir de belki. Ancak bazı senaryolarda ciddi baş ağırları yaratabilir.</p>
+<h2>Sıkıntılı senaryo 1…</h2>
+<p>Bir uygulamanız var. Linux üzerinde çalışıyor. Veritabanı da yine Linux bir makinede. Siz ise Windows ortamında çalışan bir uygulama geliştiricisisiniz. Çalışırken, veritabanındaki bazı tabloların içini doldurdunuz. Bunları Linux makinesine göndermeniz lazım. <code>PhpMyAdmin</code>’i açıp hemen bir <em>sql dump</em> alıyorsunuz. Linux makinesine gönderiyorsunuz. Çat! Bulunmayan tablo hatası! “<code>siparisbilgileri</code>” diye bir tablo yokmuş. Ama sizde vardı? Şey… Aslında sizin için aynı olan “<code>siparisbilgileri</code>” ve “<code>SiparisBilgileri</code>” tablosu Linux için aynı değil. Şimdi sql dump’ını <code>Notepad++</code> ile açıp, tüm “<code>siparisbilgileri</code>”ni elle değiştirmeniz gerekecek.</p>
+<h2>Sıkıntılı senaryo 2…</h2>
+<p>Bir veritabanınız var. Yükü “<a href="http://www.howtoforge.com/mysql_master_master_replication" rel="noopener noreferrer" target="_blank">master/slave</a>” şeklinde birkaç makineye dağıtıyorsunuz. Ancak veritabanlarında senkronizasyon problemleri çıkmaya başlıyor. Neden? Çünkü tablo isimleri aynı değil.</p>
+<h2>Çözüm</h2>
+<p>Bunu çözmenin çok basit bir yolu var: <em>Windows’ta da MySQL’i de büyük-küçük harfe duyarlı hale getirmek.</em> Bunun için tek yapmamız gereken MySQL’in yapılandırma dosyasını açmak ve aşağıdaki satırı eklemek/düzenlemek:</p>
+<p><code>lower_case_table_names=0</code></p>
+<p>Sonuçta şuna benzer bir şey olacak:</p>
+<p><a href="/2012/03/windowsta-mysql-tablolarinda-buyuk-harf-sorunu/my.ini-upper-case.png" target="_blank"><img src="/2012/03/windowsta-mysql-tablolarinda-buyuk-harf-sorunu/my.ini-upper-case.scaled-png-200.png" title="my.ini-upper-case" alt="my.ini-upper-case"  width="687" height="451" srcset="/2012/03/windowsta-mysql-tablolarinda-buyuk-harf-sorunu/my.ini-upper-case.scaled-png-200.png 200w, /2012/03/windowsta-mysql-tablolarinda-buyuk-harf-sorunu/my.ini-upper-case.scaled-png-500.png 500w, /2012/03/windowsta-mysql-tablolarinda-buyuk-harf-sorunu/my.ini-upper-case.png 687w"></a></p>
+<p>Bu ayarı yaptıktan sonra MySQL’i yeniden başlatmamız gerektiğini söylememe gerek yok sanırım.</p>
+<h2>Detaylar</h2>
+<p><code>lower_case_table_names</code> toplamda üç farklı değer alabiliyor. Bunların detaylarına <a href="http://dev.mysql.com/doc/refman/5.0/en/identifier-case-sensitivity.html" rel="noopener noreferrer" target="_blank">buraya tıklayarak</a> MySQL’in kendi sitesinden ulaşabilirsiniz.</p>
+</div></div></article><div class="card comments main-container__items"><div class="card__contents" id="disqus_thread"></div></div></div><div class="sidebar main-content__sidebar"><div class="about"><img class="about__image" src="/img/profile.jpg"/><h1 class="about__name">Umut Benzer</h1><h2 class="about__mini-bio">Software Engineer in Berlin</h2></div></div></div><div class="main-container"><div class="footer"><div class="footer__copyright-holder"><p><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license noopener noreferrer" target="_blank"><img alt="Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License" src="/img/cclicense.png"/></a></p><p><span>Bu sitedeki tüm yazı ve görseller </span><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license noopener noreferrer" target="_blank">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a><span> ile lisanslanmıştır.</span></p></div><div class="footer__generator"><span>Bu sayfa </span><span>9 Nisan 2017</span><span> tarihinde </span><a href="https://github.com/ubenzer/fil" target="_blank">Fil</a><span> ile yaratılmıştır.</span></div></div></div></div>
+        <script src="/template/app.js" type="text/javascript"></script><script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = "https://ubenzer.com/2012/03/windowsta-mysql-tablolarinda-buyuk-harf-sorunu";
+          this.page.identifier = "post@/2012/03/windowsta-mysql-tablolarinda-buyuk-harf-sorunu";
+        };
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = 'https://ubenzer.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+        </script>
+      </body>
+    </html>
+  

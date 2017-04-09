@@ -1,0 +1,293 @@
+<!doctype html>
+    <html lang="tr">
+      <head>
+        <title>Proje: C++ ve Nesneye Dayalı Programlama - UBenzer</title>
+        <meta content="utf-8" name="charset"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="#2196F3" name="theme-color"/>
+        <link href="/template/ui.css" media="screen" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i&amp;amp;subset=latin-ext" media="screen" rel="stylesheet" type="text/css"/><link href="/img/favicon/apple-touch-icon-57x57.png" rel="apple-touch-icon-precomposed" sizes="57x57"/><link href="/img/favicon/apple-touch-icon-60x60.png" rel="apple-touch-icon-precomposed" sizes="60x60"/><link href="/img/favicon/apple-touch-icon-72x72.png" rel="apple-touch-icon-precomposed" sizes="72x72"/><link href="/img/favicon/apple-touch-icon-76x76.png" rel="apple-touch-icon-precomposed" sizes="76x76"/><link href="/img/favicon/apple-touch-icon-114x114.png" rel="apple-touch-icon-precomposed" sizes="114x114"/><link href="/img/favicon/apple-touch-icon-120x120.png" rel="apple-touch-icon-precomposed" sizes="120x120"/><link href="/img/favicon/apple-touch-icon-152x152.png" rel="apple-touch-icon-precomposed" sizes="152x152"/><link href="/img/favicon/favicon-196x196.png" rel="icon" sizes="196x196"/><link href="/img/favicon/favicon-128x128.png" rel="icon" sizes="128x128"/><link href="/img/favicon/favicon-96x96.png" rel="icon" sizes="96x96"/><link href="/img/favicon/favicon-32x32.png" rel="icon" sizes="32x32"/><link href="/img/favicon/favicon-16x16.png" rel="icon" sizes="16x16"/>
+      </head>
+      <body>
+        <div><header class="header"><div class="app-bar"><h1 class="app-bar__title"><a class="app-bar__title-link" href="/">UBenzer</a></h1></div></header><div class="main-container"><div class="main-content"><article class="card main-container__items"><div class="card__contents blog-post"><div class="blog-post__date">23 Mayıs 2008</div><h1><a class="blog-post__title" href="/2008/05/proje-c-ve-nesneye-dayali-programlama">Proje: C++ ve Nesneye Dayalı Programlama</a></h1><div class="markdown-content blog-post__body blog-post__content"><p><a href="/2008/05/proje-c-ve-nesneye-dayali-programlama/proje3.jpg" target="_blank"><img src="/2008/05/proje-c-ve-nesneye-dayali-programlama/proje3.jpg" title="proje3" alt="proje3"  width="247" height="300" srcset="/2008/05/proje-c-ve-nesneye-dayali-programlama/proje3.scaled-jpg-200.jpg 200w, /2008/05/proje-c-ve-nesneye-dayali-programlama/proje3.jpg 247w"></a>{right}…ve bitti. Senenin son projesinin kontrolünü yaptık bugün. Birazcık maceralı bir başlangıçtan sonra <em>(ödev dosyamın içine .exe de koyup sonra onu bir güzel unutunca, üniversitemizin firewall’ı mailimi bir güzel bloklamış.)</em> projemi kontrol ettirdim. Sözlü kısmında kaynak kod kısmından bir şeyler soracaklar sanıyordum ama C++’a yönelik iki soru cevapladım. Her neyse, programda hata çıkmadı. Puanlar açıklanmasa da <em>100</em> aldığımı düşünmekteyim.</p>
+<p>Sanırım, bu sene son defa bir proje paylaşıyorum burada. <em>(bir anda duygulandım, cidden.)</em> Koskoca sene bitti. İnanması güç geliyor.</p>
+<p>Kaynak kodunu yazının devamında bulabileceksiniz. Ama önce birkaç açıklama yapmak istiyorum:</p>
+<ul>
+<li>
+<p>Projede kullandığım kaynak kodunun oldukça büyük bir kısmı <a href="/2008/05/proje-c-ve-nesneye-dayali-programlama/2008/04/odev-3-baglacli-listeler" >Ödev 3</a>’tekinin ya aynısıdır, ya da çok az değiştirilmiş halidir. Onun için bu proje diğer hepsinden çok daha kolaydı ve çok çabuk bitti.</p>
+</li>
+<li>
+<p>Rapor yazmamak çok hoş oldu gerçekten. =)</p>
+</li>
+<li>
+<p><code>namescape std</code> ile her <code>printf</code> ve benzeri fonksiyonun başına <code>std::</code> yazmaktan kurtulmuş bulunmaktayım.</p>
+</li>
+<li>
+<p>Projenin classlarının genel görünümünü header dosyalarında bulabilirsiniz. Header dosyalarının Özgür Gümüş hocamızın bize önerdiğinden az biraz farklı olduğunu göreceksiniz. Böylesi daha kolay geldi, böyle yazdım.</p>
+</li>
+<li>
+<p>Nesne metodlarının girdi ve çıktı tiplerini incelemenizi öneririm.</p>
+</li>
+<li>
+<p>Projede nesne yaratma ve silmeye dair birkaç satır örnek göreceksiniz.</p>
+</li>
+<li>
+<p>Projede yıkıcı (destructor) metod bulunmamaktadır, ancak yapıcı metotlara örnek bulabilirsiniz.</p>
+</li>
+<li>
+<p><em>Proje tamamen nesneye dayalı mantık kullanmaktadır.Bir nesnenin içindeki hiçbir elemana pointer ile erişilmemiş ve değiştirilmemiştir. Bunun yerine her yerde (istisnasız) Setter ve Getter metotlar kullanılmıştır.</em></p>
+</li>
+<li>
+<p>Programın içerisinde bolca comment ve bolca da yazım hatası bulmanız mümkün. =)</p>
+</li>
+<li>
+<p>vs vs.</p>
+</li>
+<li>
+<p><a href="/2008/05/proje-c-ve-nesneye-dayali-programlama/proje.7z" >Proje Açıklaması</a></p>
+</li>
+<li>
+<p><a href="/2008/05/proje-c-ve-nesneye-dayali-programlama/cpp-proje.zip" >Benim Çözümüm (7670.zip)</a></p>
+</li>
+</ul>
+<p>Umarım Matematik’ten sınıfı geçerim. Sınıf ortalamasının altında kalmamam şartıyla 😄 hepimize başarılar. =) (yok öyle yükseklerde gözüm, geçeyim sınıfı da… =) )</p>
+<p>İyi günler.</p>
+<p>Kaynak kodunu indirmek istemeyenler bir kopyasını aşağıda bulabilirler:</p>
+<p><em>main.cpp</em> [cpp] #include &lt;iostream&gt; #include &lt;conio.h&gt;</p>
+<p>#include &quot;Satis.h&quot; #include &quot;Urun.h&quot; #include &quot;Urun_Katalogu.h&quot;</p>
+<p>using namespace std;</p>
+<p>void beklet() { /* Bu fonksiyonun tek amaci kullaniciyi bir tusa basana kadar bekletmek, ve sonra ekrani silmektir. */ printf(&quot;\nDevam etmek icin bir tusa basin.&quot;); getch(); system (&quot;cls&quot;); }</p>
+<p>int main() {</p>
+<p>/* Acilis yazilari BASLANGICI <em>/ printf(&quot;Umut BENZER\n&quot;); printf(&quot;05-06-7670\n&quot;); printf(&quot;Ege Universitesi Bilgisayar Muhendisligi 1. Sinif\n&quot;); printf(&quot;http://www.ubenzer.com\n&quot;); printf(&quot;PROJE: Nesneye Dayali Programlama\n&quot;); printf(&quot;Surum: 0.2\n\n&quot;); /</em> Acilis yazilari SONU */</p>
+<p>int sag_serbest=-1; char secenek;</p>
+<p>int sayac;</p>
+<p>int girdi; char girdi2[20]; float girdi3; int girdi4; char girdi5[6]; int girdi6;</p>
+<p>/* Girdi degiskenleri main fonksiyonun her bir yerinde farkli farkli bir sürü amaçla kullanıldığı için özel isimler vermedim. */</p>
+<p>/* Ürün Kataloğu nesnesi yarat */ URUNKATALOGU dizin;</p>
+<p>/* Ana döngü */ while (sag_serbest==-1) {</p>
+<p>/* menu BASLANGICI <em>/ printf(&quot;</em>** Menu *** \n\n&quot;); printf(&quot;1. Yeni bir urunun eklenmesi \n&quot;); printf(&quot;2. Bir urunun birim alis fiyatinin ve stok miktarinin guncellenmesi \n&quot;); printf(&quot;3. Bir urune iliskin satis eklenmesi \n&quot;); printf(&quot;4. Bir urune iliskin satisin silinmesi \n&quot;); printf(&quot;5. Bir urunun silinmesi \n&quot;); printf(&quot;6. Bir urunun bilgilerinin ve o urunden yapilan tum satislarin listelenmesi \n&quot;); printf(&quot;7. Belirli bir tarihten bugune hic satis yapilmayan urunlerin listelenmesi\n&quot;); printf(&quot;8. Tum urunlerin listelenmesi \n&quot;); printf(&quot;9. Belirli bir stok miktarinin altinda urunlerin listelenmesi \n&quot;); printf(&quot;0. Tum urunlerden yapilan toplam satislarin listelenmesi \n&quot;); printf(&quot;C. Cikis \n&quot;);</p>
+<p>printf(&quot;Lutfen istediginiz islemin numarasini giriniz.\n&quot;); /*menu BITIMI */</p>
+<p>secenek=getch(); system (&quot;cls&quot;);</p>
+<p>/* secenek getche ile alındığı için ASCII koduna göre switch yapısına sokulabilir. */ switch(secenek) { case 49: //1 system (&quot;cls&quot;); printf(&quot;Yeni bir urun kodu giriniz: &quot;); scanf(&quot;%d&quot;,&amp;girdi); system (&quot;cls&quot;);</p>
+<p>switch (dizin.UrunVarMi(girdi)) {</p>
+<p>case 0: /* Yaşasın doğru girmişler. */</p>
+<p>for (sayac=0;sayac&lt;20;sayac++) { girdi2[sayac] = 0; }</p>
+<p>while (girdi2[0] == 0) { fflush(stdin); printf(&quot;Yeni urunun adini giriniz: &quot;); gets(girdi2); }</p>
+<p>printf(&quot;Urunun alis fiyatini giriniz: &quot;); scanf(&quot;%f&quot;,&amp;girdi3);</p>
+<p>printf(&quot;Urunun stok durumunu giriniz: &quot;); scanf(&quot;%d&quot;,&amp;girdi4);</p>
+<p>dizin.UrunEkle(new URUN(girdi,girdi2,girdi3,girdi4)); printf(&quot;Islem tamam. 😉\n&quot;);</p>
+<p>break; case 1: printf(&quot;Girdiginiz urun kodu daha once alinmis.\n&quot;); break; } beklet(); break; case 50: //2 system (&quot;cls&quot;); printf(&quot;Duzenlenecek urun kodunu giriniz: &quot;); scanf(&quot;%d&quot;,&amp;girdi); system (&quot;cls&quot;);</p>
+<p>switch (dizin.UrunVarMi(girdi)) {</p>
+<p>case 1: /* Yaşasın doğru girmişler. */</p>
+<p>printf(&quot;Urunun yeni alis fiyatini giriniz: &quot;); scanf(&quot;%f&quot;,&amp;girdi3);</p>
+<p>printf(&quot;Urunun yeni stok durumunu giriniz: &quot;); scanf(&quot;%d&quot;,&amp;girdi4);</p>
+<p>dizin.UrunAdres(girdi)-&gt;alisFiyatiYaz(girdi3); dizin.UrunAdres(girdi)-&gt;stokMiktariYaz(girdi4);</p>
+<p>printf(&quot;Islem tamam. 😉\n&quot;); break;</p>
+<p>case 0: printf(&quot;Aradiginiz urune su anda ulasilamiyor.\n&quot;); printf(&quot;Lutfen, daha sonra tekrar deneyin.\n&quot;); printf(&quot;The URUN you have called cannot be reached at the moment.\n&quot;); printf(&quot;Please try again later.\n&quot;); break; } beklet(); break; case 51: //3 system (&quot;cls&quot;); printf(&quot;Satis eklenecek urun kodunu giriniz: &quot;); scanf(&quot;%d&quot;,&amp;girdi); system (&quot;cls&quot;);</p>
+<p>switch (dizin.UrunVarMi(girdi)) {</p>
+<p>case 1: /* Evet var. */</p>
+<p>printf(&quot;Fatura no giriniz: &quot;); scanf(&quot;%d&quot;,&amp;girdi4);</p>
+<p>for (sayac=0;sayac&lt;6;sayac++) { girdi5[sayac] = 0; }</p>
+<p>while (girdi5[0] == 0) { fflush(stdin); /* Ödevin asıl amacının tarihlerle değil de nesnelerle uğraşmak olduğu bilindiğinden 2000 öncesi yıllar için sıralama sorunu ihmal edildi. */ printf(&quot;Satis tarihini giriniz (YYAAGG): &quot;); gets(girdi5); }</p>
+<p>printf(&quot;Urunun satis miktarini giriniz: &quot;); scanf(&quot;%d&quot;,&amp;girdi6);</p>
+<p>printf(&quot;Birim satis fiyatini giriniz: &quot;); scanf(&quot;%f&quot;,&amp;girdi3);</p>
+<p>dizin.UrunAdres(girdi)-&gt;satisEkle(new SATIS(girdi4,girdi5,girdi6,girdi3)); printf(&quot;Islem tamam.&quot;); break;</p>
+<p>case 0: /* Hayır, yok */ printf(&quot;Boyle bir urun yok.&quot;); break; } beklet(); break; case 52: //4 system (&quot;cls&quot;); printf(&quot;Satis silinecek urunun kodunu giriniz: &quot;); scanf(&quot;%d&quot;,&amp;girdi); system (&quot;cls&quot;);</p>
+<p>switch (dizin.UrunVarMi(girdi)) {</p>
+<p>case 1: /* Yaşasın doğru girmişler. */</p>
+<p>system (&quot;cls&quot;); printf(&quot;Silinecek satisin fatura nosu: &quot;); scanf(&quot;%d&quot;,&amp;girdi4); system (&quot;cls&quot;);</p>
+<p>switch (dizin.UrunAdres(girdi)-&gt;satisSil(girdi4)) {</p>
+<p>case -1: printf(&quot;Silinmesi istenen fatura numarasina rastlanamadi.\n&quot;); break; case 0: printf(&quot;Sildim bile.&quot;); break; }</p>
+<p>break; case 0: printf(&quot;Boyle bir urun yok ki. 😃\n&quot;); break; }</p>
+<p>beklet(); break; case 53: //5 system (&quot;cls&quot;); printf(&quot;Silinecek urun kodunu giriniz: &quot;); scanf(&quot;%d&quot;,&amp;girdi); system (&quot;cls&quot;);</p>
+<p>switch (dizin.UrunVarMi(girdi)) {</p>
+<p>case 1: /* Yaşasın doğru girmişler. */</p>
+<p>dizin.UrunSil(girdi); printf(&quot;Sildim bile.&quot;); break; case 0: printf(&quot;Boyle bir urun zaten yok ki. 😃\n&quot;); break; } beklet(); break; case 54: //6 system (&quot;cls&quot;); printf(&quot;Satislari listelenecek urun kodunu giriniz: &quot;); scanf(&quot;%d&quot;,&amp;girdi); system (&quot;cls&quot;);</p>
+<p>switch (dizin.UrunVarMi(girdi)) {</p>
+<p>case 1: /* Yaşasın doğru girmişler. */</p>
+<p>dizin.UrunAdres(girdi)-&gt;UrunYaz(1); /* Ürün bilgileri getirilir. <em>/ dizin.UrunAdres(girdi)-&gt;SatislariListele(); /</em> Satis bilgileri ekrana yazilir. */ break; case 0: printf(&quot;Aradiginiz urune su anda ulasilamiyor.\n&quot;); printf(&quot;Lutfen, daha sonra tekrar deneyin.\n&quot;); printf(&quot;The URUN you have called cannot be reached at the moment.\n&quot;); printf(&quot;Please try again later.\n&quot;); break; }</p>
+<p>beklet(); break; case 55: //7</p>
+<p>for (sayac=0;sayac&lt;6;sayac++) { girdi5[sayac] = 0; }</p>
+<p>while (girdi5[0] == 0) { fflush(stdin); /* Ödevin asıl amacının tarihlerle değil de nesnelerle uğraşmak olduğu bilindiğinden 2000 öncesi yıllar için sıralama sorunu ihmal edildi. */ printf(&quot;Ne zamandan beri? (YYAAGG): &quot;); gets(girdi5); }</p>
+<p>dizin.satilmayanlariListele(girdi5); beklet(); break; case 56: //8 dizin.UrunleriListele();</p>
+<p>beklet(); break; case 57: //9 girdi = -1; system(&quot;cls&quot;); printf(&quot;Kactan kucuk olsun istiyorsunuz? &quot;); scanf(&quot;%d&quot;,&amp;girdi); system(&quot;cls&quot;);</p>
+<p>dizin.UrunleriListele(girdi);</p>
+<p>beklet(); break; case 48: // 0 dizin.tumUrunTopSatis(); beklet(); break; case 99: //c case 67: //C /* E e H h ve disinda girdi kabul etmeyen cikmak istiyor musunuz sorusu BASLANGICI <em>/ do { printf (&quot;\nCidden cikmak istiyor musunuz? (E/H) &quot;); secenek = getche(); if (secenek == 'E' || secenek == 'e') { sag_serbest = 0; secenek = 'H'; } } while (secenek != 'H' &amp;&amp; secenek != 'h'); /</em> E e H h ve disinda girdi kabul etmeyen cikmak istiyor musunuz sorusu SONU <em>/ system (&quot;cls&quot;); break; default: /</em> Elleri yanlis tusa basan kullanicilar icin yazilan bolum BASLANGICI <em>/ printf(&quot;Bir zahmet 1'den 9'a kadar bir secim yapin.&quot;); beklet(); /</em> Elleri yanlis tusa basan kullanicilar icin yazilan bolum SONU */ break; } }</p>
+<p>printf(&quot;O halde hoscakalin. 😃\n\n\n&quot;); return 0; } [/cpp]</p>
+<p><em>Satis.cpp</em> [cpp] #include &lt;iostream&gt; #include &lt;conio.h&gt;</p>
+<p>#include &quot;Satis.h&quot; #include &quot;Urun.h&quot; #include &quot;Urun_Katalogu.h&quot;</p>
+<p>using namespace std;</p>
+<p>SATIS::SATIS(int a,char b[6],int c,float d) { /* Nesne yaratılırken veriler yerli yerine yerleştirilir. */ int sayac;</p>
+<p>fatura_no = a;</p>
+<p>for (sayac=0;sayac&lt;6;sayac++) { satis_tarihi[sayac] = b[sayac]; }</p>
+<p>satis_miktari = c; birim_satis_fiyati = d;</p>
+<p>sonraki = NULL; }</p>
+<p>int SATIS::faturaNoOku() { return fatura_no; }</p>
+<p>char* SATIS::tarihOku() { return satis_tarihi; }</p>
+<p>int SATIS::miktarOku() { return satis_miktari; }</p>
+<p>float SATIS::birimFiyatOku() { return birim_satis_fiyati; }</p>
+<p>SATIS* SATIS::sonrakiOku() { return sonraki; }</p>
+<p>void SATIS::sonrakiYaz(SATIS* a) { sonraki = a; } [/cpp]</p>
+<p><em>Satis.h</em> [cpp] #ifndef SATIS_H_INCLUDED #define SATIS_H_INCLUDED</p>
+<p>class SATIS {</p>
+<p>private: /* Nesne yerel değişkenleri */ int fatura_no; char satis_tarihi[6]; int satis_miktari; float birim_satis_fiyati; SATIS *sonraki;</p>
+<p>public: /* Nesne yaratma metodu <em>/ SATIS(int,char</em>,int,float);</p>
+<p>/* Getter Metodlar */ int faturaNoOku(); char *tarihOku(); int miktarOku(); float birimFiyatOku(); SATIS *sonrakiOku();</p>
+<p>/* Setter Metodlar <em>/ void sonrakiYaz(SATIS</em>);</p>
+<p>};</p>
+<p>#endif // SATIS_H_INCLUDED [/cpp]</p>
+<p><em>Urun_Katalogu.cpp</em> [cpp] #include &lt;iostream&gt; #include &lt;conio.h&gt;</p>
+<p>#include &quot;Satis.h&quot; #include &quot;Urun.h&quot; #include &quot;Urun_Katalogu.h&quot;</p>
+<p>using namespace std;</p>
+<p>URUNKATALOGU::URUNKATALOGU() { /* Nesne yaratılırken tüm kayıtlar NULL'u göstersin, sonra sakatlık çıkmasın. */ int sayac; for (sayac = 0;sayac&lt;100;sayac++) { hashTablosu[sayac] = NULL; } }</p>
+<p>int URUNKATALOGU::UrunVarMi(int urun_kodu) {</p>
+<p>/* 1: Ürün var 0: Ürün yok */</p>
+<p>URUN *guncel;</p>
+<p>guncel = hashTablosu[hash(urun_kodu)];</p>
+<p>while(guncel != NULL) { /* Kayıtlar bitene kadar */</p>
+<p>if (guncel-&gt;kodOku() == urun_kodu) { return 1; }</p>
+<p>guncel = guncel-&gt;sonrakiOku(); /* Bir sonraki kayıda uçalım. */ }</p>
+<p>return 0; /* Eğer buraya geldiyse eşleşme yok demektir. */ }</p>
+<p>URUN* URUNKATALOGU::UrunAdres(int urun_kodu) {</p>
+<p>/* Geriye ürünün adresini gönderir. */</p>
+<p>URUN *guncel;</p>
+<p>guncel = hashTablosu[hash(urun_kodu)];</p>
+<p>while(guncel != NULL) { /* Kayıtlar bitene kadar */</p>
+<p>if (guncel-&gt;kodOku() == urun_kodu) { return guncel; }</p>
+<p>guncel = guncel-&gt;sonrakiOku(); /* Bir sonraki kayıda uçalım. */ }</p>
+<p>return NULL; /* Eğer buraya geldiyse bir sakatlık var demektir, ama gelmez. 😃 */ }</p>
+<p>void URUNKATALOGU::UrunEkle(URUN *YeniUrun) {</p>
+<p>URUN *gecici;</p>
+<p>/* Eğer HashTablosu zaten boşsa yerleştirip geçelim. Yok eğer doluysa bağlantıları da ayarlayalım. */ gecici = hashTablosu[hash(YeniUrun-&gt;kodOku())];</p>
+<p>hashTablosu[hash(YeniUrun-&gt;kodOku())] = YeniUrun; YeniUrun-&gt;sonrakiYaz(gecici);</p>
+<p>}</p>
+<p>int URUNKATALOGU::hash(int urun_kodu) { return (urun_kodu % 100); }</p>
+<p>void URUNKATALOGU::UrunleriListele(int stok_limit) {</p>
+<p>int sayac; URUN *guncel;</p>
+<p>printf(&quot;Urun Kodu Urun Adi Stok Miktari Bilim Alis Fiyati\n&quot;); printf(&quot;--------- -------------------- ------------ -----------------\n&quot;);</p>
+<p>for (sayac=0;sayac&lt;100;sayac++) { guncel = hashTablosu[sayac];</p>
+<p>while (guncel != NULL) { if (stok_limit == -1 || guncel-&gt;stokMiktariOku() &lt; stok_limit) { guncel-&gt;UrunYaz(); } guncel = guncel-&gt;sonrakiOku(); } } }</p>
+<p>void URUNKATALOGU::tumUrunTopSatis() {</p>
+<p>int sayac; int satis_urun; int satis_top=0; float ciro_urun; float ciro_top=0L; URUN *guncel; SATIS *gezinti;</p>
+<p>printf(&quot;Urun Kodu Urun Adi Toplam Satis Miktari Toplam Ciro\n&quot;); printf(&quot;--------- -------------------- -------------------- -----------\n&quot;);</p>
+<p>for (sayac=0;sayac&lt;100;sayac++) { guncel = hashTablosu[sayac];</p>
+<p>while (guncel != NULL) {</p>
+<p>/* Satışlarla ilgili gerekli hesaplamaları yapalım */ satis_urun = 0; ciro_urun = 0L;</p>
+<p>if (guncel-&gt;linkOku() != NULL) { /* heheee çökertemezsiniz */ gezinti = guncel-&gt;linkOku(); while (gezinti != NULL) { satis_urun += gezinti-&gt;miktarOku(); ciro_urun += gezinti-&gt;miktarOku() * gezinti-&gt;birimFiyatOku();</p>
+<p>gezinti = gezinti-&gt;sonrakiOku(); } }</p>
+<p>printf(&quot;%9d %20s %20d %11.4f\n&quot;,guncel-&gt;kodOku(),guncel-&gt;adOku(),satis_urun,ciro_urun);</p>
+<p>ciro_top += ciro_urun; satis_top += satis_urun;</p>
+<p>guncel = guncel-&gt;sonrakiOku(); /* Bir sonraki kayıda uçalım. */</p>
+<p>} }</p>
+<p>printf(&quot;---------------------------------------------------------------\n&quot;); printf(&quot;Toplam: %22d %11.4f\n&quot;,satis_top,ciro_top); }</p>
+<p>void URUNKATALOGU::satilmayanlariListele(char *tarih_limit) {</p>
+<p>int sayac; URUN *guncel; SATIS *gezinti;</p>
+<p>printf(&quot;Urun Kodu Urun Adi \n&quot;); printf(&quot;--------- --------------------\n&quot;);</p>
+<p>for (sayac=0;sayac&lt;100;sayac++) { guncel = hashTablosu[sayac];</p>
+<p>while (guncel != NULL) {</p>
+<p>if (guncel-&gt;linkOku() != NULL) { /* heheee çökertemezsiniz <em>/ gezinti = guncel-&gt;linkOku(); if(strncmp(gezinti-&gt;tarihOku(),tarih_limit,6)&lt;0) { printf(&quot;%9d %20s\n&quot;,guncel-&gt;kodOku(),guncel-&gt;adOku()); } } else { /</em> Hiç satış yapılmamış */ printf(&quot;%9d %20s\n&quot;,guncel-&gt;kodOku(),guncel-&gt;adOku()); }</p>
+<p>guncel = guncel-&gt;sonrakiOku(); /* Bir sonraki kayıda uçalım. */ } }</p>
+<p>printf(&quot;------------------------------\n&quot;);</p>
+<p>}</p>
+<p>int URUNKATALOGU::UrunSil(int girdi) {</p>
+<p>/* Bu metotta satışlar silinirken satissil metodu çağırılabilirdi. Ancak bu metot fatura numarası verilen satışı sildikten sonra tüm bağlantıları da teker teker ayarlayacaktır. Halbuki toptan tüm satışları sileğimizden bu ayarlamaları yapmak etkin olmayacaktır. */</p>
+<p>SATIS *sil_konum; SATIS *gecici; URUN *gecici2; URUN *dolas;</p>
+<p>/* Ürüne bağlı satışları silelim */ sil_konum = UrunAdres(girdi)-&gt;linkOku(); while(sil_konum!=NULL) { gecici = sil_konum;; sil_konum = sil_konum-&gt;sonrakiOku(); delete (gecici); }</p>
+<p>/* Silmeden önce hashtablosu ya da bağlantılarda gerekli hödöleri ayarlamalıyız. */</p>
+<p>if (hashTablosu[hash(girdi)] == UrunAdres(girdi)) { /* Durum 1: Ürün Hash tablosuna bağlı ilk ürün. */</p>
+<p>/* Ayrıntılı bilgi için commenti kaldırın. */ printf(&quot;Urun hash tablosunda.\n&quot;);</p>
+<p>gecici2 = hashTablosu[hash(girdi)]; hashTablosu[hash(girdi)] = hashTablosu[hash(girdi)]-&gt;sonrakiOku(); delete (gecici2);</p>
+<p>return 0; /* İşlem tamam, gidiyorum ben. */</p>
+<p>}</p>
+<p>if (hashTablosu[hash(girdi)]-&gt;sonrakiOku() == UrunAdres(girdi)) { /* Durum 2: Ürün hash tablosundaki ilk ürüne bağlı ikinci ürün. */</p>
+<p>/* Ayrıntılı bilgi için commenti kaldırın. */ printf(&quot;Urun hash tablosundan hemen sonra.\n&quot;);</p>
+<p>gecici2 = hashTablosu[hash(girdi)]-&gt;sonrakiOku(); hashTablosu[hash(girdi)]-&gt;sonrakiYaz(UrunAdres(girdi)-&gt;sonrakiOku()); delete (gecici2);</p>
+<p>return 0;</p>
+<p>}</p>
+<p>/* Durum 3: Ürün başka diyarlarda. */</p>
+<p>/* Ayrıntılı bilgi için commenti kaldırın. */ printf(&quot;Urun aralarda bir yerlerde.\n&quot;);</p>
+<p>dolas = hashTablosu[hash(girdi)]-&gt;sonrakiOku();</p>
+<p>/* Silinecek üründen bir önceki ürünü bulalım. */ while (dolas-&gt;sonrakiOku() != UrunAdres(girdi)) { dolas = dolas-&gt;sonrakiOku(); }</p>
+<p>/* Buraya gelince silinecek üründen bir önecki ürünün bellek adresi dolas olur. */</p>
+<p>gecici2 = UrunAdres(girdi); dolas-&gt;sonrakiYaz(UrunAdres(girdi)-&gt;sonrakiOku()); delete (gecici2);</p>
+<p>return 0;</p>
+<p>} [/cpp]</p>
+<p><em>Urun_Katalogu.h</em> [cpp] #ifndef URUN_KATALOGU_H_INCLUDED #define URUN_KATALOGU_H_INCLUDED</p>
+<p>class URUNKATALOGU {</p>
+<p>private: URUN* hashTablosu[100]; int hash(int); public: URUNKATALOGU(); int UrunVarMi(int); URUN* UrunAdres(int); void UrunEkle(URUN <em>); /</em> int parametresi stok alt limittir. Parametresiz çağırılırsa tüm ürünler listelenir. */ void UrunleriListele(int=-1); void tumUrunTopSatis();</p>
+<p>void satilmayanlariListele(char *);</p>
+<p>int UrunSil(int);</p>
+<p>};</p>
+<p>#endif // URUN_KATALOGU_H_INCLUDED [cpp]</p>
+<p>&lt;strong&gt;Urun.h&lt;/strong&gt; [/cpp] #ifndef URUN_H_INCLUDED #define URUN_H_INCLUDED</p>
+<p>class URUN {</p>
+<p>private: /* Nesne yerel değişkenleri */ int urun_kodu; char urun_adi[20]; float birim_alis_fiyati; int stok_miktari; URUN *sonraki; SATIS *link;</p>
+<p>public: /* Nesne yaratma metodu <em>/ URUN(int, char</em>,float,int=0);</p>
+<p>/* Getter Metodlar */ int kodOku(); char *adOku(); float alisFiyatiOku(); int stokMiktariOku(); URUN *sonrakiOku(); SATIS *linkOku();</p>
+<p>/* Setter Metodlar */ void alisFiyatiYaz(float); void stokMiktariYaz(int); void sonrakiYaz(URUN *); void linkYaz(SATIS *);</p>
+<p>/* Ekrana Yazdırma */ void UrunYaz(int=-1); void SatislariListele();</p>
+<p>/* Satis Bilgisini Ürüne İşleme */ int satisEkle(SATIS *);</p>
+<p>/* Satış BilgileriniHavaya Uçurma */ int satisSil(int);</p>
+<p>};</p>
+<p>#endif // URUN_H_INCLUDED [/cpp]</p>
+<p><em>Urun.cpp</em> [cpp] #include &lt;iostream&gt; #include &lt;conio.h&gt;</p>
+<p>#include &quot;Satis.h&quot; #include &quot;Urun.h&quot; #include &quot;Urun_Katalogu.h&quot;</p>
+<p>using namespace std;</p>
+<p>URUN::URUN(int a,char b[20],float c,int d) { /* Nesne yaratılırken veriler yerli yerine yerleştirilir. */ int sayac;</p>
+<p>urun_kodu = a; for (sayac=0;sayac&lt;20;sayac++) { urun_adi[sayac] = b[sayac]; } birim_alis_fiyati = c; stok_miktari = d; link = NULL; }</p>
+<p>int URUN::kodOku() { return urun_kodu; }</p>
+<p>char* URUN::adOku() { return urun_adi; }</p>
+<p>float URUN::alisFiyatiOku() { return birim_alis_fiyati; }</p>
+<p>int URUN::stokMiktariOku() { return stok_miktari; }</p>
+<p>URUN* URUN::sonrakiOku() { return sonraki; }</p>
+<p>SATIS* URUN::linkOku() { return link; }</p>
+<p>void URUN::alisFiyatiYaz(float a) { birim_alis_fiyati = a; }</p>
+<p>void URUN::stokMiktariYaz(int a) { stok_miktari = a; }</p>
+<p>void URUN::sonrakiYaz(URUN *a) { sonraki = a; }</p>
+<p>void URUN::linkYaz(SATIS *a) { link = a; }</p>
+<p>void URUN::UrunYaz(int ayrinti) { if (ayrinti == -1) { printf(&quot;%9d %20s %12d %17.2f\n&quot;,urun_kodu,urun_adi,stok_miktari,birim_alis_fiyati); } else { printf(&quot;*** Urun Bilgileri ***\n&quot;); printf(&quot;Urun kodu : %d\n&quot;,urun_kodu); printf(&quot;Urun adi : %s\n&quot;,urun_adi); printf(&quot;Stok miktari : %1d\n&quot;,stok_miktari); printf(&quot;Birim alis fiyati: %.2f\n\n&quot;,birim_alis_fiyati); } }</p>
+<p>int URUN::satisEkle(SATIS *adres) {</p>
+<p>/* Bu metod Ödev 3'deki fonskiyonumun nesneli hale dönüştürülmüş halidir. Ödev 3 teslim edildikten sonra kaynak kodunu İnternet'te yayımladığım için başkaları tarafından kullanılıyor olabilir.</p>
+<p>Bu yüzden başka bir ödevde bu koda benzer bir kod kullanılıyor olabilir.</p>
+<p>Ödev 3'ün Internet'teki konumu: http://www.ubenzer.com/odev-3-baglacli-listeler/ */</p>
+<p>SATIS *gezinti; SATIS *onceki;</p>
+<p>/* Durum 1: Daha önce satış eklenmemiş olabilir. */</p>
+<p>if (link == NULL) { /* daha önce ürün eklemesi yapılmamış. hemen ekliyoruz. */ adres-&gt;sonrakiYaz(NULL); link = adres; } else {</p>
+<p>/* Durum 2: Yeni eklenen satış şimdiye kadarkilerin en büyüğü olabilir ki ürünler kısmında değişiklik gerekir. <em>/ if(strncmp(adres-&gt;tarihOku(),link-&gt;tarihOku(),6)&gt;0) { adres-&gt;sonrakiYaz(link); link = adres; } else { /</em> Durum 3: Yeni eklenen herhangi bir arada ya da en sonda olabilir. <em>/ gezinti = link; /</em> Gezintiye ilk kaydın adresini ata */</p>
+<p>do { /* Son kayda kadar */</p>
+<p>if(strncmp(adres-&gt;tarihOku(),gezinti-&gt;tarihOku(),6) &gt; 0) {</p>
+<p>adres-&gt;sonrakiYaz(gezinti); onceki-&gt;sonrakiYaz(adres); return 0; }</p>
+<p>onceki = gezinti; gezinti = gezinti-&gt;sonrakiOku();</p>
+<p>} while (gezinti != NULL);</p>
+<p>adres-&gt;sonrakiYaz(gezinti); onceki-&gt;sonrakiYaz(adres); } } return 0; }</p>
+<p>void URUN::SatislariListele() {</p>
+<p>SATIS *gezinti; char *tarih;</p>
+<p>printf(&quot;\n&quot;); printf(&quot;FATURA NO SATIS TARIHI SATIS MIKTARI BIRIM SATIS FIYATI\n&quot;); printf(&quot;--------- ------------ ------------- ------------------\n&quot;);</p>
+<p>if (link == NULL) { /* heheee çökertemezsiniz <em>/ printf(&quot;(satis kaydi yok)\n&quot;); } else { gezinti = link; while (gezinti != NULL) { tarih = gezinti-&gt;tarihOku(); /</em> dizi sonunda NULL olamdığından bu şekilde okunmazsa sorun çıkarıyor. */ printf(&quot; %6d %c%c%c%c%c%c %13d %18.4f \n&quot;,gezinti-&gt;faturaNoOku(),tarih[0],tarih[1],tarih[2],tarih[3],tarih[4],tarih[5],gezinti-&gt;miktarOku(),gezinti-&gt;birimFiyatOku()); gezinti = gezinti-&gt;sonrakiOku(); } } }</p>
+<p>int URUN::satisSil(int fatno) {</p>
+<p>/* Dikkat: Bu metot bir ürüne ait satışlardaki tüm fatura numaralarının farklı olacağı öngörülerek yazılmıştır. */</p>
+<p>SATIS *gezinti; SATIS *onceki;</p>
+<p>/* Durum 1: Liste zaten boş olablir. <em>/ if (link == NULL) { return -1; } else { /</em> Durum 2: Silinecek kayıt ilk kayıt olabiir ki ürünler kısmında değişiklik gerekir. */ if(fatno == link-&gt;faturaNoOku()) {</p>
+<p>gezinti = link; link = link-&gt;sonrakiOku(); delete (gezinti);</p>
+<p>} else { /* Durum 3: Silinecek herhangi bir arada ya da en sonda olabilir. <em>/ gezinti = link; /</em> Gezintiye ilk kaydın adresini ata */</p>
+<p>/* Burada onceki = gezinti'ye ihtiyacım yok, çünkü do while'daki şart ilk girişte KESİNLİKLE sağlanmayacak. */</p>
+<p>do { /* Son kayda kadar */</p>
+<p>if(fatno == gezinti-&gt;faturaNoOku()) {</p>
+<p>onceki-&gt;sonrakiYaz(gezinti-&gt;sonrakiOku()); delete (gezinti); return 0; }</p>
+<p>onceki = gezinti; gezinti = gezinti-&gt;sonrakiOku();</p>
+<p>} while (gezinti != NULL);</p>
+<p>/* Buraya kadar geldiyse silinecek eleman bulunamamıştır. */ return -1; } } return 0;</p>
+<p>} [/cpp]</p>
+</div></div></article><div class="card comments main-container__items"><div class="card__contents" id="disqus_thread"></div></div></div><div class="sidebar main-content__sidebar"><div class="about"><img class="about__image" src="/img/profile.jpg"/><h1 class="about__name">Umut Benzer</h1><h2 class="about__mini-bio">Software Engineer in Berlin</h2></div></div></div><div class="main-container"><div class="footer"><div class="footer__copyright-holder"><p><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license noopener noreferrer" target="_blank"><img alt="Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License" src="/img/cclicense.png"/></a></p><p><span>Bu sitedeki tüm yazı ve görseller </span><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license noopener noreferrer" target="_blank">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a><span> ile lisanslanmıştır.</span></p></div><div class="footer__generator"><span>Bu sayfa </span><span>9 Nisan 2017</span><span> tarihinde </span><a href="https://github.com/ubenzer/fil" target="_blank">Fil</a><span> ile yaratılmıştır.</span></div></div></div></div>
+        <script src="/template/app.js" type="text/javascript"></script><script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = "https://ubenzer.com/2008/05/proje-c-ve-nesneye-dayali-programlama";
+          this.page.identifier = "post@/2008/05/proje-c-ve-nesneye-dayali-programlama";
+        };
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = 'https://ubenzer.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+        </script>
+      </body>
+    </html>
+  

@@ -1,0 +1,135 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{
+    printf("Umut BENZER\n");
+    printf("05-06-7670\n");
+    printf("Ege Universitesi Bilgisayar Muhendisligi 1. Sinif\n");
+    printf("http://www.ubenzer.com\n");
+    printf("Aylik Satis Raporu Hazirlama Yazlimi 1.1\n\n");
+
+
+    int satici_no;
+    float satis_tutari;
+
+    int once_satici_no=-1; // Dongudeyken satis_no nun alamayacagi tek deger.
+
+    int satici_kac_gun_satti=0;
+    float satici_toplam_satis;
+    int kac_satis_temsilcisi=0;
+    float sirket_toplam_satis=0;
+    int en_cok_satan_satici_no=-1;
+    float en_cok_satan_satici_para=0;
+    int gun_ort_en_az_no=-1;
+    float gun_ort_en_az_para=0;
+    int gun_ort_en_cok_no=-1;
+    float gun_ort_en_cok_para=0;
+    int gun_en_cok_sat_no=-1;
+    float gun_en_cok_sat_para=0;
+    float satici_ortalama_satis;
+
+    float aylik_ort_sat_tutari;
+
+    int don=1;
+
+    printf("Satici no?\n");
+    scanf("%d",&satici_no);
+
+    if(satici_no == -1) { /* eger -1'se program ilk girdiden kapanacak. Daha fazla kod calismasin. */
+                          /* bu kisim olmasaydi, program ileride 0'a bolunme hatasi verebilirdi.   */
+        printf("Programa bir defa bile satis temsilcisi kodu girmeden sonlandirdiniz. Madem niye actiniz? :)");
+        return 0;
+    }
+
+    do {
+                       /* asagidaki if'de once_satici_no !=-1 su anlama gelir:
+                          program ilk acilisinda yeni bir saticiya gecildigini
+                          sanip rapor yazmaya kalkmasin. (-1 satici_no'nun alamayagi tek degiskendir.) */
+        if ((satici_no != once_satici_no) && (once_satici_no != -1)) { /* Yeni saticiya geciyorsak */
+
+            /* Once rapor, sonra deigsken sifirlama */
+            satici_ortalama_satis = satici_toplam_satis/satici_kac_gun_satti;
+
+            printf ("************************************************\n");
+            printf ("*     AYLIK SATIS RAPORU YAZILIMI      (UBnzr) *\n");
+            printf ("************************************************\n");
+            printf ("Yeni bir satici kodu yazdiniz. Program devam\n");
+            printf ("etmeden once size %d kodlu satici raporunu sunacak.\n",once_satici_no);
+            printf ("************************************************\n");
+            printf ("\n");
+            printf (" Satici Kodu             : %d \n",once_satici_no);
+            printf (" Calistigi gun sayisi    : %d \n",satici_kac_gun_satti);
+            printf (" Toplam satis miktari    : %f \n",satici_toplam_satis);
+            printf (" Gunluk satis ortalamasi : %f \n",satici_ortalama_satis);
+            printf ("\n");
+
+            sirket_toplam_satis = sirket_toplam_satis + satici_toplam_satis;
+            ++kac_satis_temsilcisi;
+
+            if(en_cok_satan_satici_para<=satici_toplam_satis) { /* demek ki bu satici oncekilerden daha cok satmis */
+                en_cok_satan_satici_para = satici_toplam_satis;
+                en_cok_satan_satici_no = once_satici_no;
+            }
+
+            if(gun_ort_en_az_para>=satici_ortalama_satis || gun_ort_en_az_para==0) {  /* demek ki bu satici ortalamada daha az satmis */
+                gun_ort_en_az_para = satici_ortalama_satis; /* gun_ort_en_az_para==0 program ilk defa calisiyorsa */
+                gun_ort_en_az_no = once_satici_no;
+            }
+         /* eger altta <= yerine < kullanilsaydi. programa 1 0 -1 degeri girildiginde ortalamalar hata verirdi. */
+            if(gun_ort_en_cok_para<=satici_ortalama_satis) {
+                gun_ort_en_cok_para = satici_ortalama_satis;
+                gun_ort_en_cok_no = once_satici_no;
+            }
+
+            if(satici_no==-1) {
+                break;
+            }
+            satici_toplam_satis = 0;
+            satici_kac_gun_satti = 0;
+
+            printf("Rapor verilmeden once yeni satici kodunu %d olarak belirtmistiniz.\n",satici_no);
+            printf("Program bu noktadan devam ediyor.\n");
+
+        }
+
+        printf("Satis tutari? \n");
+        scanf("%f",&satis_tutari);
+
+        if (gun_en_cok_sat_para<=satis_tutari) {
+            gun_en_cok_sat_para=satis_tutari;
+            gun_en_cok_sat_no = satici_no;
+        }
+
+        satici_toplam_satis = satici_toplam_satis + satis_tutari;
+        ++satici_kac_gun_satti;
+
+
+        once_satici_no = satici_no; /* Sonra degisip degismedigini anlamak icin elimizde bir kopyasini tutalim */
+        printf("Satici no?\n");
+        scanf("%d",&satici_no);
+        /* Eger -1'se bir bakacak ki while'a geri donus yok */
+    } while (don=1); /* zaten break; ile donguden attigimiz icin burada sarta gerek yok, ama C illaha da bir sart istiyor */
+                 /* eger burada satis_tutari != -1 yazmaya kalksaydim, aylik rapor hazirlanmadan once son satici icin */
+                 /* rapor hazirlanmasi mumkun olmazdi. Bunu yapmak icin de 52.satirla baslayan kodlari asagiya kopyala*/
+                 /* yapistir yapmanin hic hos olmayacagini dusunerek, dongude bir tur daha kalmayi uygun buldum.      */
+
+    aylik_ort_sat_tutari = sirket_toplam_satis / kac_satis_temsilcisi;
+
+    printf ("************************************************\n");
+    printf ("*     AYLIK SATIS RAPORU YAZILIMI      (UBnzr) *\n");
+    printf ("************************************************\n");
+    printf ("Ay bitti. Program sonu raporu.\n");
+    printf ("************************************************\n");
+    printf ("\n");
+    printf (" Sirketimizin aylik toplam satis tutari             : %f YTL \n",sirket_toplam_satis);
+    printf (" Satis temsilcisi basina aylik ortalama satis tutari: %f YTL \n",aylik_ort_sat_tutari);
+    printf (" En cok satis yapan satis temsilcisi %f YTL ile %d numarali calisandir.\n",en_cok_satan_satici_para,en_cok_satan_satici_no);
+    printf (" Gunluk satis ortalamasi en yuksek olan temsilci    : %d \n",gun_ort_en_cok_no);
+    printf (" Gunluk satis ortalamasi en dusuk olan temsilci     : %d \n",gun_ort_en_az_no);
+    printf (" Bir gunde en cok satisi %f YTL ile %d yapti. Tebrik ediyoruz.\n",gun_en_cok_sat_para, gun_en_cok_sat_no);
+    printf ("\n");
+    printf("Program sonlandi.");
+
+    return 0;
+}
