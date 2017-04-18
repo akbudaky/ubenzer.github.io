@@ -1178,6 +1178,9 @@ var lazysizes = createCommonjsModule(function (module) {
 ));
 });
 
+window.lazySizesConfig = window.lazySizesConfig || {};
+window.lazySizesConfig.expand = 1000;
+
 lazysizes.init();
 initAppBarOpacity();
 
