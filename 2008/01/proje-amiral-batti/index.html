@@ -18,211 +18,211 @@
 <p>Bu proje 100 aldı.</p>
 <p>Hepimize bol kaynak kodlu günler. 😃 Finallerde hepimize başarılar.</p>
 <p>Kaynak kodunun bir kopyası aşağıdadır:</p>
-<pre><code class="language-c"> #include &lt;stdio.h&gt; #include &lt;stdlib.h&gt;
+<pre><code class="hljs language-c"> <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt; #include &lt;stdlib.h&gt;</span></span>
 
-#define OYUNALANI 12 #define GEMILIMIT 10 #define GEMIGENISLIK 6 #define DENEMELIMIT 30 #define BASTANDENEMELIMIT 90000
+<span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> OYUNALANI 12 #<span class="hljs-meta-keyword">define</span> GEMILIMIT 10 #<span class="hljs-meta-keyword">define</span> GEMIGENISLIK 6 #<span class="hljs-meta-keyword">define</span> DENEMELIMIT 30 #<span class="hljs-meta-keyword">define</span> BASTANDENEMELIMIT 90000</span>
 
-/* Sabitler ve Anlamlari */ /* --------------------- */ /* OYUNALANI : Oyun alaninin bir ayritinin genisligi. GEMILIMIT : Eklenebilecek gemi sayisinin ust limiti. GEMIGENISLIK : Bir geminin en fazla sahip olabilecegi uzunluk degeri. DENEMELIMIT : Programin rastgele gemi yerlesimi yaparken bir gemi yerlesemediginde sadece o gemiyi tekrar yerlestirmeye kac defa deneyecegini belirleyen sabit. BASTANDENEMELIMIT: Programin rastgele gemi yerlesimi yaparken bir gemi DENEMELIMIT kadar deneme- de yerlesemezse tum gemiler kac defa sifiradan baslayarak yerlestirmeyi dene- yeceginin ust limiti.
+<span class="hljs-comment">/* Sabitler ve Anlamlari */</span> <span class="hljs-comment">/* --------------------- */</span> <span class="hljs-comment">/* OYUNALANI : Oyun alaninin bir ayritinin genisligi. GEMILIMIT : Eklenebilecek gemi sayisinin ust limiti. GEMIGENISLIK : Bir geminin en fazla sahip olabilecegi uzunluk degeri. DENEMELIMIT : Programin rastgele gemi yerlesimi yaparken bir gemi yerlesemediginde sadece o gemiyi tekrar yerlestirmeye kac defa deneyecegini belirleyen sabit. BASTANDENEMELIMIT: Programin rastgele gemi yerlesimi yaparken bir gemi DENEMELIMIT kadar deneme- de yerlesemezse tum gemiler kac defa sifiradan baslayarak yerlestirmeyi dene- yeceginin ust limiti.
 
-Bu programda asagidaki limitler kolayca degistirilebilir: * OYUNALANI degiskeni degistirilerek oyunun oynandigi alan kolaylikla degistirilebilir. Bu yapi- lirken GEMILIMIT ve GEMIGENISLIK degerleri goz onune alinarak gemilerin yeni oyun alanina sigip sigmayacaginin kontrolunu yapmaniz oncelikle onemlidir. Program koordinat olarak harf (harfin ASCII kodu)'nu aldigi icin koordinat duzlemi teorik ola- rak limitsiz buyultulebilse de veri girisi Z'de son bulacagi icin en fazla 26 olabilir. Bu degerin 2'den kucuk olmamasi onerilir, 0 ya da negatif sayilar olamaz. * GEMILIMIT degiskeni degistirilerek eklenebilecek gemi sayisinin ust limiti kolaylikla degisti- rilebilir. Bu sabit en az 1 olmalidir. GEMIGENISLIK uzunlugunda GEMILIMIT'in OYUNALANI genis- ligindeki oyun alanina sigip sigmadiginin kontrolunu yapmaniz onemlidir. * GEMIGENISLIK degiskeni degistirilerek her geminin maksimum uzunluk limiti kolaylikla degistiri- lebilir. Bu sabit en az 1 olmalidir. GEMIGENISLIK uzunlugunda GEMILIMIT'in OYUNALANI genis- ligindeki oyun alanina sigip sigmadiginin kontrolunu yapmaniz onemlidir. * DENEMELIMIT degiskeni oyun alanina bir gemi yerlestirilemediginde oyun alaninin farkli bolge- lerine ayni gemiyi yerlestirmenin kac defa daha deneneceginin ust limitidir. Eger ust limit asilirsa BASTANDENEMELIMIT kadar defa tum gemiler sifirdan yerlestirilmeye calisilacaktir. Iki deger de asilirsa program &quot;Yerlestiremedim.&quot; ifadesiyle kendini kapatacaktir. Bu degerleri arttirmak programi yavaslatabilirken gemilerin yerlesebilme olasiligini (eger yerlesme olasiligi 0'dan farkliysa) arttirir.
+Bu programda asagidaki limitler kolayca degistirilebilir: * OYUNALANI degiskeni degistirilerek oyunun oynandigi alan kolaylikla degistirilebilir. Bu yapi- lirken GEMILIMIT ve GEMIGENISLIK degerleri goz onune alinarak gemilerin yeni oyun alanina sigip sigmayacaginin kontrolunu yapmaniz oncelikle onemlidir. Program koordinat olarak harf (harfin ASCII kodu)'nu aldigi icin koordinat duzlemi teorik ola- rak limitsiz buyultulebilse de veri girisi Z'de son bulacagi icin en fazla 26 olabilir. Bu degerin 2'den kucuk olmamasi onerilir, 0 ya da negatif sayilar olamaz. * GEMILIMIT degiskeni degistirilerek eklenebilecek gemi sayisinin ust limiti kolaylikla degisti- rilebilir. Bu sabit en az 1 olmalidir. GEMIGENISLIK uzunlugunda GEMILIMIT'in OYUNALANI genis- ligindeki oyun alanina sigip sigmadiginin kontrolunu yapmaniz onemlidir. * GEMIGENISLIK degiskeni degistirilerek her geminin maksimum uzunluk limiti kolaylikla degistiri- lebilir. Bu sabit en az 1 olmalidir. GEMIGENISLIK uzunlugunda GEMILIMIT'in OYUNALANI genis- ligindeki oyun alanina sigip sigmadiginin kontrolunu yapmaniz onemlidir. * DENEMELIMIT degiskeni oyun alanina bir gemi yerlestirilemediginde oyun alaninin farkli bolge- lerine ayni gemiyi yerlestirmenin kac defa daha deneneceginin ust limitidir. Eger ust limit asilirsa BASTANDENEMELIMIT kadar defa tum gemiler sifirdan yerlestirilmeye calisilacaktir. Iki deger de asilirsa program "Yerlestiremedim." ifadesiyle kendini kapatacaktir. Bu degerleri arttirmak programi yavaslatabilirken gemilerin yerlesebilme olasiligini (eger yerlesme olasiligi 0'dan farkliysa) arttirir.
 
 Tum sabitler hakkinda daha ayrintili bilgiler raporda bulunabilir.
 
-*/
+*/</span>
 
-void beklet() { /* Bu fonksiyonun tek amaci kullaniciyi bir tusa basana kadar bekletmek, ve sonra ekrani silmektir. */ printf(&quot;\nDevam etmek icin bir tusa basin.&quot;); getche(); system (&quot;cls&quot;); }
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">beklet</span><span class="hljs-params">()</span> </span>{ <span class="hljs-comment">/* Bu fonksiyonun tek amaci kullaniciyi bir tusa basana kadar bekletmek, ve sonra ekrani silmektir. */</span> <span class="hljs-built_in">printf</span>(<span class="hljs-string">"\nDevam etmek icin bir tusa basin."</span>); getche(); system (<span class="hljs-string">"cls"</span>); }
 
-void cheat (int *gemiler) {
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">cheat</span> <span class="hljs-params">(<span class="hljs-keyword">int</span> *gemiler)</span> </span>{
 
-/* Bu fonksiyon herhangi bir yerde cagrilirsa ekrana gemilerin guncel durumunu cizer. Diger bir deyisle hile yapmaya yarayan bir fonksiyondur. Odev yaparken cok isime yaradi. Belki odev kontrolunde de kolaylik (gemiler nasil yerlestirilmis bakmak acisindan) diye silmek yerine burda birakiyorum. */
+<span class="hljs-comment">/* Bu fonksiyon herhangi bir yerde cagrilirsa ekrana gemilerin guncel durumunu cizer. Diger bir deyisle hile yapmaya yarayan bir fonksiyondur. Odev yaparken cok isime yaradi. Belki odev kontrolunde de kolaylik (gemiler nasil yerlestirilmis bakmak acisindan) diye silmek yerine burda birakiyorum. */</span>
 
-int sayac; int sayac2;
+<span class="hljs-keyword">int</span> sayac; <span class="hljs-keyword">int</span> sayac2;
 
-system(&quot;cls&quot;);
+system(<span class="hljs-string">"cls"</span>);
 
-printf(&quot;* &quot;); for (sayac=1;sayac&lt;=OYUNALANI;sayac++) { printf(&quot;%d &quot;,sayac%10); } printf(&quot;\n&quot;);
+<span class="hljs-built_in">printf</span>(<span class="hljs-string">"* "</span>); <span class="hljs-keyword">for</span> (sayac=<span class="hljs-number">1</span>;sayac&lt;=OYUNALANI;sayac++) { <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%d "</span>,sayac%<span class="hljs-number">10</span>); } <span class="hljs-built_in">printf</span>(<span class="hljs-string">"\n"</span>);
 
-for (sayac=0;sayac&lt;OYUNALANI;sayac++) { printf(&quot;%c &quot;,rakam_to_harf(sayac)); for (sayac2=0;sayac2&lt;OYUNALANI;sayac2++) { switch (gemiler[sayac*OYUNALANI+sayac2]) { // Konumdaki geminin durmunu al case 0: // Haritanın o kısmı boş. printf(&quot;0 &quot;); break; case 1: // O kısımda gemi var ama vurulmamış. printf(&quot;X &quot;); break; case 2: // O kısımda gemi var vurulmuş ama batırılmamış. printf(&quot;I &quot;); break; case 3: // O kısımda gemi var veeeeeeeeee artık yok çünkü batırılmış. printf(&quot;B &quot;); break; case 4: printf(&quot;K &quot;); // Karavana break; } } printf(&quot;\n&quot;); }
+<span class="hljs-keyword">for</span> (sayac=<span class="hljs-number">0</span>;sayac&lt;OYUNALANI;sayac++) { <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%c "</span>,rakam_to_harf(sayac)); <span class="hljs-keyword">for</span> (sayac2=<span class="hljs-number">0</span>;sayac2&lt;OYUNALANI;sayac2++) { <span class="hljs-keyword">switch</span> (gemiler[sayac*OYUNALANI+sayac2]) { <span class="hljs-comment">// Konumdaki geminin durmunu al case 0: // Haritanın o kısmı boş. printf("0 "); break; case 1: // O kısımda gemi var ama vurulmamış. printf("X "); break; case 2: // O kısımda gemi var vurulmuş ama batırılmamış. printf("I "); break; case 3: // O kısımda gemi var veeeeeeeeee artık yok çünkü batırılmış. printf("B "); break; case 4: printf("K "); // Karavana break; } } printf("\n"); }</span>
 
 beklet(); }
 
-void ciz(int *gemiler) {
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">ciz</span><span class="hljs-params">(<span class="hljs-keyword">int</span> *gemiler)</span> </span>{
 
-/* Bu fonksiyon gemiler dizisinde yer alan gemi yerlesim ve gemi durumu bilgilerini kullanarak guncel oyun ala- nini ekrana cizer. */
+<span class="hljs-comment">/* Bu fonksiyon gemiler dizisinde yer alan gemi yerlesim ve gemi durumu bilgilerini kullanarak guncel oyun ala- nini ekrana cizer. */</span>
 
-int sayac; int sayac2;
+<span class="hljs-keyword">int</span> sayac; <span class="hljs-keyword">int</span> sayac2;
 
-// Koordinant ekseninin üst kısmının çizimi system(&quot;cls&quot;); printf(&quot;\n* &quot;); for (sayac=1;sayac&lt;=OYUNALANI;sayac++) { printf(&quot;%d &quot;,sayac%10); } printf(&quot;\n&quot;); // Bitti
+<span class="hljs-comment">// Koordinant ekseninin üst kısmının çizimi system("cls"); printf("\n* "); for (sayac=1;sayac&lt;=OYUNALANI;sayac++) { printf("%d ",sayac%10); } printf("\n"); // Bitti</span>
 
-for (sayac=0;sayac&lt;OYUNALANI;sayac++) { printf(&quot;%c &quot;,rakam_to_harf(sayac)); // Harf ekseninin ekrana yazma for (sayac2=0;sayac2&lt;OYUNALANI;sayac2++) { switch (gemiler[sayac*OYUNALANI+sayac2]) { // Konumdaki geminin durmunu al case 0: // Haritanın o kısmı boş. case 1: // O kısımda gemi var ama vurulmamış. printf(&quot;0 &quot;); break; case 2: // O kısımda gemi var vurulmuş ama batırılmamış. printf(&quot;I &quot;); break; case 3: // O kısımda gemi var veeeeeeeeee artık yok çünkü batırılmış. printf(&quot;B &quot;); break; case 4: printf(&quot;K &quot;); // Karavana break; } } printf(&quot;\n&quot;);
+<span class="hljs-keyword">for</span> (sayac=<span class="hljs-number">0</span>;sayac&lt;OYUNALANI;sayac++) { <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%c "</span>,rakam_to_harf(sayac)); <span class="hljs-comment">// Harf ekseninin ekrana yazma for (sayac2=0;sayac2&lt;OYUNALANI;sayac2++) { switch (gemiler[sayac*OYUNALANI+sayac2]) { // Konumdaki geminin durmunu al case 0: // Haritanın o kısmı boş. case 1: // O kısımda gemi var ama vurulmamış. printf("0 "); break; case 2: // O kısımda gemi var vurulmuş ama batırılmamış. printf("I "); break; case 3: // O kısımda gemi var veeeeeeeeee artık yok çünkü batırılmış. printf("B "); break; case 4: printf("K "); // Karavana break; } } printf("\n");</span>
 
-} printf(&quot;\n&quot;);
-
-}
-
-int rakam_to_harf (int rakam) {
-
-/* RAKAM degiskeninde gelen rakamin hangi harfe karsilik gel- digini geri gonderir.
-
-Ayrintili bilgi raporda bulunabilir. */
-
-rakam = rakam + 65; if (rakam &gt; 90) { rakam = rakam%65; }
-
-return rakam;
+} <span class="hljs-built_in">printf</span>(<span class="hljs-string">"\n"</span>);
 
 }
 
-int konum_gecerli (int konum) {
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">rakam_to_harf</span> <span class="hljs-params">(<span class="hljs-keyword">int</span> rakam)</span> </span>{
 
-/* KONUM degiskeninin oyun alanina ait bir koordinat olup olmadigini denetler.
+<span class="hljs-comment">/* RAKAM degiskeninde gelen rakamin hangi harfe karsilik gel- digini geri gonderir.
 
-Ayrintili bilgi raporda bulunabilir. */
+Ayrintili bilgi raporda bulunabilir. */</span>
 
-if (konum &lt; OYUNALANI*OYUNALANI &amp;&amp; konum &gt;= 0) return 1; return 0;
+rakam = rakam + <span class="hljs-number">65</span>; <span class="hljs-keyword">if</span> (rakam &gt; <span class="hljs-number">90</span>) { rakam = rakam%<span class="hljs-number">65</span>; }
 
-}
-
-int eleman(int satir, int sutun, int yatay_dikey) {
-
-/* SATIR satırına ve SUTUN sutuna ait noktanin bellekte hangi numarali dizinde tutuyor oldugunu geri gonderir. yatay_diket 1 olursa SATIR ve SUTUN yer degistirir.
-
-Ayrintili bilgi raporda bulunabilir. */
-
-if (yatay_dikey == 0) { if (satir+1&gt;OYUNALANI || sutun+1&gt;OYUNALANI) return -1; return satir*OYUNALANI + sutun; } else { if (sutun+1&gt;OYUNALANI || satir+1&gt;OYUNALANI) return -1; return sutun*OYUNALANI + satir; }
+<span class="hljs-keyword">return</span> rakam;
 
 }
 
-int yerlestir(int *gemiuzunluk, int *gemiler, int *gemidurumu) {
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">konum_gecerli</span> <span class="hljs-params">(<span class="hljs-keyword">int</span> konum)</span> </span>{
 
-/* Gemileri oyun alanina yerlestirir.
+<span class="hljs-comment">/* KONUM degiskeninin oyun alanina ait bir koordinat olup olmadigini denetler.
 
-Ayrintili bilgi raporda bulunabilir. */
+Ayrintili bilgi raporda bulunabilir. */</span>
 
-srand((unsigned) time(NULL)); // Sistem saatine göre rastgele
+<span class="hljs-keyword">if</span> (konum &lt; OYUNALANI*OYUNALANI &amp;&amp; konum &gt;= <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>; <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
 
-/* Degisken tanimlamalari BASLANGICI */ int yon; int konum_yatay; int konum_dikey; int gemino; int sayac; int olmadi; int denemesayisi = 0; int denemesayisi_fatal = 0; /* Degisken tanimlamalari SONU */
+}
 
-system(&quot;cls&quot;); printf(&quot;Gemiler rastgele yerlestirilirken lutfen bekleyin...\n&quot;); gemino = 0; while(gemiuzunluk[gemino] != 0) {
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">eleman</span><span class="hljs-params">(<span class="hljs-keyword">int</span> satir, <span class="hljs-keyword">int</span> sutun, <span class="hljs-keyword">int</span> yatay_dikey)</span> </span>{
+
+<span class="hljs-comment">/* SATIR satırına ve SUTUN sutuna ait noktanin bellekte hangi numarali dizinde tutuyor oldugunu geri gonderir. yatay_diket 1 olursa SATIR ve SUTUN yer degistirir.
+
+Ayrintili bilgi raporda bulunabilir. */</span>
+
+<span class="hljs-keyword">if</span> (yatay_dikey == <span class="hljs-number">0</span>) { <span class="hljs-keyword">if</span> (satir+<span class="hljs-number">1</span>&gt;OYUNALANI || sutun+<span class="hljs-number">1</span>&gt;OYUNALANI) <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>; <span class="hljs-keyword">return</span> satir*OYUNALANI + sutun; } <span class="hljs-keyword">else</span> { <span class="hljs-keyword">if</span> (sutun+<span class="hljs-number">1</span>&gt;OYUNALANI || satir+<span class="hljs-number">1</span>&gt;OYUNALANI) <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>; <span class="hljs-keyword">return</span> sutun*OYUNALANI + satir; }
+
+}
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">yerlestir</span><span class="hljs-params">(<span class="hljs-keyword">int</span> *gemiuzunluk, <span class="hljs-keyword">int</span> *gemiler, <span class="hljs-keyword">int</span> *gemidurumu)</span> </span>{
+
+<span class="hljs-comment">/* Gemileri oyun alanina yerlestirir.
+
+Ayrintili bilgi raporda bulunabilir. */</span>
+
+srand((<span class="hljs-keyword">unsigned</span>) time(<span class="hljs-literal">NULL</span>)); <span class="hljs-comment">// Sistem saatine göre rastgele</span>
+
+<span class="hljs-comment">/* Degisken tanimlamalari BASLANGICI */</span> <span class="hljs-keyword">int</span> yon; <span class="hljs-keyword">int</span> konum_yatay; <span class="hljs-keyword">int</span> konum_dikey; <span class="hljs-keyword">int</span> gemino; <span class="hljs-keyword">int</span> sayac; <span class="hljs-keyword">int</span> olmadi; <span class="hljs-keyword">int</span> denemesayisi = <span class="hljs-number">0</span>; <span class="hljs-keyword">int</span> denemesayisi_fatal = <span class="hljs-number">0</span>; <span class="hljs-comment">/* Degisken tanimlamalari SONU */</span>
+
+system(<span class="hljs-string">"cls"</span>); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Gemiler rastgele yerlestirilirken lutfen bekleyin...\n"</span>); gemino = <span class="hljs-number">0</span>; <span class="hljs-keyword">while</span>(gemiuzunluk[gemino] != <span class="hljs-number">0</span>) {
 
 denemesayisi++;
 
-if(denemesayisi&gt;DENEMELIMIT) { denemesayisi_fatal++; denemesayisi = 0; sifirla(gemiler); gemino = 0;
+<span class="hljs-keyword">if</span>(denemesayisi&gt;DENEMELIMIT) { denemesayisi_fatal++; denemesayisi = <span class="hljs-number">0</span>; sifirla(gemiler); gemino = <span class="hljs-number">0</span>;
 
-/* Rastgele yerlesme durumunu goruntulemek icin commenti kaldirin */ // system(&quot;cls&quot;); // printf(&quot;Deneme: (%d/%d)\narama devam ediyor...&quot;,denemesayisi_fatal * DENEMELIMIT,DENEMELIMIT*BASTANDENEMELIMIT);
+<span class="hljs-comment">/* Rastgele yerlesme durumunu goruntulemek icin commenti kaldirin */</span> <span class="hljs-comment">// system("cls"); // printf("Deneme: (%d/%d)\narama devam ediyor...",denemesayisi_fatal * DENEMELIMIT,DENEMELIMIT*BASTANDENEMELIMIT);</span>
 
-if(denemesayisi_fatal&gt;BASTANDENEMELIMIT) { system(&quot;cls&quot;); printf(&quot;Uzgunuz, girdiginiz degerlere ait bir yerlesim yok.\n Devam etmek icin bir tusa basin.&quot;); getche(); return -1; } }
+<span class="hljs-keyword">if</span>(denemesayisi_fatal&gt;BASTANDENEMELIMIT) { system(<span class="hljs-string">"cls"</span>); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Uzgunuz, girdiginiz degerlere ait bir yerlesim yok.\n Devam etmek icin bir tusa basin."</span>); getche(); <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>; } }
 
-yon = rand()%2; konum_yatay = rand()%(OYUNALANI); konum_dikey = rand()%(OYUNALANI);
+yon = rand()%<span class="hljs-number">2</span>; konum_yatay = rand()%(OYUNALANI); konum_dikey = rand()%(OYUNALANI);
 
-/* 0 = Kuzey-Güney doğrultusu 1 = Doğu-Batı doğrultusu */
+<span class="hljs-comment">/* 0 = Kuzey-Güney doğrultusu 1 = Doğu-Batı doğrultusu */</span>
 
-olmadi = 0;
+olmadi = <span class="hljs-number">0</span>;
 
-for(sayac=0;sayac&lt;gemiuzunluk[gemino];sayac++) {
+<span class="hljs-keyword">for</span>(sayac=<span class="hljs-number">0</span>;sayac&lt;gemiuzunluk[gemino];sayac++) {
 
-if(konum_gecerli(eleman(konum_yatay+sayac,konum_dikey,yon))) { // Harita disina tasiyorsa if (gemiler[eleman(konum_yatay+sayac,konum_dikey,yon)] != 0) { // Gemiyle cakisiyosa olmadi = 1; } } else { olmadi = 1; }
+<span class="hljs-keyword">if</span>(konum_gecerli(eleman(konum_yatay+sayac,konum_dikey,yon))) { <span class="hljs-comment">// Harita disina tasiyorsa if (gemiler[eleman(konum_yatay+sayac,konum_dikey,yon)] != 0) { // Gemiyle cakisiyosa olmadi = 1; } } else { olmadi = 1; }</span>
 
-if (konum_dikey%OYUNALANI != 0) { //en solda değilse if(konum_gecerli(eleman(konum_yatay+sayac,konum_dikey-1,yon))) { if (gemiler[eleman(konum_yatay+sayac,konum_dikey-1,yon)] != 0) { // Solunda gemi var olmadi = 1; } } }
+<span class="hljs-keyword">if</span> (konum_dikey%OYUNALANI != <span class="hljs-number">0</span>) { <span class="hljs-comment">//en solda değilse if(konum_gecerli(eleman(konum_yatay+sayac,konum_dikey-1,yon))) { if (gemiler[eleman(konum_yatay+sayac,konum_dikey-1,yon)] != 0) { // Solunda gemi var olmadi = 1; } } }</span>
 
-if ((konum_dikey+1)%OYUNALANI != 0) { //en sağda değilse if(konum_gecerli((eleman(konum_yatay+sayac,konum_dikey+1,yon)))) { if (gemiler[eleman(konum_yatay+sayac,konum_dikey+1,yon)] != 0) { // Sağında gemi var olmadi = 1; } } } }
+<span class="hljs-keyword">if</span> ((konum_dikey+<span class="hljs-number">1</span>)%OYUNALANI != <span class="hljs-number">0</span>) { <span class="hljs-comment">//en sağda değilse if(konum_gecerli((eleman(konum_yatay+sayac,konum_dikey+1,yon)))) { if (gemiler[eleman(konum_yatay+sayac,konum_dikey+1,yon)] != 0) { // Sağında gemi var olmadi = 1; } } } }</span>
 
-if (konum_dikey%OYUNALANI != 0) { //en solda değilse if(konum_gecerli(eleman(konum_yatay-1,konum_dikey-1,yon))) { if (gemiler[eleman(konum_yatay-1,konum_dikey-1,yon)] != 0) { // Sol üst çaprazda gemi var olmadi = 1; } } }
+<span class="hljs-keyword">if</span> (konum_dikey%OYUNALANI != <span class="hljs-number">0</span>) { <span class="hljs-comment">//en solda değilse if(konum_gecerli(eleman(konum_yatay-1,konum_dikey-1,yon))) { if (gemiler[eleman(konum_yatay-1,konum_dikey-1,yon)] != 0) { // Sol üst çaprazda gemi var olmadi = 1; } } }</span>
 
-if ((konum_dikey+1)%OYUNALANI != 0) { //en sağda değilse if(konum_gecerli(eleman(konum_yatay-1,konum_dikey+1,yon))) { if (gemiler[eleman(konum_yatay-1,konum_dikey+1,yon)] != 0) { // Sağ üst çaprazda gemi var olmadi = 1; } } }
+<span class="hljs-keyword">if</span> ((konum_dikey+<span class="hljs-number">1</span>)%OYUNALANI != <span class="hljs-number">0</span>) { <span class="hljs-comment">//en sağda değilse if(konum_gecerli(eleman(konum_yatay-1,konum_dikey+1,yon))) { if (gemiler[eleman(konum_yatay-1,konum_dikey+1,yon)] != 0) { // Sağ üst çaprazda gemi var olmadi = 1; } } }</span>
 
-if(konum_gecerli(eleman(konum_yatay-1,konum_dikey,yon))) { if (gemiler[eleman(konum_yatay-1,konum_dikey,yon)] != 0) { // Üstte gemi var olmadi = 1; } }
+<span class="hljs-keyword">if</span>(konum_gecerli(eleman(konum_yatay<span class="hljs-number">-1</span>,konum_dikey,yon))) { <span class="hljs-keyword">if</span> (gemiler[eleman(konum_yatay<span class="hljs-number">-1</span>,konum_dikey,yon)] != <span class="hljs-number">0</span>) { <span class="hljs-comment">// Üstte gemi var olmadi = 1; } }</span>
 
-if(konum_gecerli(eleman(konum_yatay + gemiuzunluk[gemino],konum_dikey,yon))) { if (gemiler[eleman(konum_yatay + gemiuzunluk[gemino],konum_dikey,yon)] != 0) { // Altında gemi var olmadi = 1; } }
+<span class="hljs-keyword">if</span>(konum_gecerli(eleman(konum_yatay + gemiuzunluk[gemino],konum_dikey,yon))) { <span class="hljs-keyword">if</span> (gemiler[eleman(konum_yatay + gemiuzunluk[gemino],konum_dikey,yon)] != <span class="hljs-number">0</span>) { <span class="hljs-comment">// Altında gemi var olmadi = 1; } }</span>
 
-if (konum_dikey%OYUNALANI != 0) { //en solda değilse if(konum_gecerli(eleman(konum_yatay + gemiuzunluk[gemino],konum_dikey-1,yon))) { if (gemiler[eleman(konum_yatay + gemiuzunluk[gemino],konum_dikey-1,yon)] != 0) { // Sol altında gemivar olmadi = 1; } } }
+<span class="hljs-keyword">if</span> (konum_dikey%OYUNALANI != <span class="hljs-number">0</span>) { <span class="hljs-comment">//en solda değilse if(konum_gecerli(eleman(konum_yatay + gemiuzunluk[gemino],konum_dikey-1,yon))) { if (gemiler[eleman(konum_yatay + gemiuzunluk[gemino],konum_dikey-1,yon)] != 0) { // Sol altında gemivar olmadi = 1; } } }</span>
 
-if ((konum_dikey+1)%OYUNALANI != 0) { //en sağda değilse if(konum_gecerli(eleman(konum_yatay + gemiuzunluk[gemino],konum_dikey+1,yon))) { if (gemiler[eleman(konum_yatay + gemiuzunluk[gemino],konum_dikey+1,yon)] != 0) { // Sağ altında gemivar olmadi = 1; } } }
+<span class="hljs-keyword">if</span> ((konum_dikey+<span class="hljs-number">1</span>)%OYUNALANI != <span class="hljs-number">0</span>) { <span class="hljs-comment">//en sağda değilse if(konum_gecerli(eleman(konum_yatay + gemiuzunluk[gemino],konum_dikey+1,yon))) { if (gemiler[eleman(konum_yatay + gemiuzunluk[gemino],konum_dikey+1,yon)] != 0) { // Sağ altında gemivar olmadi = 1; } } }</span>
 
-if (olmadi != 1) { // gemi kurala uygunsa
+<span class="hljs-keyword">if</span> (olmadi != <span class="hljs-number">1</span>) { <span class="hljs-comment">// gemi kurala uygunsa</span>
 
-for(sayac=0;sayac&lt;gemiuzunluk[gemino];sayac++) { // gemiyi belleğe at gemiler[eleman(konum_yatay+sayac,konum_dikey,yon)] = 1; gemidurumu[GEMIGENISLIK*gemino + sayac] = eleman(konum_yatay+sayac,konum_dikey,yon); }
+<span class="hljs-keyword">for</span>(sayac=<span class="hljs-number">0</span>;sayac&lt;gemiuzunluk[gemino];sayac++) { <span class="hljs-comment">// gemiyi belleğe at gemiler[eleman(konum_yatay+sayac,konum_dikey,yon)] = 1; gemidurumu[GEMIGENISLIK*gemino + sayac] = eleman(konum_yatay+sayac,konum_dikey,yon); }</span>
 
-denemesayisi = 0; gemino++; }
-
-}
-
-// cheat(gemiler); // Gemilerin yerleşimini görmek için bu satırın commentini kaldırın. return 0; }
-
-int sifirla(int *gemiler) {
-
-int sayac;
-
-for (sayac=0;sayac&lt;OYUNALANI*OYUNALANI;sayac++) { gemiler[sayac] = 0; }
+denemesayisi = <span class="hljs-number">0</span>; gemino++; }
 
 }
 
-int atis(int *gemiler, int yatay, int dikey, int *gemidurumu) {
+<span class="hljs-comment">// cheat(gemiler); // Gemilerin yerleşimini görmek için bu satırın commentini kaldırın. return 0; }</span>
 
-int sayac; int sayac2; int gemino; int tamam;
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">sifirla</span><span class="hljs-params">(<span class="hljs-keyword">int</span> *gemiler)</span> </span>{
 
-switch(gemiler[eleman(yatay,dikey,0)]) { case 0: // Bosluga ates etti (sanssiz) gemiler[eleman(yatay,dikey,0)] = 4; return 0; case 1: // Gemiyi vurdu! nhahahaha, acaba batti mi?
+<span class="hljs-keyword">int</span> sayac;
 
-gemiler[eleman(yatay,dikey,0)] = 2;
-
-for (sayac=0;sayac&lt;GEMILIMIT;sayac++) { for (sayac2=0;sayac2&lt;GEMIGENISLIK;sayac2++) { if (gemidurumu[sayac*GEMIGENISLIK+sayac2] == eleman(yatay,dikey,0)) { gemino = sayac; break; } } }
-
-tamam = 1; for (sayac=0;sayac&lt;GEMIGENISLIK;sayac++) { if (gemidurumu[GEMIGENISLIK*gemino + sayac] != -1) { if (gemiler[gemidurumu[GEMIGENISLIK*gemino + sayac]] == 1) { // Gemi daha batmadi. tamam = 0; break; } } }
-
-if (tamam == 1) { for (sayac=0;sayac&lt;GEMIGENISLIK;sayac++) { if (gemidurumu[GEMIGENISLIK*gemino + sayac] != -1) { gemiler[gemidurumu[GEMIGENISLIK*gemino + sayac]] = 3; } } return 2; }
-
-return 1; default: return 3; }
+<span class="hljs-keyword">for</span> (sayac=<span class="hljs-number">0</span>;sayac&lt;OYUNALANI*OYUNALANI;sayac++) { gemiler[sayac] = <span class="hljs-number">0</span>; }
 
 }
 
-int main() { /* Acilis yazilari BASLANGICI */ printf(&quot;Umut BENZER\n&quot;); printf(&quot;05-06-7670\n&quot;); printf(&quot;Ege Universitesi Bilgisayar Muhendisligi 1\. Sinif\n&quot;); printf(&quot;http://www.ubenzer.com\n&quot;); printf(&quot;Amiral Batti 1.0\n\n&quot;); /* Acilis yazilari SONU */
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">atis</span><span class="hljs-params">(<span class="hljs-keyword">int</span> *gemiler, <span class="hljs-keyword">int</span> yatay, <span class="hljs-keyword">int</span> dikey, <span class="hljs-keyword">int</span> *gemidurumu)</span> </span>{
 
-int gemisayi; int gemiuzunluk [GEMILIMIT+1]; int sayac,sayac2; int gemiler[OYUNALANI*OYUNALANI]; int atissayisi; int gemidurumu[GEMILIMIT*GEMIGENISLIK]; int mesaj; int batikgemi; int secenek; int sag_serbest = 1;
+<span class="hljs-keyword">int</span> sayac; <span class="hljs-keyword">int</span> sayac2; <span class="hljs-keyword">int</span> gemino; <span class="hljs-keyword">int</span> tamam;
 
-while (sag_serbest != 0) {
+<span class="hljs-keyword">switch</span>(gemiler[eleman(yatay,dikey,<span class="hljs-number">0</span>)]) { <span class="hljs-keyword">case</span> <span class="hljs-number">0</span>: <span class="hljs-comment">// Bosluga ates etti (sanssiz) gemiler[eleman(yatay,dikey,0)] = 4; return 0; case 1: // Gemiyi vurdu! nhahahaha, acaba batti mi?</span>
 
-sifirla(gemiler); atissayisi = 0; gemisayi = 0; batikgemi = 0; mesaj = -1;
+gemiler[eleman(yatay,dikey,<span class="hljs-number">0</span>)] = <span class="hljs-number">2</span>;
 
-for (sayac=0;sayac&lt;GEMILIMIT+1;sayac++) { gemiuzunluk[sayac] = 0; }
+<span class="hljs-keyword">for</span> (sayac=<span class="hljs-number">0</span>;sayac&lt;GEMILIMIT;sayac++) { <span class="hljs-keyword">for</span> (sayac2=<span class="hljs-number">0</span>;sayac2&lt;GEMIGENISLIK;sayac2++) { <span class="hljs-keyword">if</span> (gemidurumu[sayac*GEMIGENISLIK+sayac2] == eleman(yatay,dikey,<span class="hljs-number">0</span>)) { gemino = sayac; <span class="hljs-keyword">break</span>; } } }
 
-for (sayac=0;sayac&lt;GEMILIMIT*GEMIGENISLIK;sayac++) { gemidurumu[sayac] = -1; }
+tamam = <span class="hljs-number">1</span>; <span class="hljs-keyword">for</span> (sayac=<span class="hljs-number">0</span>;sayac&lt;GEMIGENISLIK;sayac++) { <span class="hljs-keyword">if</span> (gemidurumu[GEMIGENISLIK*gemino + sayac] != <span class="hljs-number">-1</span>) { <span class="hljs-keyword">if</span> (gemiler[gemidurumu[GEMIGENISLIK*gemino + sayac]] == <span class="hljs-number">1</span>) { <span class="hljs-comment">// Gemi daha batmadi. tamam = 0; break; } } }</span>
 
-printf(&quot;Amiral batti oyununa hosgeldiniz.\n&quot;); printf(&quot;Oyuna baslamadan gemileri yerlestirmek zorundayim.&quot;);
+<span class="hljs-keyword">if</span> (tamam == <span class="hljs-number">1</span>) { <span class="hljs-keyword">for</span> (sayac=<span class="hljs-number">0</span>;sayac&lt;GEMIGENISLIK;sayac++) { <span class="hljs-keyword">if</span> (gemidurumu[GEMIGENISLIK*gemino + sayac] != <span class="hljs-number">-1</span>) { gemiler[gemidurumu[GEMIGENISLIK*gemino + sayac]] = <span class="hljs-number">3</span>; } } <span class="hljs-keyword">return</span> <span class="hljs-number">2</span>; }
 
-while (gemisayi &lt; 1 || gemisayi &gt; GEMILIMIT) { printf(&quot;\nEn fazla %d gemi olmak uzere kac gemi yerlestirmek istediginizi giriniz: &quot;,GEMILIMIT); scanf(&quot;%d&quot;,&amp;gemisayi); }
-
-system(&quot;cls&quot;); printf(&quot;Tesekkur ediyorum. Simdi bu %d geminin uzunluklarini sizden isteyecegim.\n&quot;,gemisayi); printf(&quot;Gemilerin uzunluklari 0'dan buyuk %d'den kucuk olmalidir.&quot;,GEMIGENISLIK+1);
-
-for (sayac=0;sayac&lt;gemisayi;sayac++) {
-
-while(gemiuzunluk[sayac] &lt; 1 || gemiuzunluk[sayac] &gt; GEMIGENISLIK) { printf(&quot;\n(%d/%d) %d. geminin uzunlugunu giriniz: &quot;,sayac+1,gemisayi,sayac+1); scanf(&quot;%d&quot;,&amp;gemiuzunluk[sayac]); }
+<span class="hljs-keyword">return</span> <span class="hljs-number">1</span>; <span class="hljs-keyword">default</span>: <span class="hljs-keyword">return</span> <span class="hljs-number">3</span>; }
 
 }
 
-if (yerlestir(gemiuzunluk,gemiler, gemidurumu) == -1) { // Gemiler yerleştirilemedi. return 0; }
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{ <span class="hljs-comment">/* Acilis yazilari BASLANGICI */</span> <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Umut BENZER\n"</span>); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"05-06-7670\n"</span>); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Ege Universitesi Bilgisayar Muhendisligi 1\. Sinif\n"</span>); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"http://www.ubenzer.com\n"</span>); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Amiral Batti 1.0\n\n"</span>); <span class="hljs-comment">/* Acilis yazilari SONU */</span>
 
-sayac = 0; while(gemiuzunluk[sayac] != 0) { // Gemiler bitene kadar atissayisi += gemiuzunluk[sayac]; sayac++; }
+<span class="hljs-keyword">int</span> gemisayi; <span class="hljs-keyword">int</span> gemiuzunluk [GEMILIMIT+<span class="hljs-number">1</span>]; <span class="hljs-keyword">int</span> sayac,sayac2; <span class="hljs-keyword">int</span> gemiler[OYUNALANI*OYUNALANI]; <span class="hljs-keyword">int</span> atissayisi; <span class="hljs-keyword">int</span> gemidurumu[GEMILIMIT*GEMIGENISLIK]; <span class="hljs-keyword">int</span> mesaj; <span class="hljs-keyword">int</span> batikgemi; <span class="hljs-keyword">int</span> secenek; <span class="hljs-keyword">int</span> sag_serbest = <span class="hljs-number">1</span>;
 
-atissayisi = atissayisi * 2;
+<span class="hljs-keyword">while</span> (sag_serbest != <span class="hljs-number">0</span>) {
 
-char yatay; int dikey;
+sifirla(gemiler); atissayisi = <span class="hljs-number">0</span>; gemisayi = <span class="hljs-number">0</span>; batikgemi = <span class="hljs-number">0</span>; mesaj = <span class="hljs-number">-1</span>;
 
-for (sayac=1;sayac&lt;=atissayisi;sayac++) { ciz(gemiler); printf(&quot;\nOyun: (%d/%d)\n&quot;,sayac,atissayisi);
+<span class="hljs-keyword">for</span> (sayac=<span class="hljs-number">0</span>;sayac&lt;GEMILIMIT+<span class="hljs-number">1</span>;sayac++) { gemiuzunluk[sayac] = <span class="hljs-number">0</span>; }
 
-switch (mesaj) { case 0: printf(&quot;Uzgunum, iskaladin.&quot;); break; case 1: printf(&quot;Tebrikler isabetli atis.&quot;); break; case 2: printf(&quot;Cok iyi! Gemi batti!&quot;); break; case 3: printf(&quot;Acemi misiniz? Oraya daha once ates etmistiniz?&quot;); break; }
+<span class="hljs-keyword">for</span> (sayac=<span class="hljs-number">0</span>;sayac&lt;GEMILIMIT*GEMIGENISLIK;sayac++) { gemidurumu[sayac] = <span class="hljs-number">-1</span>; }
 
-printf(&quot;\nGemi %d/%d&quot;,batikgemi,gemisayi);
+<span class="hljs-built_in">printf</span>(<span class="hljs-string">"Amiral batti oyununa hosgeldiniz.\n"</span>); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Oyuna baslamadan gemileri yerlestirmek zorundayim."</span>);
 
-yatay = -1; dikey = -1; do { printf(&quot;\nAtis yapmak istediginiz koordinati giriniz: &quot;); scanf(&quot;%c%d&quot;,&amp;yatay,&amp;dikey); } while(dikey &lt; 1 || dikey &gt; OYUNALANI || (yatay - 65) &lt; 0 || (yatay - 64) &gt; OYUNALANI);
+<span class="hljs-keyword">while</span> (gemisayi &lt; <span class="hljs-number">1</span> || gemisayi &gt; GEMILIMIT) { <span class="hljs-built_in">printf</span>(<span class="hljs-string">"\nEn fazla %d gemi olmak uzere kac gemi yerlestirmek istediginizi giriniz: "</span>,GEMILIMIT); <span class="hljs-built_in">scanf</span>(<span class="hljs-string">"%d"</span>,&amp;gemisayi); }
 
-mesaj = (atis(gemiler,yatay-65,dikey-1,gemidurumu)); if (mesaj==2) { batikgemi++; }
+system(<span class="hljs-string">"cls"</span>); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Tesekkur ediyorum. Simdi bu %d geminin uzunluklarini sizden isteyecegim.\n"</span>,gemisayi); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Gemilerin uzunluklari 0'dan buyuk %d'den kucuk olmalidir."</span>,GEMIGENISLIK+<span class="hljs-number">1</span>);
 
-if (batikgemi == gemisayi) { system(&quot;cls&quot;); printf(&quot;Tebrikler! Kazandiniz!&quot;); beklet(); break; } }
+<span class="hljs-keyword">for</span> (sayac=<span class="hljs-number">0</span>;sayac&lt;gemisayi;sayac++) {
 
-if (batikgemi != gemisayi) { system(&quot;cls&quot;); printf(&quot;Uzgunum, kaybettiniz.\n Gemi dizilimi gormek icin bir tusa basin.&quot;); getche(); cheat(gemiler); }
+<span class="hljs-keyword">while</span>(gemiuzunluk[sayac] &lt; <span class="hljs-number">1</span> || gemiuzunluk[sayac] &gt; GEMIGENISLIK) { <span class="hljs-built_in">printf</span>(<span class="hljs-string">"\n(%d/%d) %d. geminin uzunlugunu giriniz: "</span>,sayac+<span class="hljs-number">1</span>,gemisayi,sayac+<span class="hljs-number">1</span>); <span class="hljs-built_in">scanf</span>(<span class="hljs-string">"%d"</span>,&amp;gemiuzunluk[sayac]); }
 
-do { printf (&quot;\nYeniden oynamak ister misiniz? (E-H)&quot;); secenek = getche(); if (secenek == 'H' || secenek == 'h') { sag_serbest = 0; secenek = 'E'; } } while (secenek != 'E' &amp;&amp; secenek != 'e'); system(&quot;cls&quot;);
+}
 
-} return 0; }
+<span class="hljs-keyword">if</span> (yerlestir(gemiuzunluk,gemiler, gemidurumu) == <span class="hljs-number">-1</span>) { <span class="hljs-comment">// Gemiler yerleştirilemedi. return 0; }</span>
+
+sayac = <span class="hljs-number">0</span>; <span class="hljs-keyword">while</span>(gemiuzunluk[sayac] != <span class="hljs-number">0</span>) { <span class="hljs-comment">// Gemiler bitene kadar atissayisi += gemiuzunluk[sayac]; sayac++; }</span>
+
+atissayisi = atissayisi * <span class="hljs-number">2</span>;
+
+<span class="hljs-keyword">char</span> yatay; <span class="hljs-keyword">int</span> dikey;
+
+<span class="hljs-keyword">for</span> (sayac=<span class="hljs-number">1</span>;sayac&lt;=atissayisi;sayac++) { ciz(gemiler); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"\nOyun: (%d/%d)\n"</span>,sayac,atissayisi);
+
+<span class="hljs-keyword">switch</span> (mesaj) { <span class="hljs-keyword">case</span> <span class="hljs-number">0</span>: <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Uzgunum, iskaladin."</span>); <span class="hljs-keyword">break</span>; <span class="hljs-keyword">case</span> <span class="hljs-number">1</span>: <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Tebrikler isabetli atis."</span>); <span class="hljs-keyword">break</span>; <span class="hljs-keyword">case</span> <span class="hljs-number">2</span>: <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Cok iyi! Gemi batti!"</span>); <span class="hljs-keyword">break</span>; <span class="hljs-keyword">case</span> <span class="hljs-number">3</span>: <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Acemi misiniz? Oraya daha once ates etmistiniz?"</span>); <span class="hljs-keyword">break</span>; }
+
+<span class="hljs-built_in">printf</span>(<span class="hljs-string">"\nGemi %d/%d"</span>,batikgemi,gemisayi);
+
+yatay = <span class="hljs-number">-1</span>; dikey = <span class="hljs-number">-1</span>; <span class="hljs-keyword">do</span> { <span class="hljs-built_in">printf</span>(<span class="hljs-string">"\nAtis yapmak istediginiz koordinati giriniz: "</span>); <span class="hljs-built_in">scanf</span>(<span class="hljs-string">"%c%d"</span>,&amp;yatay,&amp;dikey); } <span class="hljs-keyword">while</span>(dikey &lt; <span class="hljs-number">1</span> || dikey &gt; OYUNALANI || (yatay - <span class="hljs-number">65</span>) &lt; <span class="hljs-number">0</span> || (yatay - <span class="hljs-number">64</span>) &gt; OYUNALANI);
+
+mesaj = (atis(gemiler,yatay<span class="hljs-number">-65</span>,dikey<span class="hljs-number">-1</span>,gemidurumu)); <span class="hljs-keyword">if</span> (mesaj==<span class="hljs-number">2</span>) { batikgemi++; }
+
+<span class="hljs-keyword">if</span> (batikgemi == gemisayi) { system(<span class="hljs-string">"cls"</span>); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Tebrikler! Kazandiniz!"</span>); beklet(); <span class="hljs-keyword">break</span>; } }
+
+<span class="hljs-keyword">if</span> (batikgemi != gemisayi) { system(<span class="hljs-string">"cls"</span>); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Uzgunum, kaybettiniz.\n Gemi dizilimi gormek icin bir tusa basin."</span>); getche(); cheat(gemiler); }
+
+<span class="hljs-keyword">do</span> { <span class="hljs-built_in">printf</span> (<span class="hljs-string">"\nYeniden oynamak ister misiniz? (E-H)"</span>); secenek = getche(); <span class="hljs-keyword">if</span> (secenek == <span class="hljs-string">'H'</span> || secenek == <span class="hljs-string">'h'</span>) { sag_serbest = <span class="hljs-number">0</span>; secenek = <span class="hljs-string">'E'</span>; } } <span class="hljs-keyword">while</span> (secenek != <span class="hljs-string">'E'</span> &amp;&amp; secenek != <span class="hljs-string">'e'</span>); system(<span class="hljs-string">"cls"</span>);
+
+} <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>; }
 </code></pre>
 </div></div></article><div class="card comments main-container__items"><div class="card__contents" id="disqus_thread"></div></div></div><div class="sidebar main-content__sidebar"><div class="about"><img class="about__image" src="/img/profile.jpg"/><h1 class="about__name">Umut Benzer</h1><h2 class="about__mini-bio">Software Engineer in Berlin</h2></div></div></div><div class="main-container"><div class="footer"><div class="footer__copyright-holder"><p><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license noopener noreferrer" target="_blank"><img alt="Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License" src="/img/cclicense.png"/></a></p><p><span>Bu sitedeki tüm yazı ve görseller </span><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license noopener noreferrer" target="_blank">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a><span> ile lisanslanmıştır.</span></p></div><div class="footer__generator"><span>Bu sayfa </span><span>22 Nisan 2017</span><span> tarihinde </span><a href="https://github.com/ubenzer/fil" target="_blank">Fil</a><span> ile yaratılmıştır.</span></div></div></div></div>
         <script src="/template/app.js" type="text/javascript"></script><script type="text/javascript">

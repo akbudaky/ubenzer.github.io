@@ -17,11 +17,11 @@
 <p>Nehrin bir kenarında 3 tane misyoner, 3 tane de yamyam bulunmaktadır. Bunlar bir kayık ile nehrin diğer tarafına geçecektir. Ancak bu kayık aynı anda en fazla iki kişi taşıyabilmektedir ve kayığın hareket edebilmesi için en az bir kişinin kayıkta olması gerekmektedir. Nehrin iki tarafı için ayrı ayrı, eğer yamyam sayısı misyoner sayısından fazla olursa yamyamlar misyonerleri yemektedir. Bu topluluk hiç kayıp vermeden karşıya nasıl geçer?</p>
 <h2>Çözüm</h2>
 <p>Bu problem üzerinde geçen sene Yapay Zeka dersinde durmuştuk. Problemin BFS <em>(Breadth First Search)</em> arama yöntemi ile çözümünü kodlamıştım.</p>
-<pre><code class="language-java">private final static Integer[] startingArray = { 3, 3, 1 };
+<pre><code class="hljs language-java"><span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">static</span> Integer[] startingArray = { <span class="hljs-number">3</span>, <span class="hljs-number">3</span>, <span class="hljs-number">1</span> };
 
-private final static Integer[] solutionArray = { 0, 0, 0 };
+<span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">static</span> Integer[] solutionArray = { <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span> };
 
-static { possibleActions.add(new Integer[] { 2, 0, 1 }); possibleActions.add(new Integer[] { 1, 0, 1 }); possibleActions.add(new Integer[] { 1, 1, 1 }); possibleActions.add(new Integer[] { 0, 1, 1 }); possibleActions.add(new Integer[] { 0, 2, 1 }); }
+<span class="hljs-keyword">static</span> { possibleActions.add(<span class="hljs-keyword">new</span> Integer[] { <span class="hljs-number">2</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span> }); possibleActions.add(<span class="hljs-keyword">new</span> Integer[] { <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span> }); possibleActions.add(<span class="hljs-keyword">new</span> Integer[] { <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span> }); possibleActions.add(<span class="hljs-keyword">new</span> Integer[] { <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span> }); possibleActions.add(<span class="hljs-keyword">new</span> Integer[] { <span class="hljs-number">0</span>, <span class="hljs-number">2</span>, <span class="hljs-number">1</span> }); }
 </code></pre>
 <p><code>startingArray</code> ile, nehrin sol kıyısındaki <em>(sırasıyla)</em> misyoner, yamyam ve kayık sayısı verilir. <em>(başlangıç durumu)</em></p>
 <p><code>solutionArray</code> ile problemin çözüldüğü durumda nehrin sol kıyısının nasıl görünmesi gerektiğinin bilgisi verilir. <em>(hiç kimse yok) (aranan durum, çözüm)</em></p>

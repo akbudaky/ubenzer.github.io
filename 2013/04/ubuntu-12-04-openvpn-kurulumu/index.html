@@ -20,7 +20,7 @@
 <p>Bu yazıda anlatılanlar yöntem hakkında herhangi bir garanti verilmemektedir. <strong>Sunucunuzun çalışmaz hale gelmesi, bozulması, güvenlik açığı oluşması veya herhangi bir problem oluşması sizin sorumluluğunuz altındadır!</strong> Burada yazanları dikkatle kullanın! Her zaman yedek alın!</p>
 <h2>Gerekli Araçlar</h2>
 <p>İşlem boyunca bazı dosyaları değiştirmeniz gerekecek. Bunun için <code>vim</code>, <code>nano</code> gibi istediğiniz bir metin editörünü kullanabilirsiniz. Eğer favori bir editörünüz yoksa, kullanımı kolay olduğundan dolayı <code>nano</code> ile başlayabilirsiniz. Nano’yu yüklemek için kullanılacak komut:</p>
-<pre><code class="language-sh">apt-get install nano
+<pre><code class="hljs language-sh">apt-get install nano
 </code></pre>
 <p>Herhangi bir dosyayı düzenlemek için <code>nano dosyaadi</code> veya <code>pico dosyaadi</code> kullanılabilir.</p>
 <h2>1. Sunucunuzun desteklediğinden emin olun</h2>
@@ -33,29 +33,29 @@
 </a></p>
 <h2>2. Gerekli paketleri kurun</h2>
 <p>Neredeyse tüm işlemler sudo olarak yapılmalıdır. Eğer <code>root</code> olarak giriş yapmıyorsanız tüm komutların başına <code>sudo</code> ekleyin.</p>
-<pre><code class="language-sh">apt-get update
+<pre><code class="hljs language-sh">apt-get update
 apt-get install openvpn openssl
 </code></pre>
 <h2>3. Kimliklendirme için Private/Public Key yaratımı</h2>
 <p>Not: Eğer daha önce openssl kullandıysanız ve “key yaratmak” nedir biliyorsanız aşağıdaki yöntemi kullanmak zorunda değilsiniz.</p>
 <p>OpenVPN ile gelen <code>easy-rsa</code>’yı kullanalım. Aşağıdaki komutları sırayla çağırın.</p>
-<pre><code class="language-sh">cd /etc/openvpn
+<pre><code class="hljs language-sh"><span class="hljs-built_in">cd</span> /etc/openvpn
 cp -r /usr/share/doc/openvpn/examples/easy-rsa/2.0 ./easy-rsa
 nano easy-rsa/vars
 </code></pre>
 <p><code>vars</code> dosyası içindeki</p>
-<pre><code class="language-sh">export EASY_RSA=&quot;`pwd`&quot;
+<pre><code class="hljs language-sh"><span class="hljs-built_in">export</span> EASY_RSA=<span class="hljs-string">"`pwd`"</span>
 </code></pre>
 <p>satırını</p>
-<pre><code class="language-sh">export EASY_RSA=&quot;/etc/openvpn/easy-rsa&quot;
+<pre><code class="hljs language-sh"><span class="hljs-built_in">export</span> EASY_RSA=<span class="hljs-string">"/etc/openvpn/easy-rsa"</span>
 </code></pre>
 <p>ile değiştirin.</p>
 <p>Daha sonra aşağıdaki komutları çalıştırarak devam edin:</p>
-<pre><code class="language-sh">. ./easy-rsa/vars
+<pre><code class="hljs language-sh">. ./easy-rsa/vars
 ./easy-rsa/clean-all
-cd easy-rsa
-ln -s openssl-1.0.0.cnf openssl.cnf
-cd ..
+<span class="hljs-built_in">cd</span> easy-rsa
+ln <span class="hljs-_">-s</span> openssl-1.0.0.cnf openssl.cnf
+<span class="hljs-built_in">cd</span> ..
 ./easy-rsa/build-ca OpenVPN
 ./easy-rsa/build-key-server server
 ./easy-rsa/build-key client1
@@ -64,7 +64,7 @@ cd ..
 <p>Son adımlarda sizden sertifika yaratmak için gerekli bazı bilgiler istenecektir.</p>
 <p>VPN’i kullanmasını istediğiniz her makine için ayrı bir sertifikaya ihtiyaç duyarsınız. <code>./easy-rsa/build-key client1</code> adımında <code>client1</code> yerine farklı istemci adları vererek her makine için farklı key yaratabilirsiniz.</p>
 <h3>Örnek</h3>
-<pre><code class="language-sh">./easy-rsa/build-key myandroid
+<pre><code class="hljs language-sh">./easy-rsa/build-key myandroid
 ./easy-rsa/build-key mymac
 ./easy-rsa/build-key mywin7
 ./easy-rsa/build-key seyda-mac
@@ -72,11 +72,11 @@ cd ..
 <p>vs.</p>
 <p>Yaratılan sertifikalar <code>/etc/openvpn/easy-rsa/keys/</code> içerisinde bulunabilir. İsteğe bağlı olarak  buradaki dosyaları <code>/etc/openvpn/keys/</code> klasörüne taşıyıp <code>/etc/openvpn/easy-rsa/</code> klasörünü silebilirsiniz.</p>
 <h2>4. Yaratılan sertifikaların sunucu ayarlarına eklenmesi</h2>
-<pre><code class="language-sh">cd /etc/openvpn
+<pre><code class="hljs language-sh"><span class="hljs-built_in">cd</span> /etc/openvpn
 nano server.conf
 </code></pre>
 <p>Yukarıdaki komutlar ile sunucu ayarlarını açın.</p>
-<pre><code class="language-sh">ca easy-rsa/keys/ca.crt
+<pre><code class="hljs language-sh">ca easy-rsa/keys/ca.crt
 cert easy-rsa/keys/server.crt
 key easy-rsa/keys/server.key
 dh easy-rsa/keys/dh1024.pem
@@ -85,22 +85,22 @@ dh easy-rsa/keys/dh1024.pem
 <p><code>server.key</code> dosyasını kesinlikle başkasıyla paylaşmayın!</p>
 <h2>5. Yönlendirme ayarları</h2>
 <p>Sunucunuzun yönlendirmeyi doğru bir şekilde yapabilmesi için aşağıdaki işlemleri gerçekleştirin:</p>
-<pre><code class="language-sh">echo 1 &gt; /proc/sys/net/ipv4/ip_forward
-iptables -t nat -A POSTROUTING -s 10.8.0.0/24 -o venet0 -j SNAT --to BURAYA_VPSINIZIN_IP_ADRESINI_YAZIN
-cd /etc
+<pre><code class="hljs language-sh"><span class="hljs-built_in">echo</span> 1 &gt; /proc/sys/net/ipv4/ip_forward
+iptables -t nat -A POSTROUTING <span class="hljs-_">-s</span> 10.8.0.0/24 -o venet0 -j SNAT --to BURAYA_VPSINIZIN_IP_ADRESINI_YAZIN
+<span class="hljs-built_in">cd</span> /etc
 nano sysctl.conf
 </code></pre>
 <p><code>#net.ipv4.ip_forward=1</code> satırının başındaki <code>#</code> işaretini kaldırın ve dosyayı kaydedin.</p>
-<pre><code class="language-sh">net.ipv4.ip_forward=1
+<pre><code class="hljs language-sh">net.ipv4.ip_forward=1
 </code></pre>
 <h2>6. Open VPN’i başlatma</h2>
 <p>Aşağıdaki komutu çalıştırın:</p>
-<pre><code class="language-sh">/etc/init.d/openvpn start
+<pre><code class="hljs language-sh">/etc/init.d/openvpn start
 </code></pre>
 <h2>7. İstemci ayarları</h2>
 <p>OpenVPN istemcileri neredeyse her platform için bulunmaktadır. Ben Mac ile <a href="http://code.google.com/p/tunnelblick/" rel="noopener noreferrer" target="_blank">TunnelBlick</a> kullanıyorum.</p>
 <p>Yapılacak olan istemci ayarları uygulamadan uygulamaya değişir ve bu yazının konusu değildir. Ancak genel olarak aşağıdaki gibi bir ayar dosyasına ihtiyacınız olacaktır:</p>
-<pre><code class="language-sh">dev tun
+<pre><code class="hljs language-sh">dev tun
 client
 proto udp
 remote VPSINIZIN_ADRESI 1194

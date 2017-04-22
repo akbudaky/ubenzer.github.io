@@ -25,130 +25,130 @@
 <li><a href="/2010/05/nesneye-yonelik-hesap-makinesi/nesneye-yonelik-hesap-makinesi.zip" >Proje Klasörü (nesneye-yonelik-hesap-makinesi.zip)</a></li>
 </ul>
 <h2>Makine.java</h2>
-<pre><code class="language-java"> package makine;
+<pre><code class="hljs language-java"> <span class="hljs-keyword">package</span> makine;
 
-public abstract class Makine { protected int sayi1 = 0; protected int sayi2 = 0;
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Makine</span> </span>{ <span class="hljs-keyword">protected</span> <span class="hljs-keyword">int</span> sayi1 = <span class="hljs-number">0</span>; <span class="hljs-keyword">protected</span> <span class="hljs-keyword">int</span> sayi2 = <span class="hljs-number">0</span>;
 
-/* TÜM ALT SINIFLAR İÇİN ORTAK İŞLEYİŞE SAHİP METOTLAR BURADA YAZILIYOR. */ public void setSayi1(int sayi1) { this.sayi1 = sayi1; }
+<span class="hljs-comment">/* TÜM ALT SINIFLAR İÇİN ORTAK İŞLEYİŞE SAHİP METOTLAR BURADA YAZILIYOR. */</span> <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setSayi1</span><span class="hljs-params">(<span class="hljs-keyword">int</span> sayi1)</span> </span>{ <span class="hljs-keyword">this</span>.sayi1 = sayi1; }
 
-public void setSayi2(int sayi2) { this.sayi2 = sayi2; }
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setSayi2</span><span class="hljs-params">(<span class="hljs-keyword">int</span> sayi2)</span> </span>{ <span class="hljs-keyword">this</span>.sayi2 = sayi2; }
 
-/* AYNI İŞLEVE SAHİP AMA İŞLEYİŞİ FARKLI METOTLAR, ALT SINIFLARDA YAZILMAK ÜZERE, TANIMLANIYOR KODLANMIYOR */ public abstract int hesapla(); /* Abstract (soyut) bir metot, bu metodun alt sınıflarda implement edilmesini zorunlu kılar. */ }
+<span class="hljs-comment">/* AYNI İŞLEVE SAHİP AMA İŞLEYİŞİ FARKLI METOTLAR, ALT SINIFLARDA YAZILMAK ÜZERE, TANIMLANIYOR KODLANMIYOR */</span> <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-keyword">int</span> <span class="hljs-title">hesapla</span><span class="hljs-params">()</span></span>; <span class="hljs-comment">/* Abstract (soyut) bir metot, bu metodun alt sınıflarda implement edilmesini zorunlu kılar. */</span> }
 </code></pre>
 <h2>Cikar.java</h2>
-<pre><code class="language-java"> package makine;
+<pre><code class="hljs language-java"> <span class="hljs-keyword">package</span> makine;
 
-public class Cikar extends Makine {
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Cikar</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Makine</span> </span>{
 
-public int hesapla() { return super.sayi1 - super.sayi2; }
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">hesapla</span><span class="hljs-params">()</span> </span>{ <span class="hljs-keyword">return</span> <span class="hljs-keyword">super</span>.sayi1 - <span class="hljs-keyword">super</span>.sayi2; }
 
 }
 </code></pre>
 <h2>Bol.java</h2>
-<pre><code class="language-java"> package makine;
+<pre><code class="hljs language-java"> <span class="hljs-keyword">package</span> makine;
 
-public class Bol extends Makine {
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Bol</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Makine</span> </span>{
 
-public int hesapla() { if(super.sayi2 != 0) { return super.sayi1 / super.sayi2; } return 0; }
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">hesapla</span><span class="hljs-params">()</span> </span>{ <span class="hljs-keyword">if</span>(<span class="hljs-keyword">super</span>.sayi2 != <span class="hljs-number">0</span>) { <span class="hljs-keyword">return</span> <span class="hljs-keyword">super</span>.sayi1 / <span class="hljs-keyword">super</span>.sayi2; } <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>; }
 
 }
 </code></pre>
 <h2>Topla.java</h2>
-<pre><code class="language-java"> package makine;
+<pre><code class="hljs language-java"> <span class="hljs-keyword">package</span> makine;
 
-public class Topla extends Makine {
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Topla</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Makine</span> </span>{
 
-public int hesapla() { return super.sayi1 + super.sayi2; } }
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">hesapla</span><span class="hljs-params">()</span> </span>{ <span class="hljs-keyword">return</span> <span class="hljs-keyword">super</span>.sayi1 + <span class="hljs-keyword">super</span>.sayi2; } }
 </code></pre>
 <h2>Carp.java</h2>
-<pre><code class="language-java"> package makine;
+<pre><code class="hljs language-java"> <span class="hljs-keyword">package</span> makine;
 
-public class Carp extends Makine {
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Carp</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Makine</span> </span>{
 
-public int hesapla() { return super.sayi1 * super.sayi2; }
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">hesapla</span><span class="hljs-params">()</span> </span>{ <span class="hljs-keyword">return</span> <span class="hljs-keyword">super</span>.sayi1 * <span class="hljs-keyword">super</span>.sayi2; }
 
 }
 </code></pre>
 <h2>Gorsel.java</h2>
-<pre><code class="language-java"> package makine;
+<pre><code class="hljs language-java"> <span class="hljs-keyword">package</span> makine;
 
-public class Gorsel extends javax.swing.JFrame {
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Gorsel</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">javax</span>.<span class="hljs-title">swing</span>.<span class="hljs-title">JFrame</span> </span>{
 
-private Makine hesMak; /** Creates new form Gorsel */ public Gorsel() { initComponents(); }
+<span class="hljs-keyword">private</span> Makine hesMak; <span class="hljs-comment">/** Creates new form Gorsel */</span> <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Gorsel</span><span class="hljs-params">()</span> </span>{ initComponents(); }
 
-private int stringToInt(String s) { Integer dondurulecek = null; try { dondurulecek = Integer.parseInt(s); } catch (NumberFormatException numberFormatException) { dondurulecek = 0; } return dondurulecek; }
+<span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> <span class="hljs-title">stringToInt</span><span class="hljs-params">(String s)</span> </span>{ Integer dondurulecek = <span class="hljs-keyword">null</span>; <span class="hljs-keyword">try</span> { dondurulecek = Integer.parseInt(s); } <span class="hljs-keyword">catch</span> (NumberFormatException numberFormatException) { dondurulecek = <span class="hljs-number">0</span>; } <span class="hljs-keyword">return</span> dondurulecek; }
 
-/** This method is called from within the constructor to * initialize the form. * WARNING: Do NOT modify this code. The content of this method is * always regenerated by the Form Editor. */ @SuppressWarnings(&quot;unchecked&quot;) // &lt;editor-fold defaultstate=&quot;collapsed&quot; desc=&quot;Generated Code&quot;&gt;//GEN-BEGIN:initComponents private void initComponents() {
+<span class="hljs-comment">/** This method is called from within the constructor to * initialize the form. * WARNING: Do NOT modify this code. The content of this method is * always regenerated by the Form Editor. */</span> <span class="hljs-meta">@SuppressWarnings</span>(<span class="hljs-string">"unchecked"</span>) <span class="hljs-comment">// &lt;editor-fold defaultstate="collapsed" desc="Generated Code"&gt;//GEN-BEGIN:initComponents private void initComponents() {</span>
 
-jLabel1 = new javax.swing.JLabel(); birinciSayi = new javax.swing.JTextField(); jLabel2 = new javax.swing.JLabel(); ikinciSayi = new javax.swing.JTextField(); toplaButon = new javax.swing.JButton(); sonuc = new javax.swing.JLabel(); jLabel3 = new javax.swing.JLabel(); carpButon = new javax.swing.JButton(); bolButon = new javax.swing.JButton(); cikarButon = new javax.swing.JButton();
+jLabel1 = <span class="hljs-keyword">new</span> javax.swing.JLabel(); birinciSayi = <span class="hljs-keyword">new</span> javax.swing.JTextField(); jLabel2 = <span class="hljs-keyword">new</span> javax.swing.JLabel(); ikinciSayi = <span class="hljs-keyword">new</span> javax.swing.JTextField(); toplaButon = <span class="hljs-keyword">new</span> javax.swing.JButton(); sonuc = <span class="hljs-keyword">new</span> javax.swing.JLabel(); jLabel3 = <span class="hljs-keyword">new</span> javax.swing.JLabel(); carpButon = <span class="hljs-keyword">new</span> javax.swing.JButton(); bolButon = <span class="hljs-keyword">new</span> javax.swing.JButton(); cikarButon = <span class="hljs-keyword">new</span> javax.swing.JButton();
 
-setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE); setResizable(false);
+setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE); setResizable(<span class="hljs-keyword">false</span>);
 
-jLabel1.setLabelFor(birinciSayi); jLabel1.setText(&quot;Birinci sayı:&quot;); jLabel1.setToolTipText(&quot;ABC&quot;);
+jLabel1.setLabelFor(birinciSayi); jLabel1.setText(<span class="hljs-string">"Birinci sayı:"</span>); jLabel1.setToolTipText(<span class="hljs-string">"ABC"</span>);
 
-jLabel2.setLabelFor(ikinciSayi); jLabel2.setText(&quot;İkinci Sayı:&quot;);
+jLabel2.setLabelFor(ikinciSayi); jLabel2.setText(<span class="hljs-string">"İkinci Sayı:"</span>);
 
-toplaButon.setText(&quot;+&quot;); toplaButon.addActionListener(new java.awt.event.ActionListener() { public void actionPerformed(java.awt.event.ActionEvent evt) { toplaButonActionPerformed(evt); } });
+toplaButon.setText(<span class="hljs-string">"+"</span>); toplaButon.addActionListener(<span class="hljs-keyword">new</span> java.awt.event.ActionListener() { <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">actionPerformed</span><span class="hljs-params">(java.awt.event.ActionEvent evt)</span> </span>{ toplaButonActionPerformed(evt); } });
 
-sonuc.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 18)); // NOI18N sonuc.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT); sonuc.setText(&quot;sonuç gelecek&quot;);
+sonuc.setFont(<span class="hljs-keyword">new</span> java.awt.Font(<span class="hljs-string">"Tahoma"</span>, <span class="hljs-number">0</span>, <span class="hljs-number">18</span>)); <span class="hljs-comment">// NOI18N sonuc.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT); sonuc.setText("sonuç gelecek");</span>
 
-jLabel3.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 24)); jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER); jLabel3.setText(&quot;Hesap Makinesi&quot;);
+jLabel3.setFont(<span class="hljs-keyword">new</span> java.awt.Font(<span class="hljs-string">"Tahoma"</span>, <span class="hljs-number">0</span>, <span class="hljs-number">24</span>)); jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER); jLabel3.setText(<span class="hljs-string">"Hesap Makinesi"</span>);
 
-carpButon.setText(&quot;X&quot;); carpButon.addActionListener(new java.awt.event.ActionListener() { public void actionPerformed(java.awt.event.ActionEvent evt) { carpButonActionPerformed(evt); } });
+carpButon.setText(<span class="hljs-string">"X"</span>); carpButon.addActionListener(<span class="hljs-keyword">new</span> java.awt.event.ActionListener() { <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">actionPerformed</span><span class="hljs-params">(java.awt.event.ActionEvent evt)</span> </span>{ carpButonActionPerformed(evt); } });
 
-bolButon.setText(&quot;/&quot;); bolButon.addActionListener(new java.awt.event.ActionListener() { public void actionPerformed(java.awt.event.ActionEvent evt) { bolButonActionPerformed(evt); } });
+bolButon.setText(<span class="hljs-string">"/"</span>); bolButon.addActionListener(<span class="hljs-keyword">new</span> java.awt.event.ActionListener() { <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">actionPerformed</span><span class="hljs-params">(java.awt.event.ActionEvent evt)</span> </span>{ bolButonActionPerformed(evt); } });
 
-cikarButon.setText(&quot;-&quot;); cikarButon.addActionListener(new java.awt.event.ActionListener() { public void actionPerformed(java.awt.event.ActionEvent evt) { cikarButonActionPerformed(evt); } });
+cikarButon.setText(<span class="hljs-string">"-"</span>); cikarButon.addActionListener(<span class="hljs-keyword">new</span> java.awt.event.ActionListener() { <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">actionPerformed</span><span class="hljs-params">(java.awt.event.ActionEvent evt)</span> </span>{ cikarButonActionPerformed(evt); } });
 
-javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane()); getContentPane().setLayout(layout); layout.setHorizontalGroup( layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING) .addGroup(layout.createSequentialGroup() .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false) .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup() .addContainerGap() .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)) .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup() .addGap(21, 21, 21) .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false) .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE) .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE)) .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED) .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false) .addComponent(birinciSayi) .addComponent(ikinciSayi) .addGroup(layout.createSequentialGroup() .addComponent(toplaButon) .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED) .addComponent(cikarButon) .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED) .addComponent(carpButon) .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED) .addComponent(bolButon))))) .addContainerGap(23, Short.MAX_VALUE)) .addGroup(layout.createSequentialGroup() .addContainerGap() .addComponent(sonuc, javax.swing.GroupLayout.DEFAULT_SIZE, 261, Short.MAX_VALUE) .addGap(23, 23, 23)) ); layout.setVerticalGroup( layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING) .addGroup(layout.createSequentialGroup() .addContainerGap() .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE) .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED) .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE) .addComponent(jLabel1) .addComponent(birinciSayi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)) .addGap(10, 10, 10) .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE) .addComponent(jLabel2) .addComponent(ikinciSayi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)) .addGap(18, 18, 18) .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE) .addComponent(toplaButon) .addComponent(cikarButon) .addComponent(carpButon) .addComponent(bolButon)) .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED) .addComponent(sonuc, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE) .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)) );
+javax.swing.GroupLayout layout = <span class="hljs-keyword">new</span> javax.swing.GroupLayout(getContentPane()); getContentPane().setLayout(layout); layout.setHorizontalGroup( layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING) .addGroup(layout.createSequentialGroup() .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, <span class="hljs-keyword">false</span>) .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup() .addContainerGap() .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)) .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup() .addGap(<span class="hljs-number">21</span>, <span class="hljs-number">21</span>, <span class="hljs-number">21</span>) .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, <span class="hljs-keyword">false</span>) .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE) .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, <span class="hljs-number">68</span>, Short.MAX_VALUE)) .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED) .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, <span class="hljs-keyword">false</span>) .addComponent(birinciSayi) .addComponent(ikinciSayi) .addGroup(layout.createSequentialGroup() .addComponent(toplaButon) .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED) .addComponent(cikarButon) .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED) .addComponent(carpButon) .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED) .addComponent(bolButon))))) .addContainerGap(<span class="hljs-number">23</span>, Short.MAX_VALUE)) .addGroup(layout.createSequentialGroup() .addContainerGap() .addComponent(sonuc, javax.swing.GroupLayout.DEFAULT_SIZE, <span class="hljs-number">261</span>, Short.MAX_VALUE) .addGap(<span class="hljs-number">23</span>, <span class="hljs-number">23</span>, <span class="hljs-number">23</span>)) ); layout.setVerticalGroup( layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING) .addGroup(layout.createSequentialGroup() .addContainerGap() .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, <span class="hljs-number">23</span>, javax.swing.GroupLayout.PREFERRED_SIZE) .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED) .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE) .addComponent(jLabel1) .addComponent(birinciSayi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)) .addGap(<span class="hljs-number">10</span>, <span class="hljs-number">10</span>, <span class="hljs-number">10</span>) .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE) .addComponent(jLabel2) .addComponent(ikinciSayi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)) .addGap(<span class="hljs-number">18</span>, <span class="hljs-number">18</span>, <span class="hljs-number">18</span>) .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE) .addComponent(toplaButon) .addComponent(cikarButon) .addComponent(carpButon) .addComponent(bolButon)) .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED) .addComponent(sonuc, javax.swing.GroupLayout.PREFERRED_SIZE, <span class="hljs-number">40</span>, javax.swing.GroupLayout.PREFERRED_SIZE) .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)) );
 
-pack(); }// &lt;/editor-fold&gt;//GEN-END:initComponents
+pack(); }<span class="hljs-comment">// &lt;/editor-fold&gt;//GEN-END:initComponents</span>
 
-private void toplaButonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toplaButonActionPerformed String s1 = birinciSayi.getText(); String s2 = ikinciSayi.getText();
+<span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">toplaButonActionPerformed</span><span class="hljs-params">(java.awt.event.ActionEvent evt)</span> </span>{<span class="hljs-comment">//GEN-FIRST:event_toplaButonActionPerformed String s1 = birinciSayi.getText(); String s2 = ikinciSayi.getText();</span>
 
-int sayi1 = stringToInt(s1); int sayi2 = stringToInt(s2);
+<span class="hljs-keyword">int</span> sayi1 = stringToInt(s1); <span class="hljs-keyword">int</span> sayi2 = stringToInt(s2);
 
-hesMak = new Topla();
-
-hesMak.setSayi1(sayi1); hesMak.setSayi2(sayi2);
-
-sonuc.setText(hesMak.hesapla() + &quot;&quot;);
-
-}//GEN-LAST:event_toplaButonActionPerformed
-
-private void carpButonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_carpButonActionPerformed String s1 = birinciSayi.getText(); String s2 = ikinciSayi.getText();
-
-int sayi1 = stringToInt(s1); int sayi2 = stringToInt(s2);
-
-hesMak = new Carp();
+hesMak = <span class="hljs-keyword">new</span> Topla();
 
 hesMak.setSayi1(sayi1); hesMak.setSayi2(sayi2);
 
-sonuc.setText(hesMak.hesapla() + &quot;&quot;); }//GEN-LAST:event_carpButonActionPerformed
+sonuc.setText(hesMak.hesapla() + <span class="hljs-string">""</span>);
 
-private void bolButonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bolButonActionPerformed String s1 = birinciSayi.getText(); String s2 = ikinciSayi.getText();
+}<span class="hljs-comment">//GEN-LAST:event_toplaButonActionPerformed</span>
 
-int sayi1 = stringToInt(s1); int sayi2 = stringToInt(s2);
+<span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">carpButonActionPerformed</span><span class="hljs-params">(java.awt.event.ActionEvent evt)</span> </span>{<span class="hljs-comment">//GEN-FIRST:event_carpButonActionPerformed String s1 = birinciSayi.getText(); String s2 = ikinciSayi.getText();</span>
 
-hesMak = new Bol();
+<span class="hljs-keyword">int</span> sayi1 = stringToInt(s1); <span class="hljs-keyword">int</span> sayi2 = stringToInt(s2);
 
-hesMak.setSayi1(sayi1); hesMak.setSayi2(sayi2);
-
-sonuc.setText(hesMak.hesapla() + &quot;&quot;); }//GEN-LAST:event_bolButonActionPerformed
-
-private void cikarButonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cikarButonActionPerformed String s1 = birinciSayi.getText(); String s2 = ikinciSayi.getText();
-
-int sayi1 = stringToInt(s1); int sayi2 = stringToInt(s2);
-
-hesMak = new Cikar();
+hesMak = <span class="hljs-keyword">new</span> Carp();
 
 hesMak.setSayi1(sayi1); hesMak.setSayi2(sayi2);
 
-sonuc.setText(hesMak.hesapla() + &quot;&quot;); }//GEN-LAST:event_cikarButonActionPerformed
+sonuc.setText(hesMak.hesapla() + <span class="hljs-string">""</span>); }<span class="hljs-comment">//GEN-LAST:event_carpButonActionPerformed</span>
 
-/** * @param args the command line arguments */ public static void main(String args[]) { java.awt.EventQueue.invokeLater(new Runnable() { public void run() { new Gorsel().setVisible(true); } }); }
+<span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">bolButonActionPerformed</span><span class="hljs-params">(java.awt.event.ActionEvent evt)</span> </span>{<span class="hljs-comment">//GEN-FIRST:event_bolButonActionPerformed String s1 = birinciSayi.getText(); String s2 = ikinciSayi.getText();</span>
 
-// Variables declaration - do not modify//GEN-BEGIN:variables private javax.swing.JTextField birinciSayi; private javax.swing.JButton bolButon; private javax.swing.JButton carpButon; private javax.swing.JButton cikarButon; private javax.swing.JTextField ikinciSayi; private javax.swing.JLabel jLabel1; private javax.swing.JLabel jLabel2; private javax.swing.JLabel jLabel3; private javax.swing.JLabel sonuc; private javax.swing.JButton toplaButon; // End of variables declaration//GEN-END:variables
+<span class="hljs-keyword">int</span> sayi1 = stringToInt(s1); <span class="hljs-keyword">int</span> sayi2 = stringToInt(s2);
+
+hesMak = <span class="hljs-keyword">new</span> Bol();
+
+hesMak.setSayi1(sayi1); hesMak.setSayi2(sayi2);
+
+sonuc.setText(hesMak.hesapla() + <span class="hljs-string">""</span>); }<span class="hljs-comment">//GEN-LAST:event_bolButonActionPerformed</span>
+
+<span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">cikarButonActionPerformed</span><span class="hljs-params">(java.awt.event.ActionEvent evt)</span> </span>{<span class="hljs-comment">//GEN-FIRST:event_cikarButonActionPerformed String s1 = birinciSayi.getText(); String s2 = ikinciSayi.getText();</span>
+
+<span class="hljs-keyword">int</span> sayi1 = stringToInt(s1); <span class="hljs-keyword">int</span> sayi2 = stringToInt(s2);
+
+hesMak = <span class="hljs-keyword">new</span> Cikar();
+
+hesMak.setSayi1(sayi1); hesMak.setSayi2(sayi2);
+
+sonuc.setText(hesMak.hesapla() + <span class="hljs-string">""</span>); }<span class="hljs-comment">//GEN-LAST:event_cikarButonActionPerformed</span>
+
+<span class="hljs-comment">/** * <span class="hljs-doctag">@param</span> args the command line arguments */</span> <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String args[])</span> </span>{ java.awt.EventQueue.invokeLater(<span class="hljs-keyword">new</span> Runnable() { <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">run</span><span class="hljs-params">()</span> </span>{ <span class="hljs-keyword">new</span> Gorsel().setVisible(<span class="hljs-keyword">true</span>); } }); }
+
+<span class="hljs-comment">// Variables declaration - do not modify//GEN-BEGIN:variables private javax.swing.JTextField birinciSayi; private javax.swing.JButton bolButon; private javax.swing.JButton carpButon; private javax.swing.JButton cikarButon; private javax.swing.JTextField ikinciSayi; private javax.swing.JLabel jLabel1; private javax.swing.JLabel jLabel2; private javax.swing.JLabel jLabel3; private javax.swing.JLabel sonuc; private javax.swing.JButton toplaButon; // End of variables declaration//GEN-END:variables</span>
 
 }
 </code></pre>

@@ -17,53 +17,53 @@
 <li><a href="/2010/05/c-de-processler-ve-ipc/input.txt" >Örnek Dosya (input.txt)</a></li>
 <li><a href="/2010/05/c-de-processler-ve-ipc/pipe.pdf" >Ödev Raporu</a></li>
 </ul>
-<pre><code class="language-c"> #include &lt;stdio.h&gt; #include &lt;stdlib.h&gt; #include &lt;unistd.h&gt; #include &lt;errno.h&gt;
+<pre><code class="hljs language-c"> <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt; #include &lt;stdlib.h&gt; #include &lt;unistd.h&gt; #include &lt;errno.h&gt;</span></span>
 
-#define LINE 255 int main() {
+<span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> LINE 255 int main() {</span>
 
-/* Acilis yazilari BASLANGICI */ printf(&quot;Umut BENZER\n&quot;); printf(&quot;05-06-7670\n&quot;); printf(&quot;Ege Universitesi Bilgisayar Muhendisligi 3\. Sinif\n&quot;); printf(&quot;http://www.ubenzer.com\n&quot;); printf(&quot;Processes\n\n&quot;); /* Acilis yazilari SONU */
+<span class="hljs-comment">/* Acilis yazilari BASLANGICI */</span> <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Umut BENZER\n"</span>); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"05-06-7670\n"</span>); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Ege Universitesi Bilgisayar Muhendisligi 3\. Sinif\n"</span>); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"http://www.ubenzer.com\n"</span>); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Processes\n\n"</span>); <span class="hljs-comment">/* Acilis yazilari SONU */</span>
 
-int m; int n; int k;
+<span class="hljs-keyword">int</span> m; <span class="hljs-keyword">int</span> n; <span class="hljs-keyword">int</span> k;
 
-int pid; pid = fork();
+<span class="hljs-keyword">int</span> pid; pid = fork();
 
-if (pid == 0) { /* B süreci */ FILE *fp; if((fp=fopen(&quot;input.txt&quot;,&quot;r&quot;)) == NULL) { printf (&quot;Dosya acilamadi.&quot;); exit(-1); }
+<span class="hljs-keyword">if</span> (pid == <span class="hljs-number">0</span>) { <span class="hljs-comment">/* B süreci */</span> FILE *fp; <span class="hljs-keyword">if</span>((fp=fopen(<span class="hljs-string">"input.txt"</span>,<span class="hljs-string">"r"</span>)) == <span class="hljs-literal">NULL</span>) { <span class="hljs-built_in">printf</span> (<span class="hljs-string">"Dosya acilamadi."</span>); <span class="hljs-built_in">exit</span>(<span class="hljs-number">-1</span>); }
 
-fscanf(fp,&quot;%d %d %d&quot;,&amp;m, &amp;n, &amp;k);
+<span class="hljs-built_in">fscanf</span>(fp,<span class="hljs-string">"%d %d %d"</span>,&amp;m, &amp;n, &amp;k);
 
-int matrisA[m][n]; int matrisB[n][k]; int matrisC[m][k];
+<span class="hljs-keyword">int</span> matrisA[m][n]; <span class="hljs-keyword">int</span> matrisB[n][k]; <span class="hljs-keyword">int</span> matrisC[m][k];
 
-int i; int j;
+<span class="hljs-keyword">int</span> i; <span class="hljs-keyword">int</span> j;
 
-for(i=0;i&lt;m;i++) { for(j=0;j&lt;k;j++) { matrisC[i][j] = 0; } }
+<span class="hljs-keyword">for</span>(i=<span class="hljs-number">0</span>;i&lt;m;i++) { <span class="hljs-keyword">for</span>(j=<span class="hljs-number">0</span>;j&lt;k;j++) { matrisC[i][j] = <span class="hljs-number">0</span>; } }
 
-/* A MATRISINI OKU */ for(i=0;i&lt;m;i++) { for(j=0;j&lt;n;j++) { fscanf(fp,&quot;%d&quot;,&amp;matrisA[i][j]); } }
+<span class="hljs-comment">/* A MATRISINI OKU */</span> <span class="hljs-keyword">for</span>(i=<span class="hljs-number">0</span>;i&lt;m;i++) { <span class="hljs-keyword">for</span>(j=<span class="hljs-number">0</span>;j&lt;n;j++) { <span class="hljs-built_in">fscanf</span>(fp,<span class="hljs-string">"%d"</span>,&amp;matrisA[i][j]); } }
 
-/* B MATRISINI OKU */ for(i=0;i&lt;n;i++) { for(j=0;j&lt;k;j++) { fscanf(fp,&quot;%d&quot;,&amp;matrisB[i][j]); } }
+<span class="hljs-comment">/* B MATRISINI OKU */</span> <span class="hljs-keyword">for</span>(i=<span class="hljs-number">0</span>;i&lt;n;i++) { <span class="hljs-keyword">for</span>(j=<span class="hljs-number">0</span>;j&lt;k;j++) { <span class="hljs-built_in">fscanf</span>(fp,<span class="hljs-string">"%d"</span>,&amp;matrisB[i][j]); } }
 
 fclose(fp);
 
-/* EKRANA MATRISLERI YAZDIR */ printf(&quot;Matris A:\n&quot;); for(i=0;i&lt;m;i++) { for(j=0;j&lt;n;j++) { printf(&quot;%d\t&quot;, matrisA[i][j]); } printf(&quot;\n&quot;); }
+<span class="hljs-comment">/* EKRANA MATRISLERI YAZDIR */</span> <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Matris A:\n"</span>); <span class="hljs-keyword">for</span>(i=<span class="hljs-number">0</span>;i&lt;m;i++) { <span class="hljs-keyword">for</span>(j=<span class="hljs-number">0</span>;j&lt;n;j++) { <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%d\t"</span>, matrisA[i][j]); } <span class="hljs-built_in">printf</span>(<span class="hljs-string">"\n"</span>); }
 
-printf(&quot;\nMatris B:\n&quot;); for(i=0;i&lt;n;i++) { for(j=0;j&lt;k;j++) { printf(&quot;%d\t&quot;, matrisB[i][j]); } printf(&quot;\n&quot;); }
+<span class="hljs-built_in">printf</span>(<span class="hljs-string">"\nMatris B:\n"</span>); <span class="hljs-keyword">for</span>(i=<span class="hljs-number">0</span>;i&lt;n;i++) { <span class="hljs-keyword">for</span>(j=<span class="hljs-number">0</span>;j&lt;k;j++) { <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%d\t"</span>, matrisB[i][j]); } <span class="hljs-built_in">printf</span>(<span class="hljs-string">"\n"</span>); }
 
-int pidler[m]; int pipeler[i][2]; for(i=0;i&lt;m;i++) {
+<span class="hljs-keyword">int</span> pidler[m]; <span class="hljs-keyword">int</span> pipeler[i][<span class="hljs-number">2</span>]; <span class="hljs-keyword">for</span>(i=<span class="hljs-number">0</span>;i&lt;m;i++) {
 
-if(pipe(pipeler[i]) &lt; 0) fprintf(stderr, &quot;Program coker. %d\n&quot;, errno); pidler[i] = fork(); if (pidler[i] == 0) { close(pipeler[i][0]); /* OKuma ucunu kapat */ int ic1,ic2; int temp = 0; for(ic1=0; ic1&lt;k; ic1++) { for(ic2=0; ic2&lt;n; ic2++) { temp += matrisA[i][ic2] * matrisB[ic2][ic1]; }
+<span class="hljs-keyword">if</span>(pipe(pipeler[i]) &lt; <span class="hljs-number">0</span>) <span class="hljs-built_in">fprintf</span>(<span class="hljs-built_in">stderr</span>, <span class="hljs-string">"Program coker. %d\n"</span>, errno); pidler[i] = fork(); <span class="hljs-keyword">if</span> (pidler[i] == <span class="hljs-number">0</span>) { close(pipeler[i][<span class="hljs-number">0</span>]); <span class="hljs-comment">/* OKuma ucunu kapat */</span> <span class="hljs-keyword">int</span> ic1,ic2; <span class="hljs-keyword">int</span> temp = <span class="hljs-number">0</span>; <span class="hljs-keyword">for</span>(ic1=<span class="hljs-number">0</span>; ic1&lt;k; ic1++) { <span class="hljs-keyword">for</span>(ic2=<span class="hljs-number">0</span>; ic2&lt;n; ic2++) { temp += matrisA[i][ic2] * matrisB[ic2][ic1]; }
 
-/* integer to char array dönüşümü */ char array[LINE] = {0}; sprintf(array, &quot;%d\n&quot;, temp); write(pipeler[i][1],array,LINE); temp = 0; }
+<span class="hljs-comment">/* integer to char array dönüşümü */</span> <span class="hljs-keyword">char</span> <span class="hljs-built_in">array</span>[LINE] = {<span class="hljs-number">0</span>}; <span class="hljs-built_in">sprintf</span>(<span class="hljs-built_in">array</span>, <span class="hljs-string">"%d\n"</span>, temp); write(pipeler[i][<span class="hljs-number">1</span>],<span class="hljs-built_in">array</span>,LINE); temp = <span class="hljs-number">0</span>; }
 
-exit(0);
+<span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);
 
-} else if(pidler[i] &gt; 0) { close(pipeler[i][1]); /* Yazma ucunu kapat. */
+} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(pidler[i] &gt; <span class="hljs-number">0</span>) { close(pipeler[i][<span class="hljs-number">1</span>]); <span class="hljs-comment">/* Yazma ucunu kapat. */</span>
 
-} else { fprintf(stderr, &quot;Fork yapamadim. %d\n&quot;, errno); exit(EXIT_FAILURE); } } for(i=0;i&lt;m;i++) { wait(pidler[i]); }
+} <span class="hljs-keyword">else</span> { <span class="hljs-built_in">fprintf</span>(<span class="hljs-built_in">stderr</span>, <span class="hljs-string">"Fork yapamadim. %d\n"</span>, errno); <span class="hljs-built_in">exit</span>(EXIT_FAILURE); } } <span class="hljs-keyword">for</span>(i=<span class="hljs-number">0</span>;i&lt;m;i++) { wait(pidler[i]); }
 
-char veribuf[LINE]; for(i=0;i&lt;m;i++) { for(j=0;j&lt;n;j++) { read(pipeler[i][0],veribuf,LINE); matrisC[i][j] = atoi(veribuf); } }
+<span class="hljs-keyword">char</span> veribuf[LINE]; <span class="hljs-keyword">for</span>(i=<span class="hljs-number">0</span>;i&lt;m;i++) { <span class="hljs-keyword">for</span>(j=<span class="hljs-number">0</span>;j&lt;n;j++) { read(pipeler[i][<span class="hljs-number">0</span>],veribuf,LINE); matrisC[i][j] = atoi(veribuf); } }
 
-printf(&quot;\nMatris C:\n&quot;); for(i=0;i&lt;m;i++) { for(j=0;j&lt;k;j++) { printf(&quot;%d\t&quot;, matrisC[i][j]); } printf(&quot;\n&quot;); } exit(0);
+<span class="hljs-built_in">printf</span>(<span class="hljs-string">"\nMatris C:\n"</span>); <span class="hljs-keyword">for</span>(i=<span class="hljs-number">0</span>;i&lt;m;i++) { <span class="hljs-keyword">for</span>(j=<span class="hljs-number">0</span>;j&lt;k;j++) { <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%d\t"</span>, matrisC[i][j]); } <span class="hljs-built_in">printf</span>(<span class="hljs-string">"\n"</span>); } <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);
 
-} else if (pid &gt; 0) { wait(); } else { fprintf(stderr, &quot;Fork yapamadim. %d\n&quot;, errno); exit(EXIT_FAILURE); } }
+} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (pid &gt; <span class="hljs-number">0</span>) { wait(); } <span class="hljs-keyword">else</span> { <span class="hljs-built_in">fprintf</span>(<span class="hljs-built_in">stderr</span>, <span class="hljs-string">"Fork yapamadim. %d\n"</span>, errno); <span class="hljs-built_in">exit</span>(EXIT_FAILURE); } }
 </code></pre>
 </div></div></article><div class="card comments main-container__items"><div class="card__contents" id="disqus_thread"></div></div></div><div class="sidebar main-content__sidebar"><div class="about"><img class="about__image" src="/img/profile.jpg"/><h1 class="about__name">Umut Benzer</h1><h2 class="about__mini-bio">Software Engineer in Berlin</h2></div></div></div><div class="main-container"><div class="footer"><div class="footer__copyright-holder"><p><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license noopener noreferrer" target="_blank"><img alt="Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License" src="/img/cclicense.png"/></a></p><p><span>Bu sitedeki tüm yazı ve görseller </span><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license noopener noreferrer" target="_blank">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a><span> ile lisanslanmıştır.</span></p></div><div class="footer__generator"><span>Bu sayfa </span><span>22 Nisan 2017</span><span> tarihinde </span><a href="https://github.com/ubenzer/fil" target="_blank">Fil</a><span> ile yaratılmıştır.</span></div></div></div></div>
         <script src="/template/app.js" type="text/javascript"></script><script type="text/javascript">

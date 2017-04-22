@@ -15,365 +15,365 @@
 <p>Sınav dönemine geldik. Haydi hayırlısı.</p>
 <p><em>Ek:</em> Bu ödev 100 aldı.</p>
 <p>Kaynak kodunu indirmek istemezseniz aşağıda da aynısını bulabilirsiniz.</p>
-<pre><code class="language-c"> #include &lt;stdio.h&gt; #include &lt;stdlib.h&gt;
+<pre><code class="hljs language-c"> <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt; #include &lt;stdlib.h&gt;</span></span>
 
-#define NO 1 #define AD 2 #define STOK_LIMIT_YOK -1
+<span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> NO 1 #<span class="hljs-meta-keyword">define</span> AD 2 #<span class="hljs-meta-keyword">define</span> STOK_LIMIT_YOK -1</span>
 
-/* Sabitler ve Anlamlari */ /* --------------------- */ /* NO : urun_baglanacak fonksiyonun neye göre geriye veri göndereceğini belirten sa- bitlerden bir tanesi. AD ile aynı olmamak koşuluyla her şey olabilir. AD : urun_baglanacak fonksiyonun neye göre geriye veri göndereceğini belirten sa- bitlerden bir tanesi. NO ile aynı olmamak koşuluyla her şey olabilir. STOK_LIMIT_YOK : İlgili fonksiyonun parametresindeki stok limiti kısmını göz ardı etmesini sağlayan sabit. Negatif herhangi bir sayı ile değiştirilebilir. */
+<span class="hljs-comment">/* Sabitler ve Anlamlari */</span> <span class="hljs-comment">/* --------------------- */</span> <span class="hljs-comment">/* NO : urun_baglanacak fonksiyonun neye göre geriye veri göndereceğini belirten sa- bitlerden bir tanesi. AD ile aynı olmamak koşuluyla her şey olabilir. AD : urun_baglanacak fonksiyonun neye göre geriye veri göndereceğini belirten sa- bitlerden bir tanesi. NO ile aynı olmamak koşuluyla her şey olabilir. STOK_LIMIT_YOK : İlgili fonksiyonun parametresindeki stok limiti kısmını göz ardı etmesini sağlayan sabit. Negatif herhangi bir sayı ile değiştirilebilir. */</span>
 
-/* Yapılar */ struct URUN_YAPI { int urun_kodu; char urun_adi[20]; float birim_alis_fiyati; int stok_miktari; struct URUN_YAPI *sonraki; struct URUN_YAPI *sonraki_ad; struct SATIS_YAPI *link; };
+<span class="hljs-comment">/* Yapılar */</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">URUN_YAPI</span> {</span> <span class="hljs-keyword">int</span> urun_kodu; <span class="hljs-keyword">char</span> urun_adi[<span class="hljs-number">20</span>]; <span class="hljs-keyword">float</span> birim_alis_fiyati; <span class="hljs-keyword">int</span> stok_miktari; <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">URUN_YAPI</span> *<span class="hljs-title">sonraki</span>;</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">URUN_YAPI</span> *<span class="hljs-title">sonraki_ad</span>;</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">SATIS_YAPI</span> *<span class="hljs-title">link</span>;</span> };
 
-struct SATIS_YAPI { char fatura_no[6]; char satis_tarihi[6]; int satis_miktari; float birim_satis_fiyati; struct SATIS_YAPI *sonraki; };
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">SATIS_YAPI</span> {</span> <span class="hljs-keyword">char</span> fatura_no[<span class="hljs-number">6</span>]; <span class="hljs-keyword">char</span> satis_tarihi[<span class="hljs-number">6</span>]; <span class="hljs-keyword">int</span> satis_miktari; <span class="hljs-keyword">float</span> birim_satis_fiyati; <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">SATIS_YAPI</span> *<span class="hljs-title">sonraki</span>;</span> };
 
-/* Kullanıcı tanımlı tipler */ typedef struct URUN_YAPI URUN; typedef struct SATIS_YAPI SATIS;
+<span class="hljs-comment">/* Kullanıcı tanımlı tipler */</span> <span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">URUN_YAPI</span> <span class="hljs-title">URUN</span>;</span> <span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">SATIS_YAPI</span> <span class="hljs-title">SATIS</span>;</span>
 
-void beklet() { /* Bu fonksiyonun tek amaci kullaniciyi bir tusa basana kadar bekletmek, ve sonra ekrani silmektir. */ printf(&quot;\nDevam etmek icin bir tusa basin.&quot;); getche(); system (&quot;cls&quot;); }
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">beklet</span><span class="hljs-params">()</span> </span>{ <span class="hljs-comment">/* Bu fonksiyonun tek amaci kullaniciyi bir tusa basana kadar bekletmek, ve sonra ekrani silmektir. */</span> <span class="hljs-built_in">printf</span>(<span class="hljs-string">"\nDevam etmek icin bir tusa basin."</span>); getche(); system (<span class="hljs-string">"cls"</span>); }
 
-void urun_baglanacak(URUN *liste_basi, int urun_kodu, char urun_adi[20], int ne, URUN **gonderilecek) {
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">urun_baglanacak</span><span class="hljs-params">(URUN *liste_basi, <span class="hljs-keyword">int</span> urun_kodu, <span class="hljs-keyword">char</span> urun_adi[<span class="hljs-number">20</span>], <span class="hljs-keyword">int</span> ne, URUN **gonderilecek)</span> </span>{
 
-/* Ne parametresinde aldığı bilgiye göre urun_kodu ya da urun_adi'ne göre guncel listede arama yapar ve ürün kodu/adı'ndan bir küçük koda/ada sahip ürünün bellekteki adresini gönderir. (yoksa listebaşı) */
+<span class="hljs-comment">/* Ne parametresinde aldığı bilgiye göre urun_kodu ya da urun_adi'ne göre guncel listede arama yapar ve ürün kodu/adı'ndan bir küçük koda/ada sahip ürünün bellekteki adresini gönderir. (yoksa listebaşı) */</span>
 
 URUN *guncel;
 
-if (ne == NO) { /* Ürün koduna göre sıralayacak ve bir adres göndereceğiz. */
+<span class="hljs-keyword">if</span> (ne == NO) { <span class="hljs-comment">/* Ürün koduna göre sıralayacak ve bir adres göndereceğiz. */</span>
 
-guncel = liste_basi-&gt;sonraki; /* Güncel en başta 1.kayıt olsun */ *gonderilecek = liste_basi;
+guncel = liste_basi-&gt;sonraki; <span class="hljs-comment">/* Güncel en başta 1.kayıt olsun */</span> *gonderilecek = liste_basi;
 
-/* Dikkat: Yukarıdaki satıra dikkat edilirse, eğer liste boşsa while döngüsüne girilmeyecektir. */
+<span class="hljs-comment">/* Dikkat: Yukarıdaki satıra dikkat edilirse, eğer liste boşsa while döngüsüne girilmeyecektir. */</span>
 
-while(guncel != liste_basi) { /* Baştan başla geriye dönene kadar uç */
+<span class="hljs-keyword">while</span>(guncel != liste_basi) { <span class="hljs-comment">/* Baştan başla geriye dönene kadar uç */</span>
 
-if (guncel-&gt;urun_kodu &gt;= urun_kodu) { return 0; }
+<span class="hljs-keyword">if</span> (guncel-&gt;urun_kodu &gt;= urun_kodu) { <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>; }
 
-*gonderilecek = guncel; /* Bir öncekini göndereceğimiz için bir yerde tutmak lazım geliyor. */ guncel = guncel-&gt;sonraki; /* Bir sonraki kayıda uçalım. */
-
-}
-
-return 0; /* Eğer buraya geldiyse eşleşme yok demektir. */
-
-} else { /* İsme göre sıralayacak ve bir adres göndereceğiz. */
-
-guncel = liste_basi-&gt;sonraki_ad; /* Güncel en başta 1.kayıt olsun */ *gonderilecek = liste_basi;
-
-/* Dikkat: Yukarıdaki satıra dikkat edilirse, eğer liste boşsa while döngüsüne girilmeyecektir. */
-
-while(guncel != liste_basi) { /* Baştan başla geriye dönene kadar uç */
-
-if (strncmp(guncel-&gt;urun_adi,urun_adi,20) &gt;=0) { return 0; }
-
-*gonderilecek = guncel; /* Bir öncekini göndereceğimiz için bir yerde tutmak lazım geliyor. */ guncel = guncel-&gt;sonraki_ad; /* Bir sonraki kayıda uçalım. */
+*gonderilecek = guncel; <span class="hljs-comment">/* Bir öncekini göndereceğimiz için bir yerde tutmak lazım geliyor. */</span> guncel = guncel-&gt;sonraki; <span class="hljs-comment">/* Bir sonraki kayıda uçalım. */</span>
 
 }
 
-return 0; /* Eğer buraya geldiyse eşleşme yok demektir. */
+<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>; <span class="hljs-comment">/* Eğer buraya geldiyse eşleşme yok demektir. */</span>
+
+} <span class="hljs-keyword">else</span> { <span class="hljs-comment">/* İsme göre sıralayacak ve bir adres göndereceğiz. */</span>
+
+guncel = liste_basi-&gt;sonraki_ad; <span class="hljs-comment">/* Güncel en başta 1.kayıt olsun */</span> *gonderilecek = liste_basi;
+
+<span class="hljs-comment">/* Dikkat: Yukarıdaki satıra dikkat edilirse, eğer liste boşsa while döngüsüne girilmeyecektir. */</span>
+
+<span class="hljs-keyword">while</span>(guncel != liste_basi) { <span class="hljs-comment">/* Baştan başla geriye dönene kadar uç */</span>
+
+<span class="hljs-keyword">if</span> (<span class="hljs-built_in">strncmp</span>(guncel-&gt;urun_adi,urun_adi,<span class="hljs-number">20</span>) &gt;=<span class="hljs-number">0</span>) { <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>; }
+
+*gonderilecek = guncel; <span class="hljs-comment">/* Bir öncekini göndereceğimiz için bir yerde tutmak lazım geliyor. */</span> guncel = guncel-&gt;sonraki_ad; <span class="hljs-comment">/* Bir sonraki kayıda uçalım. */</span>
+
+}
+
+<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>; <span class="hljs-comment">/* Eğer buraya geldiyse eşleşme yok demektir. */</span>
 
 }
 
 }
 
-void urun_ekle(URUN *liste_basi, int urun_kodu, char urun_adi[20], float birim_alis_fiyati, int stok_miktari) {
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">urun_ekle</span><span class="hljs-params">(URUN *liste_basi, <span class="hljs-keyword">int</span> urun_kodu, <span class="hljs-keyword">char</span> urun_adi[<span class="hljs-number">20</span>], <span class="hljs-keyword">float</span> birim_alis_fiyati, <span class="hljs-keyword">int</span> stok_miktari)</span> </span>{
 
-URUN *adres; int sayac; URUN *onceki_urun;
+URUN *adres; <span class="hljs-keyword">int</span> sayac; URUN *onceki_urun;
 
-adres=malloc(sizeof(URUN)); /* Azıcık bellek tahsis edelim kendimize. */
+adres=<span class="hljs-built_in">malloc</span>(<span class="hljs-keyword">sizeof</span>(URUN)); <span class="hljs-comment">/* Azıcık bellek tahsis edelim kendimize. */</span>
 
-/* İçine gerekli verileri yazalım. */ adres-&gt;urun_kodu = urun_kodu; for (sayac=0;sayac&lt;20;sayac++) { adres-&gt;urun_adi[sayac] = urun_adi[sayac]; } adres-&gt;birim_alis_fiyati = birim_alis_fiyati; adres-&gt;stok_miktari = stok_miktari; adres-&gt;link = NULL; /* Yazdık. */
+<span class="hljs-comment">/* İçine gerekli verileri yazalım. */</span> adres-&gt;urun_kodu = urun_kodu; <span class="hljs-keyword">for</span> (sayac=<span class="hljs-number">0</span>;sayac&lt;<span class="hljs-number">20</span>;sayac++) { adres-&gt;urun_adi[sayac] = urun_adi[sayac]; } adres-&gt;birim_alis_fiyati = birim_alis_fiyati; adres-&gt;stok_miktari = stok_miktari; adres-&gt;link = <span class="hljs-literal">NULL</span>; <span class="hljs-comment">/* Yazdık. */</span>
 
-/* Şimdi öncesini sonrasını ayarlayalım ki dairesel bir bağlaç oluşsun. */
+<span class="hljs-comment">/* Şimdi öncesini sonrasını ayarlayalım ki dairesel bir bağlaç oluşsun. */</span>
 
-/* Numaraya göre */ urun_baglanacak(liste_basi,urun_kodu,urun_adi,NO,&amp;onceki_urun);
+<span class="hljs-comment">/* Numaraya göre */</span> urun_baglanacak(liste_basi,urun_kodu,urun_adi,NO,&amp;onceki_urun);
 
-adres-&gt;sonraki = onceki_urun-&gt;sonraki; onceki_urun-&gt;sonraki = adres; /* Ada göre */
+adres-&gt;sonraki = onceki_urun-&gt;sonraki; onceki_urun-&gt;sonraki = adres; <span class="hljs-comment">/* Ada göre */</span>
 
 urun_baglanacak(liste_basi,urun_kodu,urun_adi,AD,&amp;onceki_urun);
 
 adres-&gt;sonraki_ad = onceki_urun-&gt;sonraki_ad; onceki_urun-&gt;sonraki_ad = adres;
 
-/* Burada da bağlantılar ayarlanacak ama şimdi diil */
+<span class="hljs-comment">/* Burada da bağlantılar ayarlanacak ama şimdi diil */</span>
 
 }
 
-int urun_var_mi(URUN *liste_basi, int urun_kodu) {
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">urun_var_mi</span><span class="hljs-params">(URUN *liste_basi, <span class="hljs-keyword">int</span> urun_kodu)</span> </span>{
 
-/* 1: Ürün var 0: Ürün yok */
+<span class="hljs-comment">/* 1: Ürün var 0: Ürün yok */</span>
 
 URUN *guncel;
 
-guncel = liste_basi-&gt;sonraki; /* Güncel en başta 1.kayıt olsun */ /* Dikkat: Yukarıdaki satıra dikkat edilirse, eğer liste boşsa while döngüsüne girilmeyecektir. */
+guncel = liste_basi-&gt;sonraki; <span class="hljs-comment">/* Güncel en başta 1.kayıt olsun */</span> <span class="hljs-comment">/* Dikkat: Yukarıdaki satıra dikkat edilirse, eğer liste boşsa while döngüsüne girilmeyecektir. */</span>
 
-while(guncel != liste_basi || guncel-&gt;urun_kodu &gt; urun_kodu) { /* Baştan başla geriye dönene kadar uç */
+<span class="hljs-keyword">while</span>(guncel != liste_basi || guncel-&gt;urun_kodu &gt; urun_kodu) { <span class="hljs-comment">/* Baştan başla geriye dönene kadar uç */</span>
 
-if (guncel-&gt;urun_kodu == urun_kodu) { return 1; }
+<span class="hljs-keyword">if</span> (guncel-&gt;urun_kodu == urun_kodu) { <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>; }
 
-guncel = guncel-&gt;sonraki; /* Bir sonraki kayıda uçalım. */
+guncel = guncel-&gt;sonraki; <span class="hljs-comment">/* Bir sonraki kayıda uçalım. */</span>
 
 }
 
-return 0; /* Eğer buraya geldiyse eşleşme yok demektir. */
+<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>; <span class="hljs-comment">/* Eğer buraya geldiyse eşleşme yok demektir. */</span>
 
 }
 
-void urun_duzenle(URUN *liste_basi, int urun_kodu, float birim_alis_fiyati, int stok_miktari) {
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">urun_duzenle</span><span class="hljs-params">(URUN *liste_basi, <span class="hljs-keyword">int</span> urun_kodu, <span class="hljs-keyword">float</span> birim_alis_fiyati, <span class="hljs-keyword">int</span> stok_miktari)</span> </span>{
 
 URUN *guncel;
 
-guncel = liste_basi-&gt;sonraki; /* Güncel en başta 1.kayıt olsun */ /* Dikkat: Yukarıdaki satıra dikkat edilirse, eğer liste boşsa while döngüsüne girilmeyecektir. */
+guncel = liste_basi-&gt;sonraki; <span class="hljs-comment">/* Güncel en başta 1.kayıt olsun */</span> <span class="hljs-comment">/* Dikkat: Yukarıdaki satıra dikkat edilirse, eğer liste boşsa while döngüsüne girilmeyecektir. */</span>
 
-while(guncel != liste_basi) { /* Baştan başla geriye dönene kadar uç */
+<span class="hljs-keyword">while</span>(guncel != liste_basi) { <span class="hljs-comment">/* Baştan başla geriye dönene kadar uç */</span>
 
-if (guncel-&gt;urun_kodu == urun_kodu) {
+<span class="hljs-keyword">if</span> (guncel-&gt;urun_kodu == urun_kodu) {
 
-guncel-&gt;birim_alis_fiyati = birim_alis_fiyati; guncel-&gt;stok_miktari = stok_miktari; return 0; }
+guncel-&gt;birim_alis_fiyati = birim_alis_fiyati; guncel-&gt;stok_miktari = stok_miktari; <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>; }
 
-guncel = guncel-&gt;sonraki; /* Bir sonraki kayıda uçalım. */ } }
+guncel = guncel-&gt;sonraki; <span class="hljs-comment">/* Bir sonraki kayıda uçalım. */</span> } }
 
-void urun_listele(URUN *liste_basi, int stok_miktari,int ne) {
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">urun_listele</span><span class="hljs-params">(URUN *liste_basi, <span class="hljs-keyword">int</span> stok_miktari,<span class="hljs-keyword">int</span> ne)</span> </span>{
 
 URUN *guncel;
 
-printf(&quot;Urun Kodu Urun Adi Stok Miktari Bilim Alis Fiyati\n&quot;); printf(&quot;--------- -------------------- ------------ -----------------\n&quot;);
+<span class="hljs-built_in">printf</span>(<span class="hljs-string">"Urun Kodu Urun Adi Stok Miktari Bilim Alis Fiyati\n"</span>); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"--------- -------------------- ------------ -----------------\n"</span>);
 
-if (ne == NO) { /* Liste numaraya göre sıralı gösterilecek */
+<span class="hljs-keyword">if</span> (ne == NO) { <span class="hljs-comment">/* Liste numaraya göre sıralı gösterilecek */</span>
 
-guncel = liste_basi-&gt;sonraki; /* Güncel en başta 1.kayıt olsun */ /* Dikkat: Yukarıdaki satıra dikkat edilirse, eğer liste boşsa while döngüsüne girilmeyecektir. */
+guncel = liste_basi-&gt;sonraki; <span class="hljs-comment">/* Güncel en başta 1.kayıt olsun */</span> <span class="hljs-comment">/* Dikkat: Yukarıdaki satıra dikkat edilirse, eğer liste boşsa while döngüsüne girilmeyecektir. */</span>
 
-while(guncel != liste_basi) { /* Baştan başla geriye dönene kadar uç */
+<span class="hljs-keyword">while</span>(guncel != liste_basi) { <span class="hljs-comment">/* Baştan başla geriye dönene kadar uç */</span>
 
-if (stok_miktari == STOK_LIMIT_YOK || guncel-&gt;stok_miktari &lt;= stok_miktari) { printf(&quot;%9d %20s %12d %17.2f %p %p %p\n&quot;,guncel-&gt;urun_kodu,guncel-&gt;urun_adi,guncel-&gt;stok_miktari,guncel-&gt;birim_alis_fiyati, guncel, guncel-&gt;sonraki, guncel-&gt;sonraki_ad); } guncel = guncel-&gt;sonraki; /* Bir sonraki kayıda uçalım. */ }
+<span class="hljs-keyword">if</span> (stok_miktari == STOK_LIMIT_YOK || guncel-&gt;stok_miktari &lt;= stok_miktari) { <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%9d %20s %12d %17.2f %p %p %p\n"</span>,guncel-&gt;urun_kodu,guncel-&gt;urun_adi,guncel-&gt;stok_miktari,guncel-&gt;birim_alis_fiyati, guncel, guncel-&gt;sonraki, guncel-&gt;sonraki_ad); } guncel = guncel-&gt;sonraki; <span class="hljs-comment">/* Bir sonraki kayıda uçalım. */</span> }
 
-} else { /* Liste ada göre sıralı gösterilecek. */
+} <span class="hljs-keyword">else</span> { <span class="hljs-comment">/* Liste ada göre sıralı gösterilecek. */</span>
 
-guncel = liste_basi-&gt;sonraki_ad; /* Güncel en başta 1.kayıt olsun */ /* Dikkat: Yukarıdaki satıra dikkat edilirse, eğer liste boşsa while döngüsüne girilmeyecektir. */
+guncel = liste_basi-&gt;sonraki_ad; <span class="hljs-comment">/* Güncel en başta 1.kayıt olsun */</span> <span class="hljs-comment">/* Dikkat: Yukarıdaki satıra dikkat edilirse, eğer liste boşsa while döngüsüne girilmeyecektir. */</span>
 
-while(guncel != liste_basi) { /* Baştan başla geriye dönene kadar uç */
+<span class="hljs-keyword">while</span>(guncel != liste_basi) { <span class="hljs-comment">/* Baştan başla geriye dönene kadar uç */</span>
 
-if (stok_miktari == STOK_LIMIT_YOK || guncel-&gt;stok_miktari &lt;= stok_miktari) { printf(&quot;%9d %20s %12d %17.2f\n&quot;,guncel-&gt;urun_kodu,guncel-&gt;urun_adi,guncel-&gt;stok_miktari,guncel-&gt;birim_alis_fiyati); } guncel = guncel-&gt;sonraki_ad; /* Bir sonraki kayıda uçalım. */ }
+<span class="hljs-keyword">if</span> (stok_miktari == STOK_LIMIT_YOK || guncel-&gt;stok_miktari &lt;= stok_miktari) { <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%9d %20s %12d %17.2f\n"</span>,guncel-&gt;urun_kodu,guncel-&gt;urun_adi,guncel-&gt;stok_miktari,guncel-&gt;birim_alis_fiyati); } guncel = guncel-&gt;sonraki_ad; <span class="hljs-comment">/* Bir sonraki kayıda uçalım. */</span> }
 
 } }
 
-void urun_sil(URUN *liste_basi, int urun_kodu) {
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">urun_sil</span><span class="hljs-params">(URUN *liste_basi, <span class="hljs-keyword">int</span> urun_kodu)</span> </span>{
 
 URUN *guncel; URUN *onceki_urun; SATIS *sil_konum;
 
-guncel = liste_basi-&gt;sonraki; /* Güncel en başta 1.kayıt olsun */ /* Dikkat: Yukarıdaki satıra dikkat edilirse, eğer liste boşsa while döngüsüne girilmeyecektir. */
+guncel = liste_basi-&gt;sonraki; <span class="hljs-comment">/* Güncel en başta 1.kayıt olsun */</span> <span class="hljs-comment">/* Dikkat: Yukarıdaki satıra dikkat edilirse, eğer liste boşsa while döngüsüne girilmeyecektir. */</span>
 
-while(guncel != liste_basi) { /* Baştan başla silenecek öğeyi bulana kadar uç */
+<span class="hljs-keyword">while</span>(guncel != liste_basi) { <span class="hljs-comment">/* Baştan başla silenecek öğeyi bulana kadar uç */</span>
 
-if (guncel-&gt;urun_kodu == urun_kodu) { /* İşe silinecek öğe! Sileceğim seni nhahahaha! */
+<span class="hljs-keyword">if</span> (guncel-&gt;urun_kodu == urun_kodu) { <span class="hljs-comment">/* İşe silinecek öğe! Sileceğim seni nhahahaha! */</span>
 
-/* Ürüne bağlı satışları silelim */
+<span class="hljs-comment">/* Ürüne bağlı satışları silelim */</span>
 
-sil_konum = guncel-&gt;link; while(sil_konum!=NULL) { sil_konum = sil_konum-&gt;sonraki; free(sil_konum); }
+sil_konum = guncel-&gt;link; <span class="hljs-keyword">while</span>(sil_konum!=<span class="hljs-literal">NULL</span>) { sil_konum = sil_konum-&gt;sonraki; <span class="hljs-built_in">free</span>(sil_konum); }
 
-/* Silmeden önce önceki kaydın bağını sonrakine almalıyız.*/
+<span class="hljs-comment">/* Silmeden önce önceki kaydın bağını sonrakine almalıyız.*/</span>
 
-/* Numaraya göre bir önceki ürünü bul*/ urun_baglanacak(liste_basi,urun_kodu,guncel-&gt;urun_adi,NO,&amp;onceki_urun); onceki_urun-&gt;sonraki = guncel-&gt;sonraki;
+<span class="hljs-comment">/* Numaraya göre bir önceki ürünü bul*/</span> urun_baglanacak(liste_basi,urun_kodu,guncel-&gt;urun_adi,NO,&amp;onceki_urun); onceki_urun-&gt;sonraki = guncel-&gt;sonraki;
 
-/* Ada göre bir önceki ürünü bul */ urun_baglanacak(liste_basi,urun_kodu,guncel-&gt;urun_adi,AD,&amp;onceki_urun); onceki_urun-&gt;sonraki_ad = guncel-&gt;sonraki_ad;
+<span class="hljs-comment">/* Ada göre bir önceki ürünü bul */</span> urun_baglanacak(liste_basi,urun_kodu,guncel-&gt;urun_adi,AD,&amp;onceki_urun); onceki_urun-&gt;sonraki_ad = guncel-&gt;sonraki_ad;
 
-/* Sil gitsin */ free(guncel);
+<span class="hljs-comment">/* Sil gitsin */</span> <span class="hljs-built_in">free</span>(guncel);
 
-return 0; }
+<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>; }
 
-guncel = guncel-&gt;sonraki; /* Bir sonraki kayıda uçalım. */
-
-}
+guncel = guncel-&gt;sonraki; <span class="hljs-comment">/* Bir sonraki kayıda uçalım. */</span>
 
 }
 
-void satis_ekle(URUN *liste_basi, int urun_kodu, char fatura_no[6], char satis_tarihi[6], int satis_miktari, float birim_satis_fiyati) {
+}
 
-URUN *guncel; SATIS *gezinti; SATIS *adres; SATIS *onceki; int sayac; adres=malloc(sizeof(SATIS)); /* Azıcık bellek tahsis edelim kendimize. */
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">satis_ekle</span><span class="hljs-params">(URUN *liste_basi, <span class="hljs-keyword">int</span> urun_kodu, <span class="hljs-keyword">char</span> fatura_no[<span class="hljs-number">6</span>], <span class="hljs-keyword">char</span> satis_tarihi[<span class="hljs-number">6</span>], <span class="hljs-keyword">int</span> satis_miktari, <span class="hljs-keyword">float</span> birim_satis_fiyati)</span> </span>{
 
-/* İçine gerekli verileri yazalım. */ for (sayac=0;sayac&lt;6;sayac++) { adres-&gt;fatura_no[sayac] = fatura_no[sayac]; }
+URUN *guncel; SATIS *gezinti; SATIS *adres; SATIS *onceki; <span class="hljs-keyword">int</span> sayac; adres=<span class="hljs-built_in">malloc</span>(<span class="hljs-keyword">sizeof</span>(SATIS)); <span class="hljs-comment">/* Azıcık bellek tahsis edelim kendimize. */</span>
 
-for (sayac=0;sayac&lt;6;sayac++) { adres-&gt;satis_tarihi[sayac] = satis_tarihi[sayac]; } adres-&gt;satis_miktari = satis_miktari; adres-&gt;birim_satis_fiyati = birim_satis_fiyati; /* Yazdık. */
+<span class="hljs-comment">/* İçine gerekli verileri yazalım. */</span> <span class="hljs-keyword">for</span> (sayac=<span class="hljs-number">0</span>;sayac&lt;<span class="hljs-number">6</span>;sayac++) { adres-&gt;fatura_no[sayac] = fatura_no[sayac]; }
 
-guncel = liste_basi-&gt;sonraki; /* Güncel en başta 1.kayıt olsun */ /* Dikkat: Yukarıdaki satıra dikkat edilirse, eğer liste boşsa while döngüsüne girilmeyecektir. */
+<span class="hljs-keyword">for</span> (sayac=<span class="hljs-number">0</span>;sayac&lt;<span class="hljs-number">6</span>;sayac++) { adres-&gt;satis_tarihi[sayac] = satis_tarihi[sayac]; } adres-&gt;satis_miktari = satis_miktari; adres-&gt;birim_satis_fiyati = birim_satis_fiyati; <span class="hljs-comment">/* Yazdık. */</span>
 
-while(guncel != liste_basi || guncel-&gt;urun_kodu &gt; urun_kodu) {
+guncel = liste_basi-&gt;sonraki; <span class="hljs-comment">/* Güncel en başta 1.kayıt olsun */</span> <span class="hljs-comment">/* Dikkat: Yukarıdaki satıra dikkat edilirse, eğer liste boşsa while döngüsüne girilmeyecektir. */</span>
 
-if (guncel-&gt;urun_kodu == urun_kodu) { /* Ürünü bulduk, hadi neymiş inceleyelim. */
+<span class="hljs-keyword">while</span>(guncel != liste_basi || guncel-&gt;urun_kodu &gt; urun_kodu) {
 
-/* Durum 1: Daha önce satış eklenmemiş olabilir. */
+<span class="hljs-keyword">if</span> (guncel-&gt;urun_kodu == urun_kodu) { <span class="hljs-comment">/* Ürünü bulduk, hadi neymiş inceleyelim. */</span>
 
-if (guncel-&gt;link == NULL) { /* daha önce ürün eklemesi yapılmamış. hemen ekliyoruz. */ adres-&gt;sonraki = NULL; guncel-&gt;link = adres; } else {
+<span class="hljs-comment">/* Durum 1: Daha önce satış eklenmemiş olabilir. */</span>
 
-/* Durum 2: Yeni eklenen satış şimdiye kadarkilerin en büyüğü olabilir ki ürünler kısmında değişiklik gerekir. */ if(strncmp(satis_tarihi,(guncel-&gt;link)-&gt;satis_tarihi,6)&gt;0) { /* Bu satirda hata yoksa hiçbir satırda yoktur artık :) */ adres-&gt;sonraki = guncel-&gt;link; guncel-&gt;link = adres; } else { /* Durum 3: Yeni eklenen herhangi bir arada ya da en sonra olabilir. */ gezinti = guncel-&gt;link; /* Gezintiye ilk kaydın adresini ata */
+<span class="hljs-keyword">if</span> (guncel-&gt;link == <span class="hljs-literal">NULL</span>) { <span class="hljs-comment">/* daha önce ürün eklemesi yapılmamış. hemen ekliyoruz. */</span> adres-&gt;sonraki = <span class="hljs-literal">NULL</span>; guncel-&gt;link = adres; } <span class="hljs-keyword">else</span> {
 
-do { /* Son kayda kadar */
+<span class="hljs-comment">/* Durum 2: Yeni eklenen satış şimdiye kadarkilerin en büyüğü olabilir ki ürünler kısmında değişiklik gerekir. */</span> <span class="hljs-keyword">if</span>(<span class="hljs-built_in">strncmp</span>(satis_tarihi,(guncel-&gt;link)-&gt;satis_tarihi,<span class="hljs-number">6</span>)&gt;<span class="hljs-number">0</span>) { <span class="hljs-comment">/* Bu satirda hata yoksa hiçbir satırda yoktur artık :) */</span> adres-&gt;sonraki = guncel-&gt;link; guncel-&gt;link = adres; } <span class="hljs-keyword">else</span> { <span class="hljs-comment">/* Durum 3: Yeni eklenen herhangi bir arada ya da en sonra olabilir. */</span> gezinti = guncel-&gt;link; <span class="hljs-comment">/* Gezintiye ilk kaydın adresini ata */</span>
 
-if(strncmp(satis_tarihi,gezinti-&gt;satis_tarihi,6) &gt; 0) {
+<span class="hljs-keyword">do</span> { <span class="hljs-comment">/* Son kayda kadar */</span>
 
-adres-&gt;sonraki = gezinti; onceki-&gt;sonraki = adres; return 0; }
+<span class="hljs-keyword">if</span>(<span class="hljs-built_in">strncmp</span>(satis_tarihi,gezinti-&gt;satis_tarihi,<span class="hljs-number">6</span>) &gt; <span class="hljs-number">0</span>) {
+
+adres-&gt;sonraki = gezinti; onceki-&gt;sonraki = adres; <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>; }
 
 onceki = gezinti; gezinti = gezinti-&gt;sonraki;
 
-} while (gezinti != NULL);
+} <span class="hljs-keyword">while</span> (gezinti != <span class="hljs-literal">NULL</span>);
 
-adres-&gt;sonraki = gezinti; onceki-&gt;sonraki = adres; } } } guncel = guncel-&gt;sonraki; /* Bir sonraki kayıda uçalım. */ } }
+adres-&gt;sonraki = gezinti; onceki-&gt;sonraki = adres; } } } guncel = guncel-&gt;sonraki; <span class="hljs-comment">/* Bir sonraki kayıda uçalım. */</span> } }
 
-void satis_listele(URUN *liste_basi, int urun_kodu) {
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">satis_listele</span><span class="hljs-params">(URUN *liste_basi, <span class="hljs-keyword">int</span> urun_kodu)</span> </span>{
 
 URUN *guncel; SATIS *gezinti;
 
-printf(&quot;%d numarali urunun satis listesi\n&quot;,urun_kodu); printf(&quot;\n&quot;); printf(&quot;FATURA NO SATIS TARIHI SATIS MIKTARI BIRIM SATIS FIYATI\n&quot;); printf(&quot;--------- ------------ ------------- ------------------\n&quot;);
+<span class="hljs-built_in">printf</span>(<span class="hljs-string">"%d numarali urunun satis listesi\n"</span>,urun_kodu); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"\n"</span>); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"FATURA NO SATIS TARIHI SATIS MIKTARI BIRIM SATIS FIYATI\n"</span>); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"--------- ------------ ------------- ------------------\n"</span>);
 
-guncel = liste_basi-&gt;sonraki; /* Güncel en başta 1.kayıt olsun */ /* Dikkat: Yukarıdaki satıra dikkat edilirse, eğer liste boşsa while döngüsüne girilmeyecektir. */
+guncel = liste_basi-&gt;sonraki; <span class="hljs-comment">/* Güncel en başta 1.kayıt olsun */</span> <span class="hljs-comment">/* Dikkat: Yukarıdaki satıra dikkat edilirse, eğer liste boşsa while döngüsüne girilmeyecektir. */</span>
 
-while(guncel != liste_basi) {
+<span class="hljs-keyword">while</span>(guncel != liste_basi) {
 
-if (guncel-&gt;urun_kodu == urun_kodu) { /* Ürünü bulduk, hadi ekrana satışları yazalım. */
+<span class="hljs-keyword">if</span> (guncel-&gt;urun_kodu == urun_kodu) { <span class="hljs-comment">/* Ürünü bulduk, hadi ekrana satışları yazalım. */</span>
 
-if (guncel-&gt;link == NULL) { /* heheee çökertemezsiniz */
+<span class="hljs-keyword">if</span> (guncel-&gt;link == <span class="hljs-literal">NULL</span>) { <span class="hljs-comment">/* heheee çökertemezsiniz */</span>
 
-printf(&quot;(satis kaydi yok)\n&quot;); return 0;
+<span class="hljs-built_in">printf</span>(<span class="hljs-string">"(satis kaydi yok)\n"</span>); <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
 
-} else {
+} <span class="hljs-keyword">else</span> {
 
-gezinti = guncel-&gt;link; while (gezinti != NULL) { printf(&quot; %c%c%c%c%c%c %c%c%c%c%c%c %13d %18.4f \n&quot;,gezinti-&gt;fatura_no[0],gezinti-&gt;fatura_no[1],gezinti-&gt;fatura_no[2],gezinti-&gt;fatura_no[3],gezinti-&gt;fatura_no[4],gezinti-&gt;fatura_no[5],gezinti-&gt;satis_tarihi[0],gezinti-&gt;satis_tarihi[1],gezinti-&gt;satis_tarihi[2],gezinti-&gt;satis_tarihi[3],gezinti-&gt;satis_tarihi[4],gezinti-&gt;satis_tarihi[5],gezinti-&gt;satis_miktari,gezinti-&gt;birim_satis_fiyati); gezinti = gezinti-&gt;sonraki; } } return 0; } guncel = guncel-&gt;sonraki; /* Bir sonraki kayıda uçalım. */ }
+gezinti = guncel-&gt;link; <span class="hljs-keyword">while</span> (gezinti != <span class="hljs-literal">NULL</span>) { <span class="hljs-built_in">printf</span>(<span class="hljs-string">" %c%c%c%c%c%c %c%c%c%c%c%c %13d %18.4f \n"</span>,gezinti-&gt;fatura_no[<span class="hljs-number">0</span>],gezinti-&gt;fatura_no[<span class="hljs-number">1</span>],gezinti-&gt;fatura_no[<span class="hljs-number">2</span>],gezinti-&gt;fatura_no[<span class="hljs-number">3</span>],gezinti-&gt;fatura_no[<span class="hljs-number">4</span>],gezinti-&gt;fatura_no[<span class="hljs-number">5</span>],gezinti-&gt;satis_tarihi[<span class="hljs-number">0</span>],gezinti-&gt;satis_tarihi[<span class="hljs-number">1</span>],gezinti-&gt;satis_tarihi[<span class="hljs-number">2</span>],gezinti-&gt;satis_tarihi[<span class="hljs-number">3</span>],gezinti-&gt;satis_tarihi[<span class="hljs-number">4</span>],gezinti-&gt;satis_tarihi[<span class="hljs-number">5</span>],gezinti-&gt;satis_miktari,gezinti-&gt;birim_satis_fiyati); gezinti = gezinti-&gt;sonraki; } } <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>; } guncel = guncel-&gt;sonraki; <span class="hljs-comment">/* Bir sonraki kayıda uçalım. */</span> }
 
 }
 
-void tum_urun_top_satis(URUN *liste_basi) {
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">tum_urun_top_satis</span><span class="hljs-params">(URUN *liste_basi)</span> </span>{
 
 URUN *guncel; SATIS *gezinti;
 
-int satis_urun; int satis_top=0; float ciro_urun; float ciro_top=0L;
+<span class="hljs-keyword">int</span> satis_urun; <span class="hljs-keyword">int</span> satis_top=<span class="hljs-number">0</span>; <span class="hljs-keyword">float</span> ciro_urun; <span class="hljs-keyword">float</span> ciro_top=<span class="hljs-number">0L</span>;
 
-printf(&quot;Urun Kodu Urun Adi Toplam Satis Miktari Toplam Ciro\n&quot;); printf(&quot;--------- -------------------- -------------------- -----------\n&quot;);
+<span class="hljs-built_in">printf</span>(<span class="hljs-string">"Urun Kodu Urun Adi Toplam Satis Miktari Toplam Ciro\n"</span>); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"--------- -------------------- -------------------- -----------\n"</span>);
 
-guncel = liste_basi-&gt;sonraki; /* Güncel en başta 1.kayıt olsun */ /* Dikkat: Yukarıdaki satıra dikkat edilirse, eğer liste boşsa while döngüsüne girilmeyecektir. */
+guncel = liste_basi-&gt;sonraki; <span class="hljs-comment">/* Güncel en başta 1.kayıt olsun */</span> <span class="hljs-comment">/* Dikkat: Yukarıdaki satıra dikkat edilirse, eğer liste boşsa while döngüsüne girilmeyecektir. */</span>
 
-while(guncel != liste_basi) { /* Baştan başla geriye dönene kadar uç */
+<span class="hljs-keyword">while</span>(guncel != liste_basi) { <span class="hljs-comment">/* Baştan başla geriye dönene kadar uç */</span>
 
-/* Satışlarla ilgili gerekli hesaplamaları yapalım */ satis_urun = 0; ciro_urun = 0L; if (guncel-&gt;link != NULL) { /* heheee çökertemezsiniz */ gezinti = guncel-&gt;link; while (gezinti != NULL) { satis_urun += gezinti-&gt;satis_miktari; ciro_urun += gezinti-&gt;satis_miktari * gezinti-&gt;birim_satis_fiyati;
+<span class="hljs-comment">/* Satışlarla ilgili gerekli hesaplamaları yapalım */</span> satis_urun = <span class="hljs-number">0</span>; ciro_urun = <span class="hljs-number">0L</span>; <span class="hljs-keyword">if</span> (guncel-&gt;link != <span class="hljs-literal">NULL</span>) { <span class="hljs-comment">/* heheee çökertemezsiniz */</span> gezinti = guncel-&gt;link; <span class="hljs-keyword">while</span> (gezinti != <span class="hljs-literal">NULL</span>) { satis_urun += gezinti-&gt;satis_miktari; ciro_urun += gezinti-&gt;satis_miktari * gezinti-&gt;birim_satis_fiyati;
 
 gezinti = gezinti-&gt;sonraki; } }
 
-printf(&quot;%9d %20s %20d %11.4f\n&quot;,guncel-&gt;urun_kodu,guncel-&gt;urun_adi,satis_urun,ciro_urun);
+<span class="hljs-built_in">printf</span>(<span class="hljs-string">"%9d %20s %20d %11.4f\n"</span>,guncel-&gt;urun_kodu,guncel-&gt;urun_adi,satis_urun,ciro_urun);
 
 ciro_top += ciro_urun; satis_top += satis_urun;
 
-guncel = guncel-&gt;sonraki; /* Bir sonraki kayıda uçalım. */ }
+guncel = guncel-&gt;sonraki; <span class="hljs-comment">/* Bir sonraki kayıda uçalım. */</span> }
 
-printf(&quot;---------------------------------------------------------------\n&quot;); printf(&quot;Toplam: %22d %11.4f\n&quot;,satis_top,ciro_top);
+<span class="hljs-built_in">printf</span>(<span class="hljs-string">"---------------------------------------------------------------\n"</span>); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Toplam: %22d %11.4f\n"</span>,satis_top,ciro_top);
 
 }
 
-int main() {
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
 
-/* Acilis yazilari BASLANGICI */ printf(&quot;Umut BENZER\n&quot;); printf(&quot;05-06-7670\n&quot;); printf(&quot;Ege Universitesi Bilgisayar Muhendisligi 1\. Sinif\n&quot;); printf(&quot;http://www.ubenzer.com\n&quot;); printf(&quot;Odev 3\n\n&quot;); /* Acilis yazilari SONU */
+<span class="hljs-comment">/* Acilis yazilari BASLANGICI */</span> <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Umut BENZER\n"</span>); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"05-06-7670\n"</span>); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Ege Universitesi Bilgisayar Muhendisligi 1\. Sinif\n"</span>); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"http://www.ubenzer.com\n"</span>); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Odev 3\n\n"</span>); <span class="hljs-comment">/* Acilis yazilari SONU */</span>
 
-/* Verilerin tutalacağı YAPILAR */
+<span class="hljs-comment">/* Verilerin tutalacağı YAPILAR */</span>
 
 URUN liste_basi;
 
-/* Verilerin tutulacağı YAPILAR SONU */
+<span class="hljs-comment">/* Verilerin tutulacağı YAPILAR SONU */</span>
 
-int sag_serbest=-1; int sayac; int girdi; char girdi2[20]; float girdi3; int girdi4; char girdi5[6]; char girdi6[6]; char secenek; /* Girdi degiskenleri main fonksiyonun her bir yerinde farkli farkli bir sürü amaçla kullanıldığı için özel isimler vermedim. */
+<span class="hljs-keyword">int</span> sag_serbest=<span class="hljs-number">-1</span>; <span class="hljs-keyword">int</span> sayac; <span class="hljs-keyword">int</span> girdi; <span class="hljs-keyword">char</span> girdi2[<span class="hljs-number">20</span>]; <span class="hljs-keyword">float</span> girdi3; <span class="hljs-keyword">int</span> girdi4; <span class="hljs-keyword">char</span> girdi5[<span class="hljs-number">6</span>]; <span class="hljs-keyword">char</span> girdi6[<span class="hljs-number">6</span>]; <span class="hljs-keyword">char</span> secenek; <span class="hljs-comment">/* Girdi degiskenleri main fonksiyonun her bir yerinde farkli farkli bir sürü amaçla kullanıldığı için özel isimler vermedim. */</span>
 
-liste_basi.urun_kodu = -1; for (sayac=0;sayac&lt;20;sayac++) { liste_basi.urun_adi[sayac] = '_'; } liste_basi.birim_alis_fiyati = 0.0; liste_basi.stok_miktari = 0; liste_basi.sonraki = &amp;liste_basi; liste_basi.sonraki_ad = &amp;liste_basi; liste_basi.link = NULL;
+liste_basi.urun_kodu = <span class="hljs-number">-1</span>; <span class="hljs-keyword">for</span> (sayac=<span class="hljs-number">0</span>;sayac&lt;<span class="hljs-number">20</span>;sayac++) { liste_basi.urun_adi[sayac] = <span class="hljs-string">'_'</span>; } liste_basi.birim_alis_fiyati = <span class="hljs-number">0.0</span>; liste_basi.stok_miktari = <span class="hljs-number">0</span>; liste_basi.sonraki = &amp;liste_basi; liste_basi.sonraki_ad = &amp;liste_basi; liste_basi.link = <span class="hljs-literal">NULL</span>;
 
-/* Ana döngü */ while (sag_serbest==-1) {
+<span class="hljs-comment">/* Ana döngü */</span> <span class="hljs-keyword">while</span> (sag_serbest==<span class="hljs-number">-1</span>) {
 
-/* menu BASLANGICI */ printf(&quot;*** Menu *** \n\n&quot;); printf(&quot;1\. Yeni bir urunun eklenmesi \n&quot;); printf(&quot;2\. Bir urunun birim alis fiyatinin ve stok miktarinin guncellenmesi \n&quot;); printf(&quot;3\. Bir urune iliskin satis eklenmesi \n&quot;); printf(&quot;4\. Bir urunun silinmesi \n&quot;); printf(&quot;5\. Bir urunden yapilan tum satislarin listelenmesi \n&quot;); printf(&quot;6\. Tum urunlerin koda gore sirali olarak listelenmesi \n&quot;); printf(&quot;7\. Tum urunlerin ada gore sirali olarak listelenmesi \n&quot;); printf(&quot;8\. Belirli bir stok miktarinin altinda urunlerin listelenmesi \n&quot;); printf(&quot;9\. Tum urunlerden yapilan toplam satislarin listelenmesi \n&quot;); printf(&quot;C. Cikis \n&quot;);
+<span class="hljs-comment">/* menu BASLANGICI */</span> <span class="hljs-built_in">printf</span>(<span class="hljs-string">"*** Menu *** \n\n"</span>); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"1\. Yeni bir urunun eklenmesi \n"</span>); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"2\. Bir urunun birim alis fiyatinin ve stok miktarinin guncellenmesi \n"</span>); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"3\. Bir urune iliskin satis eklenmesi \n"</span>); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"4\. Bir urunun silinmesi \n"</span>); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"5\. Bir urunden yapilan tum satislarin listelenmesi \n"</span>); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"6\. Tum urunlerin koda gore sirali olarak listelenmesi \n"</span>); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"7\. Tum urunlerin ada gore sirali olarak listelenmesi \n"</span>); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"8\. Belirli bir stok miktarinin altinda urunlerin listelenmesi \n"</span>); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"9\. Tum urunlerden yapilan toplam satislarin listelenmesi \n"</span>); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"C. Cikis \n"</span>);
 
-printf(&quot;Lutfen istediginiz islemin numarasini giriniz.\n&quot;); /*menu BITIMI */
+<span class="hljs-built_in">printf</span>(<span class="hljs-string">"Lutfen istediginiz islemin numarasini giriniz.\n"</span>); <span class="hljs-comment">/*menu BITIMI */</span>
 
-secenek=getche(); system (&quot;cls&quot;);
+secenek=getche(); system (<span class="hljs-string">"cls"</span>);
 
-/* secenek getche ile alındığı için ASCII koduna göre switch yapısına sokulabilir. */
+<span class="hljs-comment">/* secenek getche ile alındığı için ASCII koduna göre switch yapısına sokulabilir. */</span>
 
-/* Her CASE için aşağıdaki not geçerlidir. */
+<span class="hljs-comment">/* Her CASE için aşağıdaki not geçerlidir. */</span>
 
-/* Gerekli saçma sapan veri kontrolleri ve doğru girdi için ilgili fonksiyonların çağırılması, fonksiyon- lardan cevap alınması ve bunların işlenmesi.
+<span class="hljs-comment">/* Gerekli saçma sapan veri kontrolleri ve doğru girdi için ilgili fonksiyonların çağırılması, fonksiyon- lardan cevap alınması ve bunların işlenmesi.
 
-Ayrıntılı bilgi için her fonksiyona ayrı ayrı baka- bilirsiniz. */
+Ayrıntılı bilgi için her fonksiyona ayrı ayrı baka- bilirsiniz. */</span>
 
-switch(secenek) { case 49: //1
+<span class="hljs-keyword">switch</span>(secenek) { <span class="hljs-keyword">case</span> <span class="hljs-number">49</span>: <span class="hljs-comment">//1</span>
 
-system (&quot;cls&quot;); printf(&quot;Yeni bir urun kodu giriniz: \n&quot;); scanf(&quot;%d&quot;,&amp;girdi); system (&quot;cls&quot;);
+system (<span class="hljs-string">"cls"</span>); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Yeni bir urun kodu giriniz: \n"</span>); <span class="hljs-built_in">scanf</span>(<span class="hljs-string">"%d"</span>,&amp;girdi); system (<span class="hljs-string">"cls"</span>);
 
-switch (urun_var_mi(&amp;liste_basi,girdi)) {
+<span class="hljs-keyword">switch</span> (urun_var_mi(&amp;liste_basi,girdi)) {
 
-case 0: /* Yaşasın doğru girmişler. */
+<span class="hljs-keyword">case</span> <span class="hljs-number">0</span>: <span class="hljs-comment">/* Yaşasın doğru girmişler. */</span>
 
-for (sayac=0;sayac&lt;20;sayac++) { girdi2[sayac] = NULL; }
+<span class="hljs-keyword">for</span> (sayac=<span class="hljs-number">0</span>;sayac&lt;<span class="hljs-number">20</span>;sayac++) { girdi2[sayac] = <span class="hljs-literal">NULL</span>; }
 
-while (girdi2[0] == NULL) { fflush(stdin); printf(&quot;Yeni urunun adini giriniz: &quot;); gets(girdi2); }
+<span class="hljs-keyword">while</span> (girdi2[<span class="hljs-number">0</span>] == <span class="hljs-literal">NULL</span>) { fflush(<span class="hljs-built_in">stdin</span>); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Yeni urunun adini giriniz: "</span>); gets(girdi2); }
 
-printf(&quot;Urunun alis fiyatini giriniz: &quot;); scanf(&quot;%f&quot;,&amp;girdi3);
+<span class="hljs-built_in">printf</span>(<span class="hljs-string">"Urunun alis fiyatini giriniz: "</span>); <span class="hljs-built_in">scanf</span>(<span class="hljs-string">"%f"</span>,&amp;girdi3);
 
-printf(&quot;Urunun stok durumunu giriniz: &quot;); scanf(&quot;%d&quot;,&amp;girdi4);
+<span class="hljs-built_in">printf</span>(<span class="hljs-string">"Urunun stok durumunu giriniz: "</span>); <span class="hljs-built_in">scanf</span>(<span class="hljs-string">"%d"</span>,&amp;girdi4);
 
-urun_ekle(&amp;liste_basi, girdi, girdi2, girdi3, girdi4); printf(&quot;Islem tamam. ;)\n&quot;); break;
+urun_ekle(&amp;liste_basi, girdi, girdi2, girdi3, girdi4); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Islem tamam. ;)\n"</span>); <span class="hljs-keyword">break</span>;
 
-case 1: printf(&quot;Girdiginiz urun kodu daha once alinmis.\n&quot;); break; } beklet(); break; case 50: //2 system (&quot;cls&quot;); printf(&quot;Duzenlenecek urun kodunu giriniz: \n&quot;); scanf(&quot;%d&quot;,&amp;girdi); system (&quot;cls&quot;);
+<span class="hljs-keyword">case</span> <span class="hljs-number">1</span>: <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Girdiginiz urun kodu daha once alinmis.\n"</span>); <span class="hljs-keyword">break</span>; } beklet(); <span class="hljs-keyword">break</span>; <span class="hljs-keyword">case</span> <span class="hljs-number">50</span>: <span class="hljs-comment">//2 system ("cls"); printf("Duzenlenecek urun kodunu giriniz: \n"); scanf("%d",&amp;girdi); system ("cls");</span>
 
-switch (urun_var_mi(&amp;liste_basi,girdi)) {
+<span class="hljs-keyword">switch</span> (urun_var_mi(&amp;liste_basi,girdi)) {
 
-case 1: /* Yaşasın doğru girmişler. */
+<span class="hljs-keyword">case</span> <span class="hljs-number">1</span>: <span class="hljs-comment">/* Yaşasın doğru girmişler. */</span>
 
-printf(&quot;Urunun yeni alis fiyatini giriniz: &quot;); scanf(&quot;%f&quot;,&amp;girdi3);
+<span class="hljs-built_in">printf</span>(<span class="hljs-string">"Urunun yeni alis fiyatini giriniz: "</span>); <span class="hljs-built_in">scanf</span>(<span class="hljs-string">"%f"</span>,&amp;girdi3);
 
-printf(&quot;Urunun yeni stok durumunu giriniz: &quot;); scanf(&quot;%d&quot;,&amp;girdi4);
+<span class="hljs-built_in">printf</span>(<span class="hljs-string">"Urunun yeni stok durumunu giriniz: "</span>); <span class="hljs-built_in">scanf</span>(<span class="hljs-string">"%d"</span>,&amp;girdi4);
 
-urun_duzenle(&amp;liste_basi, girdi, girdi3, girdi4); printf(&quot;Islem tamam. ;)\n&quot;); break;
+urun_duzenle(&amp;liste_basi, girdi, girdi3, girdi4); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Islem tamam. ;)\n"</span>); <span class="hljs-keyword">break</span>;
 
-case 0: printf(&quot;Boyle bir urun yok. Bohuuu...\n&quot;); break; } beklet(); break; case 51: //3
+<span class="hljs-keyword">case</span> <span class="hljs-number">0</span>: <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Boyle bir urun yok. Bohuuu...\n"</span>); <span class="hljs-keyword">break</span>; } beklet(); <span class="hljs-keyword">break</span>; <span class="hljs-keyword">case</span> <span class="hljs-number">51</span>: <span class="hljs-comment">//3</span>
 
-system (&quot;cls&quot;); printf(&quot;Satis eklenecek urun kodunu giriniz: \n&quot;); scanf(&quot;%d&quot;,&amp;girdi); system (&quot;cls&quot;);
+system (<span class="hljs-string">"cls"</span>); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Satis eklenecek urun kodunu giriniz: \n"</span>); <span class="hljs-built_in">scanf</span>(<span class="hljs-string">"%d"</span>,&amp;girdi); system (<span class="hljs-string">"cls"</span>);
 
-switch (urun_var_mi(&amp;liste_basi,girdi)) {
+<span class="hljs-keyword">switch</span> (urun_var_mi(&amp;liste_basi,girdi)) {
 
-case 1: /* Evet var. */
+<span class="hljs-keyword">case</span> <span class="hljs-number">1</span>: <span class="hljs-comment">/* Evet var. */</span>
 
-for (sayac=0;sayac&lt;6;sayac++) { girdi5[sayac] = NULL; }
+<span class="hljs-keyword">for</span> (sayac=<span class="hljs-number">0</span>;sayac&lt;<span class="hljs-number">6</span>;sayac++) { girdi5[sayac] = <span class="hljs-literal">NULL</span>; }
 
-while (girdi5[0] == NULL) { fflush(stdin); printf(&quot;Fatura kodunu giriniz (6 karakter): &quot;); gets(girdi5); }
+<span class="hljs-keyword">while</span> (girdi5[<span class="hljs-number">0</span>] == <span class="hljs-literal">NULL</span>) { fflush(<span class="hljs-built_in">stdin</span>); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Fatura kodunu giriniz (6 karakter): "</span>); gets(girdi5); }
 
-for (sayac=0;sayac&lt;6;sayac++) { girdi6[sayac] = NULL; }
+<span class="hljs-keyword">for</span> (sayac=<span class="hljs-number">0</span>;sayac&lt;<span class="hljs-number">6</span>;sayac++) { girdi6[sayac] = <span class="hljs-literal">NULL</span>; }
 
-while (girdi6[0] == NULL) { fflush(stdin); /* Ödevin asıl amacının tarihlerle değil de bellekle uğraşmak olduğu bilindiğinden 2000 öncesi yıllar için sıralama sorunu ihmal edildi. */ printf(&quot;Satis tarihini giriniz (YYAAGG): &quot;); gets(girdi6); }
+<span class="hljs-keyword">while</span> (girdi6[<span class="hljs-number">0</span>] == <span class="hljs-literal">NULL</span>) { fflush(<span class="hljs-built_in">stdin</span>); <span class="hljs-comment">/* Ödevin asıl amacının tarihlerle değil de bellekle uğraşmak olduğu bilindiğinden 2000 öncesi yıllar için sıralama sorunu ihmal edildi. */</span> <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Satis tarihini giriniz (YYAAGG): "</span>); gets(girdi6); }
 
-printf(&quot;Urunun satis miktarini giriniz: &quot;); scanf(&quot;%d&quot;,&amp;girdi4);
+<span class="hljs-built_in">printf</span>(<span class="hljs-string">"Urunun satis miktarini giriniz: "</span>); <span class="hljs-built_in">scanf</span>(<span class="hljs-string">"%d"</span>,&amp;girdi4);
 
-printf(&quot;Birim satis fiyatini giriniz: &quot;); scanf(&quot;%f&quot;,&amp;girdi3);
+<span class="hljs-built_in">printf</span>(<span class="hljs-string">"Birim satis fiyatini giriniz: "</span>); <span class="hljs-built_in">scanf</span>(<span class="hljs-string">"%f"</span>,&amp;girdi3);
 
-satis_ekle(&amp;liste_basi, girdi, girdi5, girdi6, girdi4, girdi3); printf(&quot;Islem tamam.&quot;); break;
+satis_ekle(&amp;liste_basi, girdi, girdi5, girdi6, girdi4, girdi3); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Islem tamam."</span>); <span class="hljs-keyword">break</span>;
 
-case 0: /* Hayır, yok */ printf(&quot;Boyle bir urun yok.&quot;); break; } beklet(); break; case 52: //4
+<span class="hljs-keyword">case</span> <span class="hljs-number">0</span>: <span class="hljs-comment">/* Hayır, yok */</span> <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Boyle bir urun yok."</span>); <span class="hljs-keyword">break</span>; } beklet(); <span class="hljs-keyword">break</span>; <span class="hljs-keyword">case</span> <span class="hljs-number">52</span>: <span class="hljs-comment">//4</span>
 
-system (&quot;cls&quot;); printf(&quot;Silinecek urun kodunu giriniz: \n&quot;); scanf(&quot;%d&quot;,&amp;girdi); system (&quot;cls&quot;);
+system (<span class="hljs-string">"cls"</span>); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Silinecek urun kodunu giriniz: \n"</span>); <span class="hljs-built_in">scanf</span>(<span class="hljs-string">"%d"</span>,&amp;girdi); system (<span class="hljs-string">"cls"</span>);
 
-switch (urun_var_mi(&amp;liste_basi,girdi)) {
+<span class="hljs-keyword">switch</span> (urun_var_mi(&amp;liste_basi,girdi)) {
 
-case 1: /* Yaşasın doğru girmişler. */ urun_sil(&amp;liste_basi, girdi); printf(&quot;Sildim bile.&quot;); break; case 0: printf(&quot;Boyle bir urun zaten yok ki. :)\n&quot;); break; }
+<span class="hljs-keyword">case</span> <span class="hljs-number">1</span>: <span class="hljs-comment">/* Yaşasın doğru girmişler. */</span> urun_sil(&amp;liste_basi, girdi); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Sildim bile."</span>); <span class="hljs-keyword">break</span>; <span class="hljs-keyword">case</span> <span class="hljs-number">0</span>: <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Boyle bir urun zaten yok ki. :)\n"</span>); <span class="hljs-keyword">break</span>; }
 
-beklet(); break; case 53: //5 system (&quot;cls&quot;); printf(&quot;Satislari listelenecek urun kodunu giriniz: \n&quot;); scanf(&quot;%d&quot;,&amp;girdi); system (&quot;cls&quot;);
+beklet(); <span class="hljs-keyword">break</span>; <span class="hljs-keyword">case</span> <span class="hljs-number">53</span>: <span class="hljs-comment">//5 system ("cls"); printf("Satislari listelenecek urun kodunu giriniz: \n"); scanf("%d",&amp;girdi); system ("cls");</span>
 
-switch (urun_var_mi(&amp;liste_basi,girdi)) {
+<span class="hljs-keyword">switch</span> (urun_var_mi(&amp;liste_basi,girdi)) {
 
-case 1: /* Yaşasın doğru girmişler. */
+<span class="hljs-keyword">case</span> <span class="hljs-number">1</span>: <span class="hljs-comment">/* Yaşasın doğru girmişler. */</span>
 
-satis_listele(&amp;liste_basi, girdi); break;
+satis_listele(&amp;liste_basi, girdi); <span class="hljs-keyword">break</span>;
 
-case 0: printf(&quot;Boyle bir urun yok. Bohuuu...\n&quot;); break; } beklet(); break; case 54: //6 urun_listele(&amp;liste_basi, STOK_LIMIT_YOK, NO); beklet(); break; case 55: //7 urun_listele(&amp;liste_basi, STOK_LIMIT_YOK, AD); beklet(); break;
+<span class="hljs-keyword">case</span> <span class="hljs-number">0</span>: <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Boyle bir urun yok. Bohuuu...\n"</span>); <span class="hljs-keyword">break</span>; } beklet(); <span class="hljs-keyword">break</span>; <span class="hljs-keyword">case</span> <span class="hljs-number">54</span>: <span class="hljs-comment">//6 urun_listele(&amp;liste_basi, STOK_LIMIT_YOK, NO); beklet(); break; case 55: //7 urun_listele(&amp;liste_basi, STOK_LIMIT_YOK, AD); beklet(); break;</span>
 
-case 56: //8 girdi = STOK_LIMIT_YOK; while(girdi == STOK_LIMIT_YOK) { system(&quot;cls&quot;); printf(&quot;Kactan kucuk olsun istiyorsunuz? &quot;); scanf(&quot;%d&quot;,&amp;girdi); }
+<span class="hljs-keyword">case</span> <span class="hljs-number">56</span>: <span class="hljs-comment">//8 girdi = STOK_LIMIT_YOK; while(girdi == STOK_LIMIT_YOK) { system("cls"); printf("Kactan kucuk olsun istiyorsunuz? "); scanf("%d",&amp;girdi); }</span>
 
-/* Dikkat: Ödevde istenmeyen ek özelliktir. */
+<span class="hljs-comment">/* Dikkat: Ödevde istenmeyen ek özelliktir. */</span>
 
-system(&quot;cls&quot;); printf(&quot;Neye gore sirali istersiniz? (%d urun koduna gore, %d ada gore)&quot;,NO,AD); scanf(&quot;%d&quot;,&amp;girdi4);
+system(<span class="hljs-string">"cls"</span>); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Neye gore sirali istersiniz? (%d urun koduna gore, %d ada gore)"</span>,NO,AD); <span class="hljs-built_in">scanf</span>(<span class="hljs-string">"%d"</span>,&amp;girdi4);
 
-urun_listele(&amp;liste_basi, girdi, girdi4); beklet(); break;
+urun_listele(&amp;liste_basi, girdi, girdi4); beklet(); <span class="hljs-keyword">break</span>;
 
-case 57: //9
+<span class="hljs-keyword">case</span> <span class="hljs-number">57</span>: <span class="hljs-comment">//9</span>
 
-tum_urun_top_satis(&amp;liste_basi); beklet(); break; case 99: //c case 67: //C /* E e H h ve disinda girdi kabul etmeyen cikmak istiyor musunuz sorusu BASLANGICI */ do { printf (&quot;\nCidden cikmak istiyor musunuz? (E/H) &quot;); secenek = getche(); if (secenek == 'E' || secenek == 'e') { sag_serbest = 0; secenek = 'H'; } } while (secenek != 'H' &amp;&amp; secenek != 'h'); /* E e H h ve disinda girdi kabul etmeyen cikmak istiyor musunuz sorusu SONU */ system (&quot;cls&quot;); break; case 65: printf(&quot;There are no choices. Nothing but a straight line. The illusion\n&quot;); printf(&quot;comes afterwards, when you ask 'Why me?' and 'What if?'. When you\n&quot;); printf(&quot;look back and see the branches, like a pruned bonsai tree, or\n&quot;); printf(&quot;forked lightning. If you had done something differently, it\n&quot;); printf(&quot;wouldn't be you. It would be someone else looking back, asking a\n&quot;); printf(&quot;different set of questions. (a quote from Max Payne)\n&quot;); printf(&quot;\n\n&quot;); printf(&quot;Press any key to continue...&quot;); getche(); system(&quot;cls&quot;); printf(&quot;Supriz Yumurta | Easter Egg\n&quot;); printf(&quot;Tebrikler, bu programin gizli ozelligini buldunuz. :)\n&quot;); printf(&quot;\n&quot;); printf(&quot;http://www.imdb.com/title/tt0366758/quotes\n&quot;); beklet(); break; default: /* Elleri yanlis tusa basan kullanicilar icin yazilan bolum BASLANGICI */ printf(&quot;Bir zahmet 1'den 9'a kadar bir secim yapin.&quot;); beklet(); /* Elleri yanlis tusa basan kullanicilar icin yazilan bolum SONU */ break; } }
+tum_urun_top_satis(&amp;liste_basi); beklet(); <span class="hljs-keyword">break</span>; <span class="hljs-keyword">case</span> <span class="hljs-number">99</span>: <span class="hljs-comment">//c case 67: //C /* E e H h ve disinda girdi kabul etmeyen cikmak istiyor musunuz sorusu BASLANGICI */ do { printf ("\nCidden cikmak istiyor musunuz? (E/H) "); secenek = getche(); if (secenek == 'E' || secenek == 'e') { sag_serbest = 0; secenek = 'H'; } } while (secenek != 'H' &amp;&amp; secenek != 'h'); /* E e H h ve disinda girdi kabul etmeyen cikmak istiyor musunuz sorusu SONU */ system ("cls"); break; case 65: printf("There are no choices. Nothing but a straight line. The illusion\n"); printf("comes afterwards, when you ask 'Why me?' and 'What if?'. When you\n"); printf("look back and see the branches, like a pruned bonsai tree, or\n"); printf("forked lightning. If you had done something differently, it\n"); printf("wouldn't be you. It would be someone else looking back, asking a\n"); printf("different set of questions. (a quote from Max Payne)\n"); printf("\n\n"); printf("Press any key to continue..."); getche(); system("cls"); printf("Supriz Yumurta | Easter Egg\n"); printf("Tebrikler, bu programin gizli ozelligini buldunuz. :)\n"); printf("\n"); printf("http://www.imdb.com/title/tt0366758/quotes\n"); beklet(); break; default: /* Elleri yanlis tusa basan kullanicilar icin yazilan bolum BASLANGICI */ printf("Bir zahmet 1'den 9'a kadar bir secim yapin."); beklet(); /* Elleri yanlis tusa basan kullanicilar icin yazilan bolum SONU */ break; } }</span>
 
-printf(&quot;O halde hoscakalin. :)\n\n\n&quot;); return 0; }
+<span class="hljs-built_in">printf</span>(<span class="hljs-string">"O halde hoscakalin. :)\n\n\n"</span>); <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>; }
 </code></pre>
 </div></div></article><div class="card comments main-container__items"><div class="card__contents" id="disqus_thread"></div></div></div><div class="sidebar main-content__sidebar"><div class="about"><img class="about__image" src="/img/profile.jpg"/><h1 class="about__name">Umut Benzer</h1><h2 class="about__mini-bio">Software Engineer in Berlin</h2></div></div></div><div class="main-container"><div class="footer"><div class="footer__copyright-holder"><p><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license noopener noreferrer" target="_blank"><img alt="Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License" src="/img/cclicense.png"/></a></p><p><span>Bu sitedeki tüm yazı ve görseller </span><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license noopener noreferrer" target="_blank">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a><span> ile lisanslanmıştır.</span></p></div><div class="footer__generator"><span>Bu sayfa </span><span>22 Nisan 2017</span><span> tarihinde </span><a href="https://github.com/ubenzer/fil" target="_blank">Fil</a><span> ile yaratılmıştır.</span></div></div></div></div>
         <script src="/template/app.js" type="text/javascript"></script><script type="text/javascript">

@@ -7,18 +7,18 @@
       </head>
       <body>
         <div><header class="header"><div class="app-bar"><h1 class="app-bar__title"><a class="app-bar__title-link" href="/">UBenzer</a></h1></div></header><div class="main-container"><div class="main-content"><article class="card main-container__items"><div class="card__contents blog-post"><div class="blog-post__date">12 Mayıs 2013</div><h1><a class="blog-post__title" href="/2013/05/macports-nginxi-kolayca-kapatip-acmak/">MacPorts Nginx&#x27;i kolayca kapatıp açmak</a></h1><div class="markdown-content blog-post__body blog-post__content"><p>Linux uygulamalarını Mac'e kurmanın en partik yollarından biri MacPorts'tur. Ancak Mac'te şunu yapamazsınız:</p>
-<pre><code class="language-sh">service nginx restart
+<pre><code class="hljs language-sh">service nginx restart
 </code></pre>
 <p>...ve bir bakmışsınız ki basit bir yeniden başlatma işi başınızı ağrıtmaya başlamış.</p>
 <h2>Çözüm</h2>
 <p>Kendimize üç tane &quot;alias&quot; yaratalım. Bunun için Terminal'i açın ve aşağıdaki komut ile <code>bashrc</code> dosyasını düzenleyin.</p>
-<pre><code class="language-sh">sudo nano /etc/bashrc
+<pre><code class="hljs language-sh">sudo nano /etc/bashrc
 </code></pre>
 <p>Aşağıdaki satırları dosyanın en sonuna ekleyin.</p>
-<pre><code class="language-sh">alias start_nginx='sudo launchctl load -w /Library/LaunchDaemons/org.macports.nginx.plist'
-alias stop_nginx='sudo launchctl unload -w /Library/LaunchDaemons/org.macports.nginx.plist'
-alias restart_nginx='sudo launchctl unload -w /Library/LaunchDaemons/org.macports.nginx.plist; sudo launchctl load -w /Library/LaunchDaemons/org.macp$
-</code></pre>
+<pre><code class="hljs language-sh"><span class="hljs-built_in">alias</span> start_nginx=<span class="hljs-string">'sudo launchctl load -w /Library/LaunchDaemons/org.macports.nginx.plist'</span>
+<span class="hljs-built_in">alias</span> stop_nginx=<span class="hljs-string">'sudo launchctl unload -w /Library/LaunchDaemons/org.macports.nginx.plist'</span>
+<span class="hljs-built_in">alias</span> restart_nginx=<span class="hljs-string">'sudo launchctl unload -w /Library/LaunchDaemons/org.macports.nginx.plist; sudo launchctl load -w /Library/LaunchDaemons/org.macp$
+</span></code></pre>
 <p>Artık açık terminal ekranlarını kapatıp yeniden açtıktan sonra, nginx'i başlatmak, durdurmak ve yeniden başlatmak için <code>start_nginx</code>, <code>stop_nginx</code>, <code>restart_nginx</code> yazmanız yeterli olacaktır. 😃</p>
 <p><a href="/2013/05/macports-nginxi-kolayca-kapatip-acmak/start_stop_restart_nginx_on_mac.png" target="_blank"><span class="img fade-box ">
     <img class="fade-box__lores" src="/2013/05/macports-nginxi-kolayca-kapatip-acmak/start_stop_restart_nginx_on_mac.scaled-png-50.png" alt="start_stop_restart_nginx_on_mac" width="579" height="344">

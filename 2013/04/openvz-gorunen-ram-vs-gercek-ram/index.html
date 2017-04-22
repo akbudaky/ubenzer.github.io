@@ -15,19 +15,20 @@
 <p><em>Hosting firmanız, bir fiziksel sunucuyu haddinden fazla sanal sunucu ile yükleyerek gerçekte sadece size ait olması gereken RAM alanını da paylaştırıyor olabilir mi?</em> Bunu kontrol paneli, top gibi kalsik yöntemlerle öğrenmeniz mümkün değil.</p>
 <p>Ancak <a href="https://lowendbox.com/blog/how-to-tell-your-openvz-vps-is-swapping/" rel="noopener noreferrer" target="_blank">şu kaynakta</a> bunun bir şekilde öğrenilebileceği belirtiliyor.</p>
 <p>Aşağıdaki kodu çalıştırın:</p>
-<pre><code class="language-sh">sudo cat /proc/user_beancounters | grep -E '(uid|physpages|oomguarpages)'
+<pre><code class="hljs language-sh">sudo cat /proc/user_beancounters | grep -E <span class="hljs-string">'(uid|physpages|oomguarpages)'</span>
 </code></pre>
 <p>Şöyle bir çıktı gelecektir:</p>
-<p>[code lang=&quot;bash&quot; light=&quot;true&quot;]root@vps:~# sudo cat /proc/user_beancounters | grep -E '(uid|physpages|oomguarpages)' uid resource held maxheld barrier limit failcnt physpages 217899 524384 0 524288 0 oomguarpages 181208 277135 9223372036854775807 9223372036854775807 0[/code]</p>
+<pre><code class="hljs language-bash">root@vps:~<span class="hljs-comment"># sudo cat /proc/user_beancounters | grep -E '(uid|physpages|oomguarpages)' uid resource held maxheld barrier limit failcnt physpages 217899 524384 0 524288 0 oomguarpages 181208 277135 9223372036854775807 9223372036854775807 0</span>
+</code></pre>
 <p>held kolonunda physpages ve oomguarpages satırlarında yer alan rakamlar farklı ise normalde RAM'de saklanması gereken bazılarının diske gitmiş demektir! <em>(swapping)</em> Şu an benim VPS firmamın da aynısını benim hostingime yaptığımı görüyorsunuz.</p>
 <p>Tam olarak kaç MB'ın swap-out ettiğini görmek için aşağıdaki formülü kullanın:</p>
-<pre><code class="language-sh">(physpages - oomguarpages) * 4096 / 1024 / 1024
+<pre><code class="hljs language-sh">(physpages - oomguarpages) * 4096 / 1024 / 1024
 </code></pre>
 <p>Benim VPS'im için bu değer:</p>
-<pre><code class="language-sh">(217899 - 181208) * 4096 / 1024 / 1024 = 143MB!
+<pre><code class="hljs language-sh">(217899 - 181208) * 4096 / 1024 / 1024 = 143MB!
 </code></pre>
 <p>Bu da bana vaadedilen 2GB'lık RAM'in %7'sinin aslında bana verilmediği anlamına gelir. Ancak o an kullanımda olan RAM/SwapOut RAM yüzdesi daha mantıklı bir istatistik sağlayacaktır:</p>
-<pre><code class="language-sh">Kullanılan RAM: 217899 * 4096 / 1024 / 1024 = 851MB
+<pre><code class="hljs language-sh">Kullanılan RAM: 217899 * 4096 / 1024 / 1024 = 851MB
 Swap-out RAM: 143MB
 </code></pre>
 <p>Bilgilerimin %16'sı olması gereken yerde, RAM'de durmuyor.</p>

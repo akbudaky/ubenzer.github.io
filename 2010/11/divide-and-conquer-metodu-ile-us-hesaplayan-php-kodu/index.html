@@ -12,14 +12,14 @@
 <p>Karmaşıklığı O(n)’dir.</p>
 <p><em>For foreigners:</em> The algorithm bellow calculates a number’s power using divide and conquer method. It’s complexity is O(n). Educational purposes only. There are less complex algorithms exist to do that (due to recursion overhead).</p>
 <h2>Kod Parçası</h2>
-<pre><code class="language-php">
-``` &lt;?php /* Yazar: Umut Benzer http://www.ubenzer.com/ Kullanım: power(TABAN,US); */
+<pre><code class="hljs language-php">
+``` <span class="hljs-meta">&lt;?php</span> <span class="hljs-comment">/* Yazar: Umut Benzer http://www.ubenzer.com/ Kullanım: power(TABAN,US); */</span>
 
-echo power(9,17); /* 9 üssü 17 */
+<span class="hljs-keyword">echo</span> power(<span class="hljs-number">9</span>,<span class="hljs-number">17</span>); <span class="hljs-comment">/* 9 üssü 17 */</span>
 
-function power($base, $exp) { if($exp &gt; 1) { $b = round($exp / 2,0, PHP_ROUND_HALF_DOWN); $c = $exp - $b;
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">power</span><span class="hljs-params">($base, $exp)</span> </span>{ <span class="hljs-keyword">if</span>($exp &gt; <span class="hljs-number">1</span>) { $b = round($exp / <span class="hljs-number">2</span>,<span class="hljs-number">0</span>, PHP_ROUND_HALF_DOWN); $c = $exp - $b;
 
-$result_left = power($base, $b); $result_right= power($base, $c); return $result_left * $result_right; } else { return $base; } }
+$result_left = power($base, $b); $result_right= power($base, $c); <span class="hljs-keyword">return</span> $result_left * $result_right; } <span class="hljs-keyword">else</span> { <span class="hljs-keyword">return</span> $base; } }
 </code></pre>
 <h2>Nasıl Çalışıyor?</h2>
 <p><a href="/2010/11/divide-and-conquer-metodu-ile-us-hesaplayan-php-kodu/divide_and_conquer_us_alma.jpg" target="_blank"><span class="img fade-box ">

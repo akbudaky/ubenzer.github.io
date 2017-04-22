@@ -11,11 +11,11 @@
 <p>E-postam Gmail’de doğru görüntülenirken, Hotmail gönderdiğim postanın kodlamasını bir türlü algılayamıyor, bu yüzden Türkçe karakterler bozuk çıkıyor… Neden?</p>
 <p>Uğraştım durdum… Tek bir sitede yanıt bulamadım… Uzunca bir süre araştırdıktan sonra keşfettim ki <em>gönderdiğimiz mailin konusu (subject) ve içeriği (body) sadece UTF-8 karakteri içerse dahi base64 ile şifrelenmesi (encode in base64) gerekliymiş.</em></p>
 <p>Budan dolayı şöyle bir fonksiyon kullandım. Sorun çözüldü.</p>
-<pre><code class="language-php"> function UTF8_mail($from, $to, $subject, $message) { $from2 = explode(&quot;&lt;&quot;,$from); if (isset($from2[0])) { $headers = &quot;From: =?UTF-8?B?&quot;.base64_encode($from2[0]).&quot;?= &lt;&quot;.$from2[1].&quot;\r\n&quot;; } else { $headers = &quot;From: &quot;.$from[1].&quot;\r\n&quot;; } $subject =&quot;=?UTF-8?B?&quot;.base64_encode($subject).&quot;?=\n&quot;;
+<pre><code class="hljs language-php"> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">UTF8_mail</span><span class="hljs-params">($from, $to, $subject, $message)</span> </span>{ $from2 = explode(<span class="hljs-string">"&lt;"</span>,$from); <span class="hljs-keyword">if</span> (<span class="hljs-keyword">isset</span>($from2[<span class="hljs-number">0</span>])) { $headers = <span class="hljs-string">"From: =?UTF-8?B?"</span>.base64_encode($from2[<span class="hljs-number">0</span>]).<span class="hljs-string">"?= &lt;"</span>.$from2[<span class="hljs-number">1</span>].<span class="hljs-string">"\r\n"</span>; } <span class="hljs-keyword">else</span> { $headers = <span class="hljs-string">"From: "</span>.$from[<span class="hljs-number">1</span>].<span class="hljs-string">"\r\n"</span>; } $subject =<span class="hljs-string">"=?UTF-8?B?"</span>.base64_encode($subject).<span class="hljs-string">"?=\n"</span>;
 
-$headers .= &quot;Content-Type: text/plain; charset=UTF-8; format=flowed \n&quot;. &quot;MIME-Version: 1.0 \n&quot; . &quot;Content-Transfer-Encoding: 8bit \n&quot;. &quot;X-Mailer: PHP \n&quot;;
+$headers .= <span class="hljs-string">"Content-Type: text/plain; charset=UTF-8; format=flowed \n"</span>. <span class="hljs-string">"MIME-Version: 1.0 \n"</span> . <span class="hljs-string">"Content-Transfer-Encoding: 8bit \n"</span>. <span class="hljs-string">"X-Mailer: PHP \n"</span>;
 
-return mail($to, $subject, $message, $headers); }
+<span class="hljs-keyword">return</span> mail($to, $subject, $message, $headers); }
 </code></pre>
 <h2>Daha Fazla Bilgi İçin</h2>
 <ul>

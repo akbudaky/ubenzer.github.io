@@ -20,37 +20,37 @@
 <p>Benim kod örneğim ikinci yöntemi içeriyor. Örneğimde bağlı listeye sıralı eleman ekleme ve elemanları listeme (bağlı listeyi bir defa sıralı gezme) yer alıyor.</p>
 <p>C dilinde daha kapsamlı bir bağlı liste örneği <a href="http://en.wikipedia.org/wiki/Linked_lists#Language_support" rel="noopener noreferrer" target="_blank">Wikipedia’da mevcut</a>.</p>
 <p><em>Not:</em> Benim örneğimde harflerin karşılaştırılması <em>ASCII koduna göre</em> yapılmıştır.</p>
-<pre><code class="language-c"> #include &lt;stdio.h&gt; #include &lt;stdlib.h&gt;
+<pre><code class="hljs language-c"> <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt; #include &lt;stdlib.h&gt;</span></span>
 
-/* Bagli Liste Yapisi */ struct list_el { char karakter; struct list_el *sonraki; };
+<span class="hljs-comment">/* Bagli Liste Yapisi */</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">list_el</span> {</span> <span class="hljs-keyword">char</span> karakter; <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">list_el</span> *<span class="hljs-title">sonraki</span>;</span> };
 
-typedef struct list_el bliste;
+<span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">list_el</span> <span class="hljs-title">bliste</span>;</span>
 
-/* Fonksiyon Prototipleri */ void beklet(); void bliste_m(); void bliste_ekle(char, bliste**); int main();
+<span class="hljs-comment">/* Fonksiyon Prototipleri */</span> <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">beklet</span><span class="hljs-params">()</span></span>; <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">bliste_m</span><span class="hljs-params">()</span></span>; <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">bliste_ekle</span><span class="hljs-params">(<span class="hljs-keyword">char</span>, bliste**)</span></span>; <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>;
 
-void beklet() { /* Bu fonksiyonun tek amaci kullaniciyi bir tusa basana kadar bekletmek, ve sonra ekrani silmektir. */ printf(&quot;\nDevam etmek icin bir tusa basin.&quot;); getche(); system (&quot;cls&quot;); }
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">beklet</span><span class="hljs-params">()</span> </span>{ <span class="hljs-comment">/* Bu fonksiyonun tek amaci kullaniciyi bir tusa basana kadar bekletmek, ve sonra ekrani silmektir. */</span> <span class="hljs-built_in">printf</span>(<span class="hljs-string">"\nDevam etmek icin bir tusa basin."</span>); getche(); system (<span class="hljs-string">"cls"</span>); }
 
-void bliste_m() { /* Bagli liste icin gerekli ilk tanimlamalar */ bliste *simdiki, *bas; bas = NULL;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">bliste_m</span><span class="hljs-params">()</span> </span>{ <span class="hljs-comment">/* Bagli liste icin gerekli ilk tanimlamalar */</span> bliste *simdiki, *bas; bas = <span class="hljs-literal">NULL</span>;
 
-/* Eklenecek veriyi ekrandan alma. */ char eklenecek='a'; printf(&quot;Sirali bagli listeye harf ekleyeceksiniz. Ekleme islemini 'x' yazarak birebilirsiniz.\n&quot;); while(eklenecek !='x') { eklenecek = getche(); bliste_ekle(eklenecek,&amp;bas); printf(&quot; &quot;); } printf(&quot;Bagli listenin icindekiler sirasiyle yazdiriliyor:\n&quot;);
+<span class="hljs-comment">/* Eklenecek veriyi ekrandan alma. */</span> <span class="hljs-keyword">char</span> eklenecek=<span class="hljs-string">'a'</span>; <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Sirali bagli listeye harf ekleyeceksiniz. Ekleme islemini 'x' yazarak birebilirsiniz.\n"</span>); <span class="hljs-keyword">while</span>(eklenecek !=<span class="hljs-string">'x'</span>) { eklenecek = getche(); bliste_ekle(eklenecek,&amp;bas); <span class="hljs-built_in">printf</span>(<span class="hljs-string">" "</span>); } <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Bagli listenin icindekiler sirasiyle yazdiriliyor:\n"</span>);
 
-/* Bagli listeyi gezip, listeleme. */ simdiki = bas;
+<span class="hljs-comment">/* Bagli listeyi gezip, listeleme. */</span> simdiki = bas;
 
-while(simdiki) { printf(&quot;%c\n&quot;, simdiki-&gt;karakter); simdiki = simdiki-&gt;sonraki ; } }
+<span class="hljs-keyword">while</span>(simdiki) { <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%c\n"</span>, simdiki-&gt;karakter); simdiki = simdiki-&gt;sonraki ; } }
 
-void bliste_ekle(char c, bliste **bas) { /* Bagli listeye sirali eleman ekler. */ bliste *onceki = NULL, *eklenecek, *etkin ;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">bliste_ekle</span><span class="hljs-params">(<span class="hljs-keyword">char</span> c, bliste **bas)</span> </span>{ <span class="hljs-comment">/* Bagli listeye sirali eleman ekler. */</span> bliste *onceki = <span class="hljs-literal">NULL</span>, *eklenecek, *etkin ;
 
-/* Bagli liste ile oncelik kuyrugu uygulamasi */ eklenecek = (bliste*)malloc(sizeof(bliste)); eklenecek-&gt;karakter = c; eklenecek-&gt;sonraki = NULL;
+<span class="hljs-comment">/* Bagli liste ile oncelik kuyrugu uygulamasi */</span> eklenecek = (bliste*)<span class="hljs-built_in">malloc</span>(<span class="hljs-keyword">sizeof</span>(bliste)); eklenecek-&gt;karakter = c; eklenecek-&gt;sonraki = <span class="hljs-literal">NULL</span>;
 
 etkin = *bas;
 
-/* Bu kisim bagli listeye sirali sekilde eleman ekler */ while (etkin != NULL &amp;&amp; eklenecek-&gt;karakter &gt; etkin-&gt;karakter) { onceki = etkin; etkin = etkin-&gt;sonraki; }
+<span class="hljs-comment">/* Bu kisim bagli listeye sirali sekilde eleman ekler */</span> <span class="hljs-keyword">while</span> (etkin != <span class="hljs-literal">NULL</span> &amp;&amp; eklenecek-&gt;karakter &gt; etkin-&gt;karakter) { onceki = etkin; etkin = etkin-&gt;sonraki; }
 
-if (onceki == NULL) { *bas = eklenecek; } else { onceki-&gt;sonraki = eklenecek; } eklenecek-&gt;sonraki = etkin;
+<span class="hljs-keyword">if</span> (onceki == <span class="hljs-literal">NULL</span>) { *bas = eklenecek; } <span class="hljs-keyword">else</span> { onceki-&gt;sonraki = eklenecek; } eklenecek-&gt;sonraki = etkin;
 
 }
 
-int main() { bliste_m(); beklet(); return 0; }
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{ bliste_m(); beklet(); <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>; }
 </code></pre>
 </div></div></article><div class="card comments main-container__items"><div class="card__contents" id="disqus_thread"></div></div></div><div class="sidebar main-content__sidebar"><div class="about"><img class="about__image" src="/img/profile.jpg"/><h1 class="about__name">Umut Benzer</h1><h2 class="about__mini-bio">Software Engineer in Berlin</h2></div></div></div><div class="main-container"><div class="footer"><div class="footer__copyright-holder"><p><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license noopener noreferrer" target="_blank"><img alt="Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License" src="/img/cclicense.png"/></a></p><p><span>Bu sitedeki tüm yazı ve görseller </span><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license noopener noreferrer" target="_blank">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a><span> ile lisanslanmıştır.</span></p></div><div class="footer__generator"><span>Bu sayfa </span><span>22 Nisan 2017</span><span> tarihinde </span><a href="https://github.com/ubenzer/fil" target="_blank">Fil</a><span> ile yaratılmıştır.</span></div></div></div></div>
         <script src="/template/app.js" type="text/javascript"></script><script type="text/javascript">

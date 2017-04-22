@@ -15,11 +15,11 @@
 <p>Diyelim program yazıyorsunuz. Bir metot çağıracaksınız ve <code>A</code> tipinde bir veri istiyor. Sizde ise <code>A</code>'ya dönüştürülebilir <code>B</code> tipinde bir veri var.</p>
 <p>Normalde ne yaparsınız? <code>B</code>'yi <code>A</code>'ya çeviren bir metot yazarsınız ve önce bunu çağırarak verinizi <code>A</code> tipine dönüştürürsünüz.</p>
 <p>Şunun gibi:</p>
-<pre><code class="language-java">public A covertBtoA(B variable) {
+<pre><code class="hljs language-java"><span class="hljs-function"><span class="hljs-keyword">public</span> A <span class="hljs-title">covertBtoA</span><span class="hljs-params">(B variable)</span> </span>{
   ...
-  return toA;
+  <span class="hljs-keyword">return</span> toA;
 }
-public void somethingWithA(A variable) {
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">somethingWithA</span><span class="hljs-params">(A variable)</span> </span>{
   ...
 }
 B myVariable = ...something...;
@@ -28,26 +28,26 @@ somethingWithA(convertBtoA(myVariable));
 <p>Bu dönüşümü çeşitli yerlerde sürekli yaptığınızı düşünün. Sonra bunu otomatikleştirebileceğinizi düşünün.</p>
 <p>Scala'da bir tipten bir tipe dönüşüm yukarıdaki gibi el ile yapılabileceği gibi &quot;<em>implicit conversions</em>&quot; ile otomatik hale de getirilebilir. Bunu bir örnek üzerinden açıklayayım.</p>
 <p>Projenizde bir kütüphane kullanıyorsunuz ve bu kütüphanede imzası aşağıdaki gibi olan bir metot var:</p>
-<pre><code class="language-scala">def parseStream(stream: InputStream)
+<pre><code class="hljs language-scala"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">parseStream</span></span>(stream: <span class="hljs-type">InputStream</span>)
 </code></pre>
 <p>Sizin bu metotta kullanmak istediğiniz veri ise bir <code>Stream</code>'da değil, bir <code>String</code> nesnesi içerisinde.</p>
-<pre><code class="language-scala">val myDataToBeParsed = &quot;Ben bu veriyi parse ettirmek istiyorum.&quot;
+<pre><code class="hljs language-scala"><span class="hljs-keyword">val</span> myDataToBeParsed = <span class="hljs-string">"Ben bu veriyi parse ettirmek istiyorum."</span>
 </code></pre>
 <p><code>parseStream</code>'ın imzasını değiştiremezsiniz çünkü kontrol sizde değil, bir kütüphanenin parçası. O zaman <code>myDataToBeParsed</code>'i bir <code>IntputStream</code>'a çevirmelisiniz. Bunu şu şekilde yapabilirsiniz:</p>
-<pre><code class="language-scala">val myDataToBeParsedAsInputStream = new ByteArrayInputStream(value.getBytes(&quot;UTF-8&quot;))
+<pre><code class="hljs language-scala"><span class="hljs-keyword">val</span> myDataToBeParsedAsInputStream = <span class="hljs-keyword">new</span> <span class="hljs-type">ByteArrayInputStream</span>(value.getBytes(<span class="hljs-string">"UTF-8"</span>))
 </code></pre>
 <p>Daha sonra <code>myDataToBeParsedAsInputStream</code> ile <code>parseStream</code> metodunu çağırabilirsiniz:</p>
-<pre><code class="language-scala">myDataToBeParsed(myDataToBeParsedAsInputStream)
+<pre><code class="hljs language-scala">myDataToBeParsed(myDataToBeParsedAsInputStream)
 </code></pre>
 <p>Ancak bu iki adımlı bir işlem. Eğer uygulamanızın birçok yerinde bu <code>String -&gt; InputStream</code> dönüşümü tekrar edecekse can sıkıcı olabilir. Bu işlem otomatik olursa çok daha kolay ve anlaşılır olmaz mı?</p>
 <p>Dönüşümleri otomatik yapabilmek için öncelikle bir singleton nesne içerisine istenilen dönüşümleri gerçekleştirecek metotlar yazılır:</p>
-<pre><code class="language-scala">object StringImplicits {
-  implicit def String2InputStream(value: String): InputStream = new ByteArrayInputStream(value.getBytes(&quot;UTF-8&quot;))
+<pre><code class="hljs language-scala"><span class="hljs-class"><span class="hljs-keyword">object</span> <span class="hljs-title">StringImplicits</span> </span>{
+  <span class="hljs-keyword">implicit</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">String2InputStream</span></span>(value: <span class="hljs-type">String</span>): <span class="hljs-type">InputStream</span> = <span class="hljs-keyword">new</span> <span class="hljs-type">ByteArrayInputStream</span>(value.getBytes(<span class="hljs-string">"UTF-8"</span>))
 }
 </code></pre>
 <p><code>StringImplicits</code> ve <code>String2InputStream</code> örnek bir isimlerdir. Herhangi bir isim verilebilir. Metot tanımının en başında bulunan <code>implicit</code> bunun otomatik olarak uygulanacak bir dönüşüm kuralı olduğunu Scala'ya belirtir. Scala bu metodun girdi ve çıktı parametresini inceleyerek, metodun <code>String</code> tipini <code>InputSteam</code>'a dönüştürdüğünü kendisi anlar.</p>
 <p>Bu tanımlamayı yaptıktan sonra artık kodumuzu şu şekilde düzenleyebiliriz:</p>
-<pre><code class="language-scala">import StringImplicits._
+<pre><code class="hljs language-scala"><span class="hljs-keyword">import</span> <span class="hljs-type">StringImplicits</span>._
 myDataToBeParsed(myDataToBeParsed)
 </code></pre>
 <p><code>myDataToBeParsed</code> <code>String</code> tipine olmasına ve <code>myDataToBeParsed</code> <code>InputStream</code> beklemesine rağmen bu kod derlenir ve doğru bir şekilde çalışır. <code>import StringImplicits._</code> satırı sayesinde otomatik dönüşüm kuralları arka planda otomatik olarak çalışmaktadır.</p>

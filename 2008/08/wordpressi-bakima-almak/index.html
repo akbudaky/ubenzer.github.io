@@ -16,44 +16,44 @@
 <p>Ancak eklentilerle sorun yaşadıysanız, sitenizi kapatmak için bile eklenti kurmak istemiyorsanız ya da eklentilerle ilgili duygusal problemleriniz varsa saf PHP kodu değişikliklerinden oluşan benim yöntemimi kullanabilirsiniz.</p>
 <p>Anlatacağım yöntem sadece Wordpress için değil, <em>tek bir giriş noktası olan</em> (Wordpress’de index.php) tüm betikler için geçerli.</p>
 <p>Wordpress’de bir sayfa çağırdığınızda ilk <em>index.php</em> çalışır. Kaynak kodunu aşağıda görüyorsunuz.</p>
-<pre><code class="language-php"> &lt;?php /** * Front to the WordPress application. This file doesn't do anything, but loads * wp-blog-header.php which does and tells WordPress to load the theme. * * @package WordPress */
+<pre><code class="hljs language-php"> <span class="hljs-meta">&lt;?php</span> <span class="hljs-comment">/** * Front to the WordPress application. This file doesn't do anything, but loads * wp-blog-header.php which does and tells WordPress to load the theme. * * <span class="hljs-doctag">@package</span> WordPress */</span>
 
-/** * Tells WordPress to load the WordPress theme and output it. * * @var bool */ define('WP_USE_THEMES', true);
+<span class="hljs-comment">/** * Tells WordPress to load the WordPress theme and output it. * * <span class="hljs-doctag">@var</span> bool */</span> define(<span class="hljs-string">'WP_USE_THEMES'</span>, <span class="hljs-keyword">true</span>);
 
-/** Loads the WordPress Environment and Template */ require('./wp-blog-header.php'); ?&gt;
+<span class="hljs-comment">/** Loads the WordPress Environment and Template */</span> <span class="hljs-keyword">require</span>(<span class="hljs-string">'./wp-blog-header.php'</span>); <span class="hljs-meta">?&gt;</span>
 ``` Bu basit dosyanın tek amacı, bir sonraki dosyayı çağırmak ve temiz bir başlangıç yapmaktır. Ziyaretçilerin önünü, sisteme tek giriş noktası olan bu dosyada kesebiliriz.
 
-Sitemizi bakım moduna alırken dikkat edeceğimiz bazı önemli noktalar var:
+Sitemizi bakım moduna alırken dikkat edeceğimiz bazı önemli noktalar <span class="hljs-keyword">var</span>:
 
-*   Bakım modu tüm siteyi kapsamalı. Örneğin insanlar *http://hödö.com/* adresine girince *“Sitemiz Bakımdadır”* yazısını görürken *http://hödö.com/bir-blog-girdisi/* adresine girince yamulmuş bir site görmemeliler.
+*   Bakım modu tüm siteyi kapsamalı. Örneğin insanlar *http:<span class="hljs-comment">//hödö.com/* adresine girince *“Sitemiz Bakımdadır”* yazısını görürken *http://hödö.com/bir-blog-girdisi/* adresine girince yamulmuş bir site görmemeliler.</span>
 *   Bakım modu sayfası sistem yüklenmeden (yani Wordpress’e dair hiçbir şey yüklenmeden) gelmeli. Böylece veritabanı bağlantısı çökse de wp-includes klasörünü silseniz de bakım modu yazısına bir şey olmayacak, ziyaretçiler arkada ne olup bittiğini bilemeyecekler. (denemedim ama eklenti halinde dağıtılanların bu adımı sağlayacağını hiç sanmıyorum.)
 *   Bakım modu sayfası tarayıcı önbelleğinden etkilenmemeli.  
     Bakım modu sayfası koymanın en dandik yönetimi şudur: *index.php’*nin yanına bir tane *index.html* atarsınız ve içine bakımda yazarsınız. Ama önbelleğinde sitenin açılış sayfasının index.php olduğunu tutan tarayıcıların *index.html*’den haberi olmayacağı için siz sadece bazı ziyaretçilere bakımda olduğunuzu duyurabilirsiniz.
-*   Bakım modu yazısı devredeyken sisteme erişebilmelisiniz. Bir üstte anlatılan yöntem şöyle geliştirilebilir. *index.php*’yi *index2.php* olarak adlandırır ve *index.php*’nize bakımda yazısını koyarsınız. Böylece insanlar bakımda yazısını görür. Ama sistem sizin için de doğru işlemeyebilir. Hoş değildir.
-*   Bakım modu botlara *200 OK* headeri yerine *503 Service Temporarily Unavailable* headeri göndermelidir. Aksi halde botlar bakımda olduğunuzu anlamayıp içeriğinizin değiştiğini sanabilir, hatalı davranabilir ve başınızı ağrıtabilir.
+*   Bakım modu yazısı devredeyken sisteme erişebilmelisiniz. Bir üstte anlatılan yöntem şöyle geliştirilebilir. *index.php*’yi *index2.php* olarak adlandırır ve *index.php*’nize bakımda yazısını koyarsınız. Böylece insanlar bakımda yazısını görür. Ama sistem sizin için de <span class="hljs-keyword">do</span>ğru işlemeyebilir. Hoş değildir.
+*   Bakım modu botlara *<span class="hljs-number">200</span> OK* headeri yerine *<span class="hljs-number">503</span> Service Temporarily Unavailable* headeri göndermelidir. Aksi halde botlar bakımda olduğunuzu anlamayıp içeriğinizin değiştiğini sanabilir, hatalı davranabilir ve başınızı ağrıtabilir.
 
-Yukarıdaki maddelerde anlatılanlara dikkat edilerek oluşturulmuş, kendi sitelerimde bakım yaparken kullandığım kaynak kodu aşağıdadır. Wordpress'in *index.php*'sini aşağıdaki gibi değiştiriyoruz:
+Yukarıdaki maddelerde anlatılanlara dikkat edilerek oluşturulmuş, kendi sitelerimde bakım yaparken kullandığım kaynak kodu aşağıdadır. Wordpress<span class="hljs-string">'in *index.php*'</span>sini aşağıdaki gibi değiştiriyoruz:
 
 ```php
- &lt;?php
+ <span class="hljs-meta">&lt;?php</span>
 
-$bakim_modu = FALSE; $bakim_ip = &quot;155.223.1.1&quot;; /* Üst satıra kendi IP adresinizi yazmalısınız. */ /* Web sitesi sadece yukarıdaki IP sahibine açılacak. Diğerleri bakım mesajı görecek. Güncel IP adresinizi http://whatismyip.com adresinden öğrenebilirsiniz. */
+$bakim_modu = <span class="hljs-keyword">FALSE</span>; $bakim_ip = <span class="hljs-string">"155.223.1.1"</span>; <span class="hljs-comment">/* Üst satıra kendi IP adresinizi yazmalısınız. */</span> <span class="hljs-comment">/* Web sitesi sadece yukarıdaki IP sahibine açılacak. Diğerleri bakım mesajı görecek. Güncel IP adresinizi http://whatismyip.com adresinden öğrenebilirsiniz. */</span>
 
-if (($bakim_modu &amp;&amp; ($bakim_ip == $_SERVER['REMOTE_ADDR'])) || !$bakim_modu) { /* Eğer web sitesi bakımda değilse veya izinli IP sisteme giriş yapıyorsa orijinal wordpress index.php'sindeki kodları çalıştır. Eğer index.php'nizde değişiklik yaptıysanız aşağıya olduğu gibi yansıtın. */
+<span class="hljs-keyword">if</span> (($bakim_modu &amp;&amp; ($bakim_ip == $_SERVER[<span class="hljs-string">'REMOTE_ADDR'</span>])) || !$bakim_modu) { <span class="hljs-comment">/* Eğer web sitesi bakımda değilse veya izinli IP sisteme giriş yapıyorsa orijinal wordpress index.php'sindeki kodları çalıştır. Eğer index.php'nizde değişiklik yaptıysanız aşağıya olduğu gibi yansıtın. */</span>
 
-/** * Front to the WordPress application. This file doesn't do anything, but loads * wp-blog-header.php which does and tells WordPress to load the theme. * * @package WordPress */
+<span class="hljs-comment">/** * Front to the WordPress application. This file doesn't do anything, but loads * wp-blog-header.php which does and tells WordPress to load the theme. * * <span class="hljs-doctag">@package</span> WordPress */</span>
 
-/** * Tells WordPress to load the WordPress theme and output it. * * @var bool */ define('WP_USE_THEMES', true);
+<span class="hljs-comment">/** * Tells WordPress to load the WordPress theme and output it. * * <span class="hljs-doctag">@var</span> bool */</span> define(<span class="hljs-string">'WP_USE_THEMES'</span>, <span class="hljs-keyword">true</span>);
 
-/** Loads the WordPress Environment and Template */ require('./wp-blog-header.php');
+<span class="hljs-comment">/** Loads the WordPress Environment and Template */</span> <span class="hljs-keyword">require</span>(<span class="hljs-string">'./wp-blog-header.php'</span>);
 
-} else { /* Eğer web sitesi bakım halindeyse... */ ob_start(); /* Botlara web sitesinin geçici bakımda olduğu bilgisi gönderilir. Bir saat sonra tekrar denemeleri söylenir. */ header('HTTP/1.1 503 Service Temporarily Unavailable'); header('Status: 503 Service Temporarily Unavailable'); header('Retry-After: 3600'); header('Content-Type: text/html; charset=utf-8'); include (&quot;kapali.html&quot;); /* Bakım mesajının yer aldığı kapali.html adlı bir HTML dosyası oluşturun. Bu dosya index.php ile aynı konumda olmalı ve UTF-8 karakter setiyle kodlanmış bir dosya olmalıdır. */ }
+} <span class="hljs-keyword">else</span> { <span class="hljs-comment">/* Eğer web sitesi bakım halindeyse... */</span> ob_start(); <span class="hljs-comment">/* Botlara web sitesinin geçici bakımda olduğu bilgisi gönderilir. Bir saat sonra tekrar denemeleri söylenir. */</span> header(<span class="hljs-string">'HTTP/1.1 503 Service Temporarily Unavailable'</span>); header(<span class="hljs-string">'Status: 503 Service Temporarily Unavailable'</span>); header(<span class="hljs-string">'Retry-After: 3600'</span>); header(<span class="hljs-string">'Content-Type: text/html; charset=utf-8'</span>); <span class="hljs-keyword">include</span> (<span class="hljs-string">"kapali.html"</span>); <span class="hljs-comment">/* Bakım mesajının yer aldığı kapali.html adlı bir HTML dosyası oluşturun. Bu dosya index.php ile aynı konumda olmalı ve UTF-8 karakter setiyle kodlanmış bir dosya olmalıdır. */</span> }
 
-?&gt;
+<span class="hljs-meta">?&gt;</span>
 </code></pre>
 <p>Dosyamızı bir defa böyle değiştirdikten sonra bakım zamanı tek yapmamız gereken <code>php $bakim_modu = FALSE;</code> satırını <code>php $bakim_modu = TRUE;</code> olarak değiştirmek ve ```php
 $bakim_ip = &quot;155.223.1.1&quot;;</p>
-<pre><code class="language-satırına">
+<pre><code class="hljs language-satırına">
 Böylece başkaları ve arama motorları sitemizi bakımda olarak görürken biz normal gezmeye devam edebilir ve yapacaklarımızı kapabiliriz.
 
 ### Uyarılar

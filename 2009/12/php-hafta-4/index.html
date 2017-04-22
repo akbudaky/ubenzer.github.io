@@ -27,39 +27,39 @@
 <h2>Kodlar</h2>
 <p>Örnek kaynak kodlarını doğrudan web sitesinden incelemek isteyenler yazının devamına bakabilirler.</p>
 <h3>example-sessions.php</h3>
-<pre><code class="language-php"> &lt;?php session_start(); if(isset($_SESSION['views'])) { $_SESSION['views'] = $_SESSION['views']+ 1; } else { $_SESSION['views'] = 1; } echo &quot;views = &quot;. $_SESSION['views']; ?&gt;
+<pre><code class="hljs language-php"> <span class="hljs-meta">&lt;?php</span> session_start(); <span class="hljs-keyword">if</span>(<span class="hljs-keyword">isset</span>($_SESSION[<span class="hljs-string">'views'</span>])) { $_SESSION[<span class="hljs-string">'views'</span>] = $_SESSION[<span class="hljs-string">'views'</span>]+ <span class="hljs-number">1</span>; } <span class="hljs-keyword">else</span> { $_SESSION[<span class="hljs-string">'views'</span>] = <span class="hljs-number">1</span>; } <span class="hljs-keyword">echo</span> <span class="hljs-string">"views = "</span>. $_SESSION[<span class="hljs-string">'views'</span>]; <span class="hljs-meta">?&gt;</span>
 </code></pre>
 <h3>example-sessions-security.php</h3>
-<pre><code class="language-php"> &lt;?php /* ÖNEMLİ: Bu program parçası güvenlik açığı içerir, sadece eğitim amaçlı kullanılmalıdır! */ ini_set (&quot;session.use_only_cookies&quot;, &quot;0&quot;); session_start(); if(isset($_SESSION['views'])) { $_SESSION['views'] = $_SESSION['views']+ 1; } else { $_SESSION['views'] = 1; } echo &quot;views = &quot;. $_SESSION['views']; ?&gt;
+<pre><code class="hljs language-php"> <span class="hljs-meta">&lt;?php</span> <span class="hljs-comment">/* ÖNEMLİ: Bu program parçası güvenlik açığı içerir, sadece eğitim amaçlı kullanılmalıdır! */</span> ini_set (<span class="hljs-string">"session.use_only_cookies"</span>, <span class="hljs-string">"0"</span>); session_start(); <span class="hljs-keyword">if</span>(<span class="hljs-keyword">isset</span>($_SESSION[<span class="hljs-string">'views'</span>])) { $_SESSION[<span class="hljs-string">'views'</span>] = $_SESSION[<span class="hljs-string">'views'</span>]+ <span class="hljs-number">1</span>; } <span class="hljs-keyword">else</span> { $_SESSION[<span class="hljs-string">'views'</span>] = <span class="hljs-number">1</span>; } <span class="hljs-keyword">echo</span> <span class="hljs-string">"views = "</span>. $_SESSION[<span class="hljs-string">'views'</span>]; <span class="hljs-meta">?&gt;</span>
 </code></pre>
 <h3>example-sessions-starting.php</h3>
-<pre><code class="language-php"> &lt;?php ob_start();
+<pre><code class="hljs language-php"> <span class="hljs-meta">&lt;?php</span> ob_start();
 
-$_SESSION[&quot;deneme&quot;] = 'session_start kullanmadan önce bir değer atamak istiyorum. Ama bu nereye kaydolacak?';
+$_SESSION[<span class="hljs-string">"deneme"</span>] = <span class="hljs-string">'session_start kullanmadan önce bir değer atamak istiyorum. Ama bu nereye kaydolacak?'</span>;
 
-/* Session ID ile id ataması session_starttan önce yapılmalıdır. Eğer böyle bir atama yapılmazsa (ki ne gerek var?) PHP rastgele bir değer atacaktır. */ echo &quot;&amp;lt;br /&amp;gt;Session ID: &quot;. session_id(); /* Bu satır henüz session başlamadığı için bir veri döndürmez. */
+<span class="hljs-comment">/* Session ID ile id ataması session_starttan önce yapılmalıdır. Eğer böyle bir atama yapılmazsa (ki ne gerek var?) PHP rastgele bir değer atacaktır. */</span> <span class="hljs-keyword">echo</span> <span class="hljs-string">"&amp;lt;br /&amp;gt;Session ID: "</span>. session_id(); <span class="hljs-comment">/* Bu satır henüz session başlamadığı için bir veri döndürmez. */</span>
 
-echo &quot;&lt;br /&gt;Session Name:&quot;. session_name(&quot;SEMSIPASAPASAJI&quot;); /* Bu satır ile varsayılan PHPSESSID değerini değiştirmek mümkündür. Bu değişiklik session_starttan önce yapılmalıdır. */
+<span class="hljs-keyword">echo</span> <span class="hljs-string">"&lt;br /&gt;Session Name:"</span>. session_name(<span class="hljs-string">"SEMSIPASAPASAJI"</span>); <span class="hljs-comment">/* Bu satır ile varsayılan PHPSESSID değerini değiştirmek mümkündür. Bu değişiklik session_starttan önce yapılmalıdır. */</span>
 
-echo &quot;&lt;br /&gt;&quot;; echo &quot;&lt;br /&gt; Session Başladı&quot;;
+<span class="hljs-keyword">echo</span> <span class="hljs-string">"&lt;br /&gt;"</span>; <span class="hljs-keyword">echo</span> <span class="hljs-string">"&lt;br /&gt; Session Başladı"</span>;
 
-session_start(); /* Kullanıcı için bir kimlik numarası belirlenir. (eğer session_id ile belirlenmişse, bu değer kullanılır.) Bu kimlik numarası kullanıcıya gönderilmek üzere cookielere eklenir. Sessionların sunucu üzerinde tutalacağı klasörde session bilgilerini tutacak bir dosya oluşturularak $_SESSIONS süper değişkeni ilklenir. */
+session_start(); <span class="hljs-comment">/* Kullanıcı için bir kimlik numarası belirlenir. (eğer session_id ile belirlenmişse, bu değer kullanılır.) Bu kimlik numarası kullanıcıya gönderilmek üzere cookielere eklenir. Sessionların sunucu üzerinde tutalacağı klasörde session bilgilerini tutacak bir dosya oluşturularak $_SESSIONS süper değişkeni ilklenir. */</span>
 
-/* Bu noktadan sonra aşağıdaki iki fonksiyon ile sadece değer öğrenilir. Değişiklik yapılamaz. */ echo &quot;&lt;br /&gt;Session ID:&quot;. session_id(); echo &quot;&lt;br /&gt;Session Name:&quot;. session_name();
+<span class="hljs-comment">/* Bu noktadan sonra aşağıdaki iki fonksiyon ile sadece değer öğrenilir. Değişiklik yapılamaz. */</span> <span class="hljs-keyword">echo</span> <span class="hljs-string">"&lt;br /&gt;Session ID:"</span>. session_id(); <span class="hljs-keyword">echo</span> <span class="hljs-string">"&lt;br /&gt;Session Name:"</span>. session_name();
 
-echo &quot;&lt;br /&gt;&quot;; echo &quot;&lt;br /&gt;&quot;;
+<span class="hljs-keyword">echo</span> <span class="hljs-string">"&lt;br /&gt;"</span>; <span class="hljs-keyword">echo</span> <span class="hljs-string">"&lt;br /&gt;"</span>;
 
-if(isset($_SESSION['views'])) { $_SESSION['views'] = $_SESSION['views']+ 1; } else { $_SESSION['views'] = 1; } echo &quot;views = &quot;. $_SESSION['views'];
+<span class="hljs-keyword">if</span>(<span class="hljs-keyword">isset</span>($_SESSION[<span class="hljs-string">'views'</span>])) { $_SESSION[<span class="hljs-string">'views'</span>] = $_SESSION[<span class="hljs-string">'views'</span>]+ <span class="hljs-number">1</span>; } <span class="hljs-keyword">else</span> { $_SESSION[<span class="hljs-string">'views'</span>] = <span class="hljs-number">1</span>; } <span class="hljs-keyword">echo</span> <span class="hljs-string">"views = "</span>. $_SESSION[<span class="hljs-string">'views'</span>];
 
-echo '$_SESSION[&quot;deneme&quot;]:' . $_SESSION[&quot;deneme&quot;];
+<span class="hljs-keyword">echo</span> <span class="hljs-string">'$_SESSION["deneme"]:'</span> . $_SESSION[<span class="hljs-string">"deneme"</span>];
 
-echo &quot;Vardump: &quot; . var_dump($_SESSION);
+<span class="hljs-keyword">echo</span> <span class="hljs-string">"Vardump: "</span> . var_dump($_SESSION);
 
-echo &quot;Vardump: &quot; . var_dump($_SERVER);
+<span class="hljs-keyword">echo</span> <span class="hljs-string">"Vardump: "</span> . var_dump($_SERVER);
 
-/* session_unset(); // Deneyin. echo &quot;&lt;br /&gt;views = &quot;. $_SESSION['views']; */
+<span class="hljs-comment">/* session_unset(); // Deneyin. echo "&lt;br /&gt;views = ". $_SESSION['views']; */</span>
 
-ob_end_flush(); ?&gt;
+ob_end_flush(); <span class="hljs-meta">?&gt;</span>
 </code></pre>
 </div></div></article><div class="card comments main-container__items"><div class="card__contents" id="disqus_thread"></div></div></div><div class="sidebar main-content__sidebar"><div class="about"><img class="about__image" src="/img/profile.jpg"/><h1 class="about__name">Umut Benzer</h1><h2 class="about__mini-bio">Software Engineer in Berlin</h2></div></div></div><div class="main-container"><div class="footer"><div class="footer__copyright-holder"><p><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license noopener noreferrer" target="_blank"><img alt="Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License" src="/img/cclicense.png"/></a></p><p><span>Bu sitedeki tüm yazı ve görseller </span><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license noopener noreferrer" target="_blank">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a><span> ile lisanslanmıştır.</span></p></div><div class="footer__generator"><span>Bu sayfa </span><span>22 Nisan 2017</span><span> tarihinde </span><a href="https://github.com/ubenzer/fil" target="_blank">Fil</a><span> ile yaratılmıştır.</span></div></div></div></div>
         <script src="/template/app.js" type="text/javascript"></script><script type="text/javascript">

@@ -11,67 +11,67 @@
 <li><a href="/2007/11/izsu-su-faturasi-algoritmasi/izsu.pdf" >Ödev Açıklaması</a></li>
 <li><a href="/2007/11/izsu-su-faturasi-algoritmasi/izsu.c" >Benim Çözümüm (7670.c)</a></li>
 </ul>
-<pre><code class="language-c"> #include &lt;stdio.h&gt; #include &lt;stdlib.h&gt;
+<pre><code class="hljs language-c"> <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt; #include &lt;stdlib.h&gt;</span></span>
 
-int main() { printf(&quot;Umut BENZER\n&quot;); printf(&quot;05-06-7670\n&quot;); printf(&quot;Aylık Satış Raporu\n\n&quot;);
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{ <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Umut BENZER\n"</span>); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"05-06-7670\n"</span>); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Aylık Satış Raporu\n\n"</span>);
 
-int abonetipi; int okuay; int okugun; int guncelsayac; int oncekigun; int oncekisayac;
+<span class="hljs-keyword">int</span> abonetipi; <span class="hljs-keyword">int</span> okuay; <span class="hljs-keyword">int</span> okugun; <span class="hljs-keyword">int</span> guncelsayac; <span class="hljs-keyword">int</span> oncekigun; <span class="hljs-keyword">int</span> oncekisayac;
 
-int aydakigun=31; // Girilen ayda kac gun oldugunu tutacak. Varsayilan olarak 31 atali. int oncekiay; // Bunun nedeni bir yildaki aylarin cogunun 31 cekmesi. Etkilik acisindan int oncekiaydakigun=31; // ay sadece 31 cekmiyorsa ileride case dongusunde bir sarta girilecek.
+<span class="hljs-keyword">int</span> aydakigun=<span class="hljs-number">31</span>; <span class="hljs-comment">// Girilen ayda kac gun oldugunu tutacak. Varsayilan olarak 31 atali. int oncekiay; // Bunun nedeni bir yildaki aylarin cogunun 31 cekmesi. Etkilik acisindan int oncekiaydakigun=31; // ay sadece 31 cekmiyorsa ileride case dongusunde bir sarta girilecek.</span>
 
-int kacgungecti; int tuketim;
+<span class="hljs-keyword">int</span> kacgungecti; <span class="hljs-keyword">int</span> tuketim;
 
-float kademe1; float kademe2; float kademe3;
+<span class="hljs-keyword">float</span> kademe1; <span class="hljs-keyword">float</span> kademe2; <span class="hljs-keyword">float</span> kademe3;
 
-float kademe1fiyat; float kademe2fiyat; float kademe3fiyat; float kademe4fiyat;
+<span class="hljs-keyword">float</span> kademe1fiyat; <span class="hljs-keyword">float</span> kademe2fiyat; <span class="hljs-keyword">float</span> kademe3fiyat; <span class="hljs-keyword">float</span> kademe4fiyat;
 
-float fiyat; float kalan; // Ileride kalan = tuketim gececek. Bunun nedeni ekrana bu ay 0.000 ton harcadiniz yerine // 0 ton harcadiniz yazdirmak. Yoksa tek float degiskeni de kullanabilirdim.
+<span class="hljs-keyword">float</span> fiyat; <span class="hljs-keyword">float</span> kalan; <span class="hljs-comment">// Ileride kalan = tuketim gececek. Bunun nedeni ekrana bu ay 0.000 ton harcadiniz yerine // 0 ton harcadiniz yazdirmak. Yoksa tek float degiskeni de kullanabilirdim.</span>
 
-printf(&quot;Abone tipi kodunu giriniz:\n&quot;); scanf(&quot;%d&quot;,&amp;abonetipi); if (abonetipi&gt;4 || abonetipi&lt;1) { printf(&quot;Abone tipi hatali. Program sonlanacak.&quot;); return 0; }
+<span class="hljs-built_in">printf</span>(<span class="hljs-string">"Abone tipi kodunu giriniz:\n"</span>); <span class="hljs-built_in">scanf</span>(<span class="hljs-string">"%d"</span>,&amp;abonetipi); <span class="hljs-keyword">if</span> (abonetipi&gt;<span class="hljs-number">4</span> || abonetipi&lt;<span class="hljs-number">1</span>) { <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Abone tipi hatali. Program sonlanacak."</span>); <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>; }
 
-printf(&quot;Sayacin okundugu ay:\n&quot;); scanf(&quot;%d&quot;,&amp;okuay); if (okuay&gt;12 || okuay&lt;1) { printf(&quot;Ay girdisi hatali. Program sonlanacak.&quot;); return 0; }
+<span class="hljs-built_in">printf</span>(<span class="hljs-string">"Sayacin okundugu ay:\n"</span>); <span class="hljs-built_in">scanf</span>(<span class="hljs-string">"%d"</span>,&amp;okuay); <span class="hljs-keyword">if</span> (okuay&gt;<span class="hljs-number">12</span> || okuay&lt;<span class="hljs-number">1</span>) { <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Ay girdisi hatali. Program sonlanacak."</span>); <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>; }
 
-printf(&quot;Sayacin okundugu gun:\n&quot;); scanf(&quot;%d&quot;,&amp;okugun); switch (okuay) // 1 OC 31 { // 2 SU 28 case 4: // 3 MA 31 case 6: // 4 NI 30 case 9: // 5 MA 31 case 11: // 6 HA 30 aydakigun = 30; // 7 TE 31 break; // 8 AG 31 case 2: // 9 EY 30 aydakigun = 28; // 10 EK 31 } // 11 KA 30 // 12 AR 31 if (okugun&lt;1 || okugun&gt;aydakigun) { printf(&quot;%d. ayda %d. gun yok. Program sonlanacak.&quot;,okuay,okugun); return 0; }
+<span class="hljs-built_in">printf</span>(<span class="hljs-string">"Sayacin okundugu gun:\n"</span>); <span class="hljs-built_in">scanf</span>(<span class="hljs-string">"%d"</span>,&amp;okugun); <span class="hljs-keyword">switch</span> (okuay) <span class="hljs-comment">// 1 OC 31 { // 2 SU 28 case 4: // 3 MA 31 case 6: // 4 NI 30 case 9: // 5 MA 31 case 11: // 6 HA 30 aydakigun = 30; // 7 TE 31 break; // 8 AG 31 case 2: // 9 EY 30 aydakigun = 28; // 10 EK 31 } // 11 KA 30 // 12 AR 31 if (okugun&lt;1 || okugun&gt;aydakigun) { printf("%d. ayda %d. gun yok. Program sonlanacak.",okuay,okugun); return 0; }</span>
 
-printf(&quot;Guncel sayac degeri:\n&quot;); scanf(&quot;%d&quot;,&amp;guncelsayac);
+<span class="hljs-built_in">printf</span>(<span class="hljs-string">"Guncel sayac degeri:\n"</span>); <span class="hljs-built_in">scanf</span>(<span class="hljs-string">"%d"</span>,&amp;guncelsayac);
 
-// ve sayac 0'dan az olamaz degil mi? En azindan bizim evdeki sayacda yok if (guncelsayac&lt;0) { printf(&quot;Sayac eksi deger almaz. Sizi sistemden atiyoruz.&quot;); return 0; }
+<span class="hljs-comment">// ve sayac 0'dan az olamaz degil mi? En azindan bizim evdeki sayacda yok if (guncelsayac&lt;0) { printf("Sayac eksi deger almaz. Sizi sistemden atiyoruz."); return 0; }</span>
 
-printf(&quot;Bir onceki ay sayacin okundugu gun:\n&quot;); scanf(&quot;%d&quot;,&amp;oncekigun);
+<span class="hljs-built_in">printf</span>(<span class="hljs-string">"Bir onceki ay sayacin okundugu gun:\n"</span>); <span class="hljs-built_in">scanf</span>(<span class="hljs-string">"%d"</span>,&amp;oncekigun);
 
-oncekiay = okuay - 1; if (oncekiay==0) oncekiay = 12; // Eger güncel ay ocaksa, bir onceki ay araliktir. switch (oncekiay) // 1 OC 31 { // 2 SU 28 case 4: // 3 MA 31 case 6: // 4 NI 30 case 9: // 5 MA 31 case 11: // 6 HA 30 oncekiaydakigun = 30; // 7 TE 31 break; // 8 AG 31 case 2: // 9 EY 30 oncekiaydakigun = 28; // 10 EK 31 } // 11 KA 30 // 12 AR 31 if (oncekigun&lt;1 || oncekigun&gt;oncekiaydakigun) { printf(&quot;%d. ayda %d. gun yok. Program sonlanacak.&quot;,oncekiay,oncekigun); return 0; }
+oncekiay = okuay - <span class="hljs-number">1</span>; <span class="hljs-keyword">if</span> (oncekiay==<span class="hljs-number">0</span>) oncekiay = <span class="hljs-number">12</span>; <span class="hljs-comment">// Eger güncel ay ocaksa, bir onceki ay araliktir. switch (oncekiay) // 1 OC 31 { // 2 SU 28 case 4: // 3 MA 31 case 6: // 4 NI 30 case 9: // 5 MA 31 case 11: // 6 HA 30 oncekiaydakigun = 30; // 7 TE 31 break; // 8 AG 31 case 2: // 9 EY 30 oncekiaydakigun = 28; // 10 EK 31 } // 11 KA 30 // 12 AR 31 if (oncekigun&lt;1 || oncekigun&gt;oncekiaydakigun) { printf("%d. ayda %d. gun yok. Program sonlanacak.",oncekiay,oncekigun); return 0; }</span>
 
-printf(&quot;Eski sayac degeri:\n&quot;); scanf(&quot;%d&quot;,&amp;oncekisayac);
+<span class="hljs-built_in">printf</span>(<span class="hljs-string">"Eski sayac degeri:\n"</span>); <span class="hljs-built_in">scanf</span>(<span class="hljs-string">"%d"</span>,&amp;oncekisayac);
 
-if (oncekisayac&gt;guncelsayac) { printf(&quot;Gecen ayin sayac degeri simdikinden buyuk. Program sonlancak.&quot;); return 0; }
+<span class="hljs-keyword">if</span> (oncekisayac&gt;guncelsayac) { <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Gecen ayin sayac degeri simdikinden buyuk. Program sonlancak."</span>); <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>; }
 
-// ve sayac 0'dan az olamaz degil mi? En azindan bizim evdeki sayacda yok if (oncekisayac&lt;0) { printf(&quot;Sayac eksi deger almaz. Sizi sistemden atiyoruz.&quot;); return 0; }
+<span class="hljs-comment">// ve sayac 0'dan az olamaz degil mi? En azindan bizim evdeki sayacda yok if (oncekisayac&lt;0) { printf("Sayac eksi deger almaz. Sizi sistemden atiyoruz."); return 0; }</span>
 
-printf(&quot;\n*** Ciktilar ***\nAbone tipi: &quot;); switch (abonetipi) { case 1: printf(&quot;Konut&quot;); //Oncelikle ev kullanicilarini yazalim, cunku en cok onlardan var. Etkinlik meselesi. kademe1 = 13.0/30.0; kademe2 = 7.0/30.0; kademe3 = 8.0/3.0;
+<span class="hljs-built_in">printf</span>(<span class="hljs-string">"\n*** Ciktilar ***\nAbone tipi: "</span>); <span class="hljs-keyword">switch</span> (abonetipi) { <span class="hljs-keyword">case</span> <span class="hljs-number">1</span>: <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Konut"</span>); <span class="hljs-comment">//Oncelikle ev kullanicilarini yazalim, cunku en cok onlardan var. Etkinlik meselesi. kademe1 = 13.0/30.0; kademe2 = 7.0/30.0; kademe3 = 8.0/3.0;</span>
 
-kademe1fiyat = 1.19; kademe2fiyat = 3.09; kademe3fiyat = 5.00; kademe4fiyat = 6.13; break; case 2: printf(&quot;Konut disi&quot;); kademe1 = 0; kademe2 = 1.0/3.0; kademe3 = 1.0/3.0;
+kademe1fiyat = <span class="hljs-number">1.19</span>; kademe2fiyat = <span class="hljs-number">3.09</span>; kademe3fiyat = <span class="hljs-number">5.00</span>; kademe4fiyat = <span class="hljs-number">6.13</span>; <span class="hljs-keyword">break</span>; <span class="hljs-keyword">case</span> <span class="hljs-number">2</span>: <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Konut disi"</span>); kademe1 = <span class="hljs-number">0</span>; kademe2 = <span class="hljs-number">1.0</span>/<span class="hljs-number">3.0</span>; kademe3 = <span class="hljs-number">1.0</span>/<span class="hljs-number">3.0</span>;
 
-kademe2fiyat = 4.13; kademe3fiyat = 4.75; kademe4fiyat = 6.53; break; case 3: printf(&quot;Resmi daire&quot;); kademe1 = 0; kademe2 = 0; kademe3 = 0;
+kademe2fiyat = <span class="hljs-number">4.13</span>; kademe3fiyat = <span class="hljs-number">4.75</span>; kademe4fiyat = <span class="hljs-number">6.53</span>; <span class="hljs-keyword">break</span>; <span class="hljs-keyword">case</span> <span class="hljs-number">3</span>: <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Resmi daire"</span>); kademe1 = <span class="hljs-number">0</span>; kademe2 = <span class="hljs-number">0</span>; kademe3 = <span class="hljs-number">0</span>;
 
-kademe4fiyat = 3.55; break; case 4: printf(&quot;Okul-Hastane&quot;); kademe1 = 0; kademe2 = 0; kademe3 = 0;
+kademe4fiyat = <span class="hljs-number">3.55</span>; <span class="hljs-keyword">break</span>; <span class="hljs-keyword">case</span> <span class="hljs-number">4</span>: <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Okul-Hastane"</span>); kademe1 = <span class="hljs-number">0</span>; kademe2 = <span class="hljs-number">0</span>; kademe3 = <span class="hljs-number">0</span>;
 
-kademe4fiyat = 2.84; break; }
+kademe4fiyat = <span class="hljs-number">2.84</span>; <span class="hljs-keyword">break</span>; }
 
-printf(&quot;\n\nOnceki sayac okuma bilgileri\n AY: %d, GUN: %d, SAYAC DEGERI: %d\n&quot;,oncekiay,oncekigun,oncekisayac); printf(&quot;\nSimdiki sayac okuma bilgileri\n AY: %d, GUN: %d, SAYAC DEGERI: %d\n\n&quot;,okuay,okugun,guncelsayac);
+<span class="hljs-built_in">printf</span>(<span class="hljs-string">"\n\nOnceki sayac okuma bilgileri\n AY: %d, GUN: %d, SAYAC DEGERI: %d\n"</span>,oncekiay,oncekigun,oncekisayac); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"\nSimdiki sayac okuma bilgileri\n AY: %d, GUN: %d, SAYAC DEGERI: %d\n\n"</span>,okuay,okugun,guncelsayac);
 
-kacgungecti = oncekiaydakigun - oncekigun + okugun; printf(&quot;Son sayac okunmasindan bu yana %d gun gecti.\n&quot;,kacgungecti);
+kacgungecti = oncekiaydakigun - oncekigun + okugun; <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Son sayac okunmasindan bu yana %d gun gecti.\n"</span>,kacgungecti);
 
-tuketim = guncelsayac - oncekisayac; printf(&quot;Bu ayin tuketim miktari: %d ton.\n&quot;,tuketim); // kalan degiskeni float tuketim int, cunku ekranda x.0000 ton yazmasini istemiyorum.
+tuketim = guncelsayac - oncekisayac; <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Bu ayin tuketim miktari: %d ton.\n"</span>,tuketim); <span class="hljs-comment">// kalan degiskeni float tuketim int, cunku ekranda x.0000 ton yazmasini istemiyorum.</span>
 
 kalan = tuketim;
 
 kademe1=kademe1*kacgungecti; kademe2=kademe2*kacgungecti; kademe3=kademe3*kacgungecti;
 
-if (kalan&gt;kademe1) { // Eger program buraya geliyorsa demek ki bir kismi kademe1'den ucretlendirilecek, kalani 2'ye aktarilacak. fiyat = kademe1 * kademe1fiyat; kalan = kalan - kademe1; // Kalan kismi kademe 2'ye gonder if (kalan&gt;kademe2) { // Odeme kademe 3'e de sarkacak. fiyat = fiyat + kademe2 * kademe2fiyat; kalan = kalan - kademe2; // Kalan kismi kademe 3'e gonder. if (kalan&gt;kademe3) { // Odeme kademe 4'e de sarkacak, aboooo fiyat = fiyat + kademe3 * kademe3fiyat + (kalan - kademe3) * kademe4fiyat; } else { fiyat = fiyat + kalan * kademe3fiyat; } } else { // Odeme kademe 2 de tamamlaniyor. fiyat = fiyat + kalan * kademe2fiyat; } } else { // Burada parantez olmasina gerek yok, farkindayim ama diger turlu kafam karisiyor. fiyat = kalan * kademe1fiyat; // Odemenin tamami 1.Kademeden gerceklesitiriyor... }
+<span class="hljs-keyword">if</span> (kalan&gt;kademe1) { <span class="hljs-comment">// Eger program buraya geliyorsa demek ki bir kismi kademe1'den ucretlendirilecek, kalani 2'ye aktarilacak. fiyat = kademe1 * kademe1fiyat; kalan = kalan - kademe1; // Kalan kismi kademe 2'ye gonder if (kalan&gt;kademe2) { // Odeme kademe 3'e de sarkacak. fiyat = fiyat + kademe2 * kademe2fiyat; kalan = kalan - kademe2; // Kalan kismi kademe 3'e gonder. if (kalan&gt;kademe3) { // Odeme kademe 4'e de sarkacak, aboooo fiyat = fiyat + kademe3 * kademe3fiyat + (kalan - kademe3) * kademe4fiyat; } else { fiyat = fiyat + kalan * kademe3fiyat; } } else { // Odeme kademe 2 de tamamlaniyor. fiyat = fiyat + kalan * kademe2fiyat; } } else { // Burada parantez olmasina gerek yok, farkindayim ama diger turlu kafam karisiyor. fiyat = kalan * kademe1fiyat; // Odemenin tamami 1.Kademeden gerceklesitiriyor... }</span>
 
-float kdv; kdv = fiyat*8.0/108.0; printf (&quot;KDV %8: %f\n&quot;,kdv); printf (&quot;KDV DAHIL %f YTL ODENMESI GEREKIYOR.&quot;,fiyat);
+<span class="hljs-keyword">float</span> kdv; kdv = fiyat*<span class="hljs-number">8.0</span>/<span class="hljs-number">108.0</span>; <span class="hljs-built_in">printf</span> (<span class="hljs-string">"KDV %8: %f\n"</span>,kdv); <span class="hljs-built_in">printf</span> (<span class="hljs-string">"KDV DAHIL %f YTL ODENMESI GEREKIYOR."</span>,fiyat);
 
-return 0; }
+<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>; }
 </code></pre>
 <p>Bu kaynak koduyla 100 almış bulunmaktayım. 😃</p>
 </div></div></article><div class="card comments main-container__items"><div class="card__contents" id="disqus_thread"></div></div></div><div class="sidebar main-content__sidebar"><div class="about"><img class="about__image" src="/img/profile.jpg"/><h1 class="about__name">Umut Benzer</h1><h2 class="about__mini-bio">Software Engineer in Berlin</h2></div></div></div><div class="main-container"><div class="footer"><div class="footer__copyright-holder"><p><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license noopener noreferrer" target="_blank"><img alt="Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License" src="/img/cclicense.png"/></a></p><p><span>Bu sitedeki tüm yazı ve görseller </span><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" rel="license noopener noreferrer" target="_blank">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a><span> ile lisanslanmıştır.</span></p></div><div class="footer__generator"><span>Bu sayfa </span><span>22 Nisan 2017</span><span> tarihinde </span><a href="https://github.com/ubenzer/fil" target="_blank">Fil</a><span> ile yaratılmıştır.</span></div></div></div></div>

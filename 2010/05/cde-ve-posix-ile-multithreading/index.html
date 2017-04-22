@@ -17,65 +17,65 @@
 <li><a href="/2010/05/cde-ve-posix-ile-multithreading/ornekdosya.txt" >Örnek Dosya (input.txt)</a></li>
 <li><a href="/2010/05/cde-ve-posix-ile-multithreading/thrad.pdf" >Ödev Raporu</a></li>
 </ul>
-<pre><code class="language-c"> #include &lt;stdio.h&gt; #include &lt;stdlib.h&gt; #include &lt;pthread.h&gt; #include &lt;errno.h&gt;
+<pre><code class="hljs language-c"> <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt; #include &lt;stdlib.h&gt; #include &lt;pthread.h&gt; #include &lt;errno.h&gt;</span></span>
 
-/* Mutex ve cond değişkenleri */ pthread_mutex_t condition_mutex = PTHREAD_MUTEX_INITIALIZER; pthread_cond_t condition_cond = PTHREAD_COND_INITIALIZER;
+<span class="hljs-comment">/* Mutex ve cond değişkenleri */</span> <span class="hljs-keyword">pthread_mutex_t</span> condition_mutex = PTHREAD_MUTEX_INITIALIZER; <span class="hljs-keyword">pthread_cond_t</span> condition_cond = PTHREAD_COND_INITIALIZER;
 
-pthread_mutex_t creating_theads_mutex = PTHREAD_MUTEX_INITIALIZER; int creating_theads = 0;
+<span class="hljs-keyword">pthread_mutex_t</span> creating_theads_mutex = PTHREAD_MUTEX_INITIALIZER; <span class="hljs-keyword">int</span> creating_theads = <span class="hljs-number">0</span>;
 
-int *sharedMatrisA; int *sharedMatrisB; int *sharedMatrisC; int m; int n; int k;
+<span class="hljs-keyword">int</span> *sharedMatrisA; <span class="hljs-keyword">int</span> *sharedMatrisB; <span class="hljs-keyword">int</span> *sharedMatrisC; <span class="hljs-keyword">int</span> m; <span class="hljs-keyword">int</span> n; <span class="hljs-keyword">int</span> k;
 
-void *matrisHesapla(int satirno) {
+<span class="hljs-function"><span class="hljs-keyword">void</span> *<span class="hljs-title">matrisHesapla</span><span class="hljs-params">(<span class="hljs-keyword">int</span> satirno)</span> </span>{
 
-printf(&quot;Thread #%d init.\n&quot;,satirno+1); fflush(stdout);
+<span class="hljs-built_in">printf</span>(<span class="hljs-string">"Thread #%d init.\n"</span>,satirno+<span class="hljs-number">1</span>); fflush(<span class="hljs-built_in">stdout</span>);
 
-/* Hala thread yaratma asamasindaysak bekle. */ if(creating_theads &gt; 0) { printf(&quot;Thread #%d digerlerinin yaratilmasini beklemek uzere kitlenecek.\n&quot;,satirno+1); fflush(stdout); /* Yaratılınca bir bekle önce. */ pthread_mutex_lock( &amp;condition_mutex ); printf(&quot;Thread #%d mutex locked.\n&quot;,satirno+1); fflush(stdout); pthread_cond_wait( &amp;condition_cond, &amp;condition_mutex ); printf(&quot;Thread #%d cond wait ended.\n&quot;,satirno+1); fflush(stdout); pthread_mutex_unlock( &amp;condition_mutex );
+<span class="hljs-comment">/* Hala thread yaratma asamasindaysak bekle. */</span> <span class="hljs-keyword">if</span>(creating_theads &gt; <span class="hljs-number">0</span>) { <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Thread #%d digerlerinin yaratilmasini beklemek uzere kitlenecek.\n"</span>,satirno+<span class="hljs-number">1</span>); fflush(<span class="hljs-built_in">stdout</span>); <span class="hljs-comment">/* Yaratılınca bir bekle önce. */</span> pthread_mutex_lock( &amp;condition_mutex ); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Thread #%d mutex locked.\n"</span>,satirno+<span class="hljs-number">1</span>); fflush(<span class="hljs-built_in">stdout</span>); pthread_cond_wait( &amp;condition_cond, &amp;condition_mutex ); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Thread #%d cond wait ended.\n"</span>,satirno+<span class="hljs-number">1</span>); fflush(<span class="hljs-built_in">stdout</span>); pthread_mutex_unlock( &amp;condition_mutex );
 
-printf(&quot;Thread #%d calismaya devam ediyor.\n&quot;,satirno+1); fflush(stdout); } else { pthread_mutex_unlock(&amp;creating_theads_mutex); printf(&quot;Thread #%d beklemeye fırsat bulamadan tüm threadler yaratılmış.\n&quot;,satirno+1); fflush(stdout); }
+<span class="hljs-built_in">printf</span>(<span class="hljs-string">"Thread #%d calismaya devam ediyor.\n"</span>,satirno+<span class="hljs-number">1</span>); fflush(<span class="hljs-built_in">stdout</span>); } <span class="hljs-keyword">else</span> { pthread_mutex_unlock(&amp;creating_theads_mutex); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Thread #%d beklemeye fırsat bulamadan tüm threadler yaratılmış.\n"</span>,satirno+<span class="hljs-number">1</span>); fflush(<span class="hljs-built_in">stdout</span>); }
 
-printf(&quot;Thread #%d hesaplamaya basladi.\n&quot;,satirno+1); int ic1,ic2; for(ic1=0; ic1&lt;k; ic1++) { for(ic2=0; ic2&lt;n; ic2++) { /* Her thread kendi satırına yazdıgı için problem olmaz, mutexe gerek yok. */ sharedMatrisC[(satirno*k) + ic1] += sharedMatrisA[(satirno*n) + ic2] * sharedMatrisB[(ic2*k)+ic1]; } } printf(&quot;Thread #%d hesaplamayi bitirdi ve sonlandi.\n&quot;,satirno+1); }
+<span class="hljs-built_in">printf</span>(<span class="hljs-string">"Thread #%d hesaplamaya basladi.\n"</span>,satirno+<span class="hljs-number">1</span>); <span class="hljs-keyword">int</span> ic1,ic2; <span class="hljs-keyword">for</span>(ic1=<span class="hljs-number">0</span>; ic1&lt;k; ic1++) { <span class="hljs-keyword">for</span>(ic2=<span class="hljs-number">0</span>; ic2&lt;n; ic2++) { <span class="hljs-comment">/* Her thread kendi satırına yazdıgı için problem olmaz, mutexe gerek yok. */</span> sharedMatrisC[(satirno*k) + ic1] += sharedMatrisA[(satirno*n) + ic2] * sharedMatrisB[(ic2*k)+ic1]; } } <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Thread #%d hesaplamayi bitirdi ve sonlandi.\n"</span>,satirno+<span class="hljs-number">1</span>); }
 
-int main() {
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
 
-/* Acilis yazilari BASLANGICI */ printf(&quot;Umut BENZER\n&quot;); printf(&quot;05-06-7670\n&quot;); printf(&quot;Ege Universitesi Bilgisayar Muhendisligi 3\. Sinif\n&quot;); printf(&quot;http://www.ubenzer.com\n&quot;); printf(&quot;Threads\n\n&quot;); /* Acilis yazilari SONU */
+<span class="hljs-comment">/* Acilis yazilari BASLANGICI */</span> <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Umut BENZER\n"</span>); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"05-06-7670\n"</span>); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Ege Universitesi Bilgisayar Muhendisligi 3\. Sinif\n"</span>); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"http://www.ubenzer.com\n"</span>); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Threads\n\n"</span>); <span class="hljs-comment">/* Acilis yazilari SONU */</span>
 
-FILE *fp; if((fp=fopen(&quot;input.txt&quot;,&quot;r&quot;)) == NULL) { printf (&quot;Dosya acilamadi.&quot;); exit(-1); }
+FILE *fp; <span class="hljs-keyword">if</span>((fp=fopen(<span class="hljs-string">"input.txt"</span>,<span class="hljs-string">"r"</span>)) == <span class="hljs-literal">NULL</span>) { <span class="hljs-built_in">printf</span> (<span class="hljs-string">"Dosya acilamadi."</span>); <span class="hljs-built_in">exit</span>(<span class="hljs-number">-1</span>); }
 
-fscanf(fp,&quot;%d %d %d&quot;,&amp;m, &amp;n, &amp;k);
+<span class="hljs-built_in">fscanf</span>(fp,<span class="hljs-string">"%d %d %d"</span>,&amp;m, &amp;n, &amp;k);
 
-int matrisA[m][n]; int matrisB[n][k]; int matrisC[m][k]; sharedMatrisA = &amp;matrisA; sharedMatrisB = &amp;matrisB; sharedMatrisC = &amp;matrisC;
+<span class="hljs-keyword">int</span> matrisA[m][n]; <span class="hljs-keyword">int</span> matrisB[n][k]; <span class="hljs-keyword">int</span> matrisC[m][k]; sharedMatrisA = &amp;matrisA; sharedMatrisB = &amp;matrisB; sharedMatrisC = &amp;matrisC;
 
-int i; int j;
+<span class="hljs-keyword">int</span> i; <span class="hljs-keyword">int</span> j;
 
-for(i=0;i&lt;m;i++) { for(j=0;j&lt;k;j++) { matrisC[i][j] = 0; } }
+<span class="hljs-keyword">for</span>(i=<span class="hljs-number">0</span>;i&lt;m;i++) { <span class="hljs-keyword">for</span>(j=<span class="hljs-number">0</span>;j&lt;k;j++) { matrisC[i][j] = <span class="hljs-number">0</span>; } }
 
-/* A MATRISINI OKU */ for(i=0;i&lt;m;i++) { for(j=0;j&lt;n;j++) { fscanf(fp,&quot;%d&quot;,&amp;matrisA[i][j]); } }
+<span class="hljs-comment">/* A MATRISINI OKU */</span> <span class="hljs-keyword">for</span>(i=<span class="hljs-number">0</span>;i&lt;m;i++) { <span class="hljs-keyword">for</span>(j=<span class="hljs-number">0</span>;j&lt;n;j++) { <span class="hljs-built_in">fscanf</span>(fp,<span class="hljs-string">"%d"</span>,&amp;matrisA[i][j]); } }
 
-/* B MATRISINI OKU */ for(i=0;i&lt;n;i++) { for(j=0;j&lt;k;j++) { fscanf(fp,&quot;%d&quot;,&amp;matrisB[i][j]); } }
+<span class="hljs-comment">/* B MATRISINI OKU */</span> <span class="hljs-keyword">for</span>(i=<span class="hljs-number">0</span>;i&lt;n;i++) { <span class="hljs-keyword">for</span>(j=<span class="hljs-number">0</span>;j&lt;k;j++) { <span class="hljs-built_in">fscanf</span>(fp,<span class="hljs-string">"%d"</span>,&amp;matrisB[i][j]); } }
 
 fclose(fp);
 
-/* EKRANA MATRISLERI YAZDIR */ printf(&quot;Matris A:\n&quot;); for(i=0;i&lt;m;i++) { for(j=0;j&lt;n;j++) { printf(&quot;%d\t&quot;, matrisA[i][j]); } printf(&quot;\n&quot;); }
+<span class="hljs-comment">/* EKRANA MATRISLERI YAZDIR */</span> <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Matris A:\n"</span>); <span class="hljs-keyword">for</span>(i=<span class="hljs-number">0</span>;i&lt;m;i++) { <span class="hljs-keyword">for</span>(j=<span class="hljs-number">0</span>;j&lt;n;j++) { <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%d\t"</span>, matrisA[i][j]); } <span class="hljs-built_in">printf</span>(<span class="hljs-string">"\n"</span>); }
 
-printf(&quot;\nMatris B:\n&quot;); for(i=0;i&lt;n;i++) { for(j=0;j&lt;k;j++) { printf(&quot;%d\t&quot;, matrisB[i][j]); } printf(&quot;\n&quot;); }
+<span class="hljs-built_in">printf</span>(<span class="hljs-string">"\nMatris B:\n"</span>); <span class="hljs-keyword">for</span>(i=<span class="hljs-number">0</span>;i&lt;n;i++) { <span class="hljs-keyword">for</span>(j=<span class="hljs-number">0</span>;j&lt;k;j++) { <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%d\t"</span>, matrisB[i][j]); } <span class="hljs-built_in">printf</span>(<span class="hljs-string">"\n"</span>); }
 
-printf(&quot;\n&quot;); pthread_t threads[m]; fflush(stdout);
+<span class="hljs-built_in">printf</span>(<span class="hljs-string">"\n"</span>); <span class="hljs-keyword">pthread_t</span> threads[m]; fflush(<span class="hljs-built_in">stdout</span>);
 
-creating_theads = 1; printf(&quot;Threadler yaratılıyor...\n&quot;); fflush(stdout); for(i=0;i&lt;m;i++) { printf(&quot;Thread #%d/%d yaratıldı.\n&quot;,i+1,m); fflush(stdout); pthread_create(&amp;threads[i], NULL, &amp;matrisHesapla, i); }
+creating_theads = <span class="hljs-number">1</span>; <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Threadler yaratılıyor...\n"</span>); fflush(<span class="hljs-built_in">stdout</span>); <span class="hljs-keyword">for</span>(i=<span class="hljs-number">0</span>;i&lt;m;i++) { <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Thread #%d/%d yaratıldı.\n"</span>,i+<span class="hljs-number">1</span>,m); fflush(<span class="hljs-built_in">stdout</span>); pthread_create(&amp;threads[i], <span class="hljs-literal">NULL</span>, &amp;matrisHesapla, i); }
 
-pthread_mutex_lock(&amp;creating_theads_mutex); creating_theads = 0; pthread_mutex_unlock(&amp;creating_theads_mutex);
+pthread_mutex_lock(&amp;creating_theads_mutex); creating_theads = <span class="hljs-number">0</span>; pthread_mutex_unlock(&amp;creating_theads_mutex);
 
-printf(&quot;Thread yaratimi tamamlamdi. Simdi beklemelerin bitmesi icin mesaj gonderilecek.\n&quot;); fflush(stdout);
+<span class="hljs-built_in">printf</span>(<span class="hljs-string">"Thread yaratimi tamamlamdi. Simdi beklemelerin bitmesi icin mesaj gonderilecek.\n"</span>); fflush(<span class="hljs-built_in">stdout</span>);
 
-/* Threadler çalışabilirler */ pthread_mutex_lock( &amp;condition_mutex ); pthread_cond_broadcast( &amp;condition_cond ); pthread_mutex_unlock( &amp;condition_mutex );
+<span class="hljs-comment">/* Threadler çalışabilirler */</span> pthread_mutex_lock( &amp;condition_mutex ); pthread_cond_broadcast( &amp;condition_cond ); pthread_mutex_unlock( &amp;condition_mutex );
 
-printf(&quot;Beklemekte olabilecek threadlere isleme baslamasini soyleyen mesaj gonderildi.\n&quot;);
+<span class="hljs-built_in">printf</span>(<span class="hljs-string">"Beklemekte olabilecek threadlere isleme baslamasini soyleyen mesaj gonderildi.\n"</span>);
 
-fflush(stdout); for(i=0;i&lt;m;i++) { printf(&quot;Main thread #%d/%d'nin bitmesini bekliyor...\n&quot;,i+1,m); pthread_join(threads[i],NULL); }
+fflush(<span class="hljs-built_in">stdout</span>); <span class="hljs-keyword">for</span>(i=<span class="hljs-number">0</span>;i&lt;m;i++) { <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Main thread #%d/%d'nin bitmesini bekliyor...\n"</span>,i+<span class="hljs-number">1</span>,m); pthread_join(threads[i],<span class="hljs-literal">NULL</span>); }
 
-printf(&quot;\nMatris C:\n&quot;); for(i=0;i&lt;m;i++) { for(j=0;j&lt;k;j++) { printf(&quot;%d\t&quot;, matrisC[i][j]); } printf(&quot;\n&quot;); }
+<span class="hljs-built_in">printf</span>(<span class="hljs-string">"\nMatris C:\n"</span>); <span class="hljs-keyword">for</span>(i=<span class="hljs-number">0</span>;i&lt;m;i++) { <span class="hljs-keyword">for</span>(j=<span class="hljs-number">0</span>;j&lt;k;j++) { <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%d\t"</span>, matrisC[i][j]); } <span class="hljs-built_in">printf</span>(<span class="hljs-string">"\n"</span>); }
 
-printf(&quot;\n&quot;); printf(&quot;...ve bize ayrilan surenin sonuna geldik...\n&quot;); printf(&quot;...bir sonraki odevde gorusmek uzere, esen kalin efendim...\n&quot;); exit(0);
+<span class="hljs-built_in">printf</span>(<span class="hljs-string">"\n"</span>); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"...ve bize ayrilan surenin sonuna geldik...\n"</span>); <span class="hljs-built_in">printf</span>(<span class="hljs-string">"...bir sonraki odevde gorusmek uzere, esen kalin efendim...\n"</span>); <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);
 
 }
 </code></pre>
