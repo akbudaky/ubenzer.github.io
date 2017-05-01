@@ -15,7 +15,9 @@
 <p>Hotlinking, bir sitenin başka bir sitenin <em>(genelde resim dosyası olan)</em> içeriğini izinsiz kullanması <em>(bant genişliği hırsızlığı yapması)</em> anlamına gelir.</p>
 </blockquote>
 <p>Basit bir örnek verecek olursak: Siz web sitenize bir fotoğraf (mesela Türk bayrağı) yüklersiniz. Bu fotoğrafın adresi (siteniz.com/resim.jpg) olur. Başka bir X sitesi de, içeriğine Türk bayrağı eklemek ister. Ancak sizin fotoğrafınızın bir kopyasını kendi sunusuna atmak yerine aşağıdaki kodu kullanarak, doğrudan sizin sununuzdan çeker:</p>
-<p>[html light=&quot;true&quot;] &lt;!-- ADAMIN SİTESİNİN ADRESİNİN hirsiz.com OLDUĞUNU VARSAYARSAK --&gt; &lt;img src=&quot;http://www.ubenzer.com/deepo/hotlink/hotlink.png&quot; alt=&quot;Bayrak&quot; /&gt; [/html]</p>
+<pre><code class="hljs language-html"><span class="hljs-comment">&lt;!-- ADAMIN SİTESİNİN ADRESİNİN hirsiz.com OLDUĞUNU VARSAYARSAK --&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"http://www.ubenzer.com/deepo/hotlink/hotlink.png"</span> <span class="hljs-attr">alt</span>=<span class="hljs-string">"Bayrak"</span> /&gt;</span>
+</code></pre>
 <h3>Bunun size zararı nedir?</h3>
 <p>Bandwidth <em>(ya da bant genişliği, BW)</em>, web sitenizin yayınlanması için anlaşma yaptığınız şirketin size <em>(genelde)</em> bir aylık süre zarfı içerisinde yapabileceğiniz en çok veri aktarım boyutu için koyduğu sınırdır. Sözgelimi, sizin bant genişliğiniz 500MB olsun. Web sitenizin her sayfasının 0.1MB (100KB) olduğunu varsayarsak, bir ayda en fazla 50000 sayfa görüntülenebilir. Daha sonra siteniz ay bitene kadar kapalı kalacaktır.</p>
 <p>Başka birinin sizin alanınızdaki bir dosyayı sömürmesi de size bu noktada zararlıdır. Adam sizin kendi sunucunuza attığınız karikatürleri bir foruma gönderiyor olabilir. Forumda bu resimlerin her yüklenişi size BW gideri olarak patlayacaktır... <em>Biraz acemiyseniz bundan haberiniz bile olmayabilir.</em></p>
@@ -26,11 +28,32 @@
 <h3>Nasıl çözülür?</h3>
 <p>HTTP Referrer bilgisini kontrol edebileceğiniz her yolla. Ama en basiti (linux ortamında) <em>.htaccess</em> dosyası ile. Sitenizin kök klasörüne aşağıdaki bilgileri içeren bir <em>.htaccess</em> dosyası oluşturursanız <em>JPG, JPEG, PNG, GIF ve BMP</em> formatındaki dış referanslar sizin istediğiniz bir dosyaya yönlenecektir.</p>
 <p>Bu kod parçası <em>mod_rewrite</em>'nin açık olmasını gerektirmektedir ki, açık değilse ve siz o hosting firmasını seçtiyseniz kendinizi camdan atabilirsiniz. Yok eğer sunucunun sahibi benim diyorsanız <em>httpd.conf</em> dosyasında gerekli oynamaları yapıp sunucuyu yeniden başlatmalısınız.</p>
-<p>[plain] # BEGIN Hotlink Koruması</p>
-<p>&lt;IfModule mod_rewrite.c&gt; RewriteEngine on RewriteCond %{REQUEST_URI} ^/deepo/hotlink # Hotlink resimlerinin olduğu dizini korumasız yapmalıyız ki, sonsuz dönüye girmeyelim. RewriteRule ^.*$ - [L]</p>
-<p>RewriteCond %{HTTP_REFERER} !^$ RewriteCond %{HTTP_REFERER} !^http://(.+.)?ubenzer.com [NC] RewriteCond %{HTTP_REFERER} !^http://(.+.)?facebook.com [NC] RewriteCond %{HTTP_REFERER} !^https://(.+.)?facebook.com [NC] RewriteCond %{HTTP_REFERER} !^http://(.+.)?google.com [NC] RewriteCond %{HTTP_REFERER} !^http://(.+.)?google.com.tr [NC] # Yukarıdaki sitelerden biri referans olarak gelirse engelleme mekanizması çalışmaz. Kendi sitemizi # bu alana eklemek ÖNEMLİDİR! Yoksa kendi sitemize de hırsız muamelesi uygularız. # Facebook ve Google tarzı sitelerde de ön izlemelerin çalışması için yine mekanizmayı çalıştırmamak iyidir.</p>
-<p>RewriteRule .*.(jpg|jpeg|gif|png|bmp|JPG|JPEG|GIF|PNG|BMP)$ http://www.ubenzer.com/deepo/hotlink/hotlink.$1 [L] # Her formatı ayrı ayrı ele almak gerekir. Hırsız PNG istediğinde siz JPG biçimi gönderirseniz her tarayıcı bunu doğru yorumlayamaz. &lt;/IfModule&gt;</p>
-<h1>END Hotlink Koruması [/plain]</h1>
+<pre><code class="hljs"><span class="hljs-comment"># BEGIN Hotlink Koruması</span>
+
+<span class="hljs-section">&lt;IfModule mod_rewrite.c&gt;</span>
+<span class="hljs-attribute"><span class="hljs-nomarkup">RewriteEngine</span></span> <span class="hljs-literal">on</span>
+
+<span class="hljs-attribute"><span class="hljs-nomarkup">RewriteCond</span></span> <span class="hljs-variable">%{REQUEST_URI}</span> ^/deepo/hotlink
+<span class="hljs-comment"># Hotlink resimlerinin olduğu dizini korumasız yapmalıyız ki, sonsuz dönüye girmeyelim.</span>
+<span class="hljs-attribute"><span class="hljs-nomarkup">RewriteRule</span></span> ^.*$ -<span class="hljs-meta"> [L]</span>
+
+<span class="hljs-attribute"><span class="hljs-nomarkup">RewriteCond</span></span> <span class="hljs-variable">%{HTTP_REFERER}</span> !^$
+<span class="hljs-attribute"><span class="hljs-nomarkup">RewriteCond</span></span> <span class="hljs-variable">%{HTTP_REFERER}</span> !^http://(.+\.)?ubenzer\.com<span class="hljs-meta"> [NC]</span>
+<span class="hljs-attribute"><span class="hljs-nomarkup">RewriteCond</span></span> <span class="hljs-variable">%{HTTP_REFERER}</span> !^http://(.+\.)?facebook\.com<span class="hljs-meta"> [NC]</span>
+<span class="hljs-attribute"><span class="hljs-nomarkup">RewriteCond</span></span> <span class="hljs-variable">%{HTTP_REFERER}</span> !^https://(.+\.)?facebook\.com<span class="hljs-meta"> [NC]</span>
+<span class="hljs-attribute"><span class="hljs-nomarkup">RewriteCond</span></span> <span class="hljs-variable">%{HTTP_REFERER}</span> !^http://(.+\.)?google\.com<span class="hljs-meta"> [NC]</span>
+<span class="hljs-attribute"><span class="hljs-nomarkup">RewriteCond</span></span> <span class="hljs-variable">%{HTTP_REFERER}</span> !^http://(.+\.)?google\.com\.tr<span class="hljs-meta"> [NC]</span>
+
+<span class="hljs-comment"># Yukarıdaki sitelerden biri referans olarak gelirse engelleme mekanizması çalışmaz. Kendi sitemizi</span>
+<span class="hljs-comment"># bu alana eklemek ÖNEMLİDİR! Yoksa kendi sitemize de hırsız muamelesi uygularız.</span>
+<span class="hljs-comment"># Facebook ve Google tarzı sitelerde de ön izlemelerin çalışması için yine mekanizmayı çalıştırmamak iyidir.</span>
+
+<span class="hljs-attribute"><span class="hljs-nomarkup">RewriteRule</span></span> .*\.(jpg|jpeg|gif|png|bmp|JPG|JPEG|GIF|PNG|BMP)$ http://www.ubenzer.com/deepo/hotlink/hotlink.<span class="hljs-number">$1</span><span class="hljs-meta"> [L]</span>
+<span class="hljs-comment"># Her formatı ayrı ayrı ele almak gerekir. Hırsız PNG istediğinde siz JPG biçimi gönderirseniz her tarayıcı bunu doğru yorumlayamaz.</span>
+<span class="hljs-section">&lt;/IfModule&gt;</span>
+
+<span class="hljs-comment"># END Hotlink Koruması</span>
+</code></pre>
 <h3>Dosya iyi hoş da, bir anlatıversen?</h3>
 <p>Anlatalım efendim.</p>
 <p>Öncelikle <em>hırsızların istediği resim yerine görünecek resimlerimizi</em> hazırlayarak <em>jpg, gif, png ve bmp</em> formatlarında kaydediyoruz. Daha sonra büyük-küçük harf sorunlarını engellemek için uzantıların büyük harflilerini de kaydediyoruz. <em>(Linux sistemlerde a.JPG ile a.jpg farklı dosya olarak kabul edilir.)</em> Kısaca aşağıdaki dosyaları hazırlıyoruz:</p>
@@ -46,11 +69,12 @@
 <li>hotlink.PNG</li>
 <li>hotlink.png</li>
 </ul>
-<p>Eğer ilham gelmiyorsa, benim <a href="/2009/07/bant-genisligi-hirsizlarina-hotlink-korumasi/hotlink.png" >hotlink resmimden ilham alabilirsiniz</a>. <em>(Dikkat: Hareken çeken el içerir. 😄 )</em></p>
+<p>Eğer ilham gelmiyorsa, benim <a href="/2009/07/bant-genisligi-hirsizlarina-hotlink-korumasi/hotlink.png" >hotlink resmimden ilham alabilirsiniz</a>.</p>
 <p>İkinci adımda sitenizde <em>&quot;hotlink korumasız&quot;</em> bir dizin oluşturmalısınız. Hotlink durumunda görünecek resimleri de hotlink korumasına maruz bırakırsanız insanlık sizi affetmez. Benim örneğimde bu dizin www.ubenzer.com/deepo/hotlink/. Kendi <em>.htaccess</em> dosyanızı <em>bunu ele alarak değiştirin</em>.</p>
 <p>Üçüncü adım olarak <em>hotlink korumasından etkilenmeyecek siteleri</em> ayarlamalısınız. <em>Kendi sitenizi mutlaka yazın, yoksa kendi kendinize hırsız muamelesi yaparsınız.</em> Verdiğim örnek <em>.htaccess</em> dosyası tüm subdomain ve adresleri kapsayacak örneklerdir. Mesela <em>facebook.com</em> adresini beyaz listeye alırsanız <em>static.ak.facebook.com</em> da alınır.</p>
 <p>Google ve Facebook gibi, <em>ön izlemenin önemli olabileceği siteleri beyaz listeye almanızı</em> ve</p>
-<p>[plain firstline=&quot;9&quot;]RewriteCond %{HTTP_REFERER} !^$[/plain]</p>
+<pre><code class="hljs"><span class="hljs-attribute"><span class="hljs-nomarkup">RewriteCond</span></span> <span class="hljs-variable">%{HTTP_REFERER}</span> !^$
+</code></pre>
 <p>satırını kullanmanızı tavsiye ederim. <em>Bu satır hiçbir referans olmadığında</em> <em>(yani adres satırına doğrudan girildiğinde ya da sık kullanılanlardan çağrıldığında)</em> <em>ilgili resmin görünmesini sağlayacaktır.</em> <em>(Aşırı koruyucu olmamak lazım bir yerde...)</em></p>
 <p>Son adımda, yaptıklarınızın keyfini çıkarmak kalıyor size. Bitti bu kadardı. 😃 Hırsızlardan artakalan bant genişliğinizi güle güle kullanın.</p>
 <p><em>Güncelleme:</em> <em>.htaccess</em> kodlarındaki ufak bir hatayı giderdim. Yorumuyla beni uyarak Selim'e teşekkürlerimi sunarım.</p>
