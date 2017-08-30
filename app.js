@@ -17,25 +17,32 @@
  * limitations under the License.
  */
 
+/**
+ * @template A
+ */
 class MDCFoundation {
+  /** @return enum{cssClasses} */
   static get cssClasses() {
     // Classes extending MDCFoundation should implement this method to return an object which exports every
     // CSS class the foundation class needs as a property. e.g. {ACTIVE: 'mdc-component--active'}
     return {};
   }
 
+  /** @return enum{strings} */
   static get strings() {
     // Classes extending MDCFoundation should implement this method to return an object which exports all
     // semantic strings as constants. e.g. {ARIA_ROLE: 'tablist'}
     return {};
   }
 
+  /** @return enum{numbers} */
   static get numbers() {
     // Classes extending MDCFoundation should implement this method to return an object which exports all
     // of its semantic numbers as constants. e.g. {ANIMATION_DELAY_MS: 350}
     return {};
   }
 
+  /** @return {!Object} */
   static get defaultAdapter() {
     // Classes extending MDCFoundation may choose to implement this getter in order to provide a convenient
     // way of viewing the necessary methods of an adapter. In the future, this could also be used for adapter
@@ -43,7 +50,11 @@ class MDCFoundation {
     return {};
   }
 
+  /**
+   * @param {A=} adapter
+   */
   constructor(adapter = {}) {
+    /** @protected {!A} */
     this.adapter_ = adapter;
   }
 
@@ -72,7 +83,14 @@ class MDCFoundation {
  * limitations under the License.
  */
 
+/**
+ * @template F
+ */
 class MDCComponent {
+  /**
+   * @param {!Element} root
+   * @return {!MDCComponent}
+   */
   static attachTo(root) {
     // Subclasses which extend MDCBase should provide an attachTo() method that takes a root element and
     // returns an instantiated component with its root set to that element. Also note that in the cases of
@@ -81,11 +99,18 @@ class MDCComponent {
     return new MDCComponent(root, new MDCFoundation());
   }
 
+  /**
+   * @param {!Element} root
+   * @param {F=} foundation
+   * @param {...?} args
+   */
   constructor(root, foundation = undefined, ...args) {
+    /** @protected {!Element} */
     this.root_ = root;
     this.initialize(...args);
     // Note that we initialize foundation here and not within the constructor's default param so that
     // this.root_ is defined and can be used within the foundation class.
+    /** @protected {!F} */
     this.foundation_ = foundation === undefined ? this.getDefaultFoundation() : foundation;
     this.foundation_.init();
     this.initialSyncWithDOM();
@@ -97,6 +122,9 @@ class MDCComponent {
     // initialized. Any additional arguments besides root and foundation will be passed in here.
   }
 
+  /**
+   * @return {!F} foundation
+   */
   getDefaultFoundation() {
     // Subclasses must override this method to return a properly configured foundation class for the
     // component.
@@ -117,20 +145,33 @@ class MDCComponent {
     this.foundation_.destroy();
   }
 
-  // Wrapper method to add an event listener to the component's root element. This is most useful when
-  // listening for custom events.
+  /**
+   * Wrapper method to add an event listener to the component's root element. This is most useful when
+   * listening for custom events.
+   * @param {string} evtType
+   * @param {!Function} handler
+   */
   listen(evtType, handler) {
     this.root_.addEventListener(evtType, handler);
   }
 
-  // Wrapper method to remove an event listener to the component's root element. This is most useful when
-  // unlistening for custom events.
+  /**
+   * Wrapper method to remove an event listener to the component's root element. This is most useful when
+   * unlistening for custom events.
+   * @param {string} evtType
+   * @param {!Function} handler
+   */
   unlisten(evtType, handler) {
     this.root_.removeEventListener(evtType, handler);
   }
 
-  // Fires a cross-browser-compatible custom event from the component root of the given type,
-  // with the given data.
+  /**
+   * Fires a cross-browser-compatible custom event from the component root of the given type,
+   * with the given data.
+   * @param {string} evtType
+   * @param {!Object} evtData
+   * @param {boolean=} shouldBubble
+   */
   emit(evtType, evtData, shouldBubble = false) {
     let evt;
     if (typeof CustomEvent === 'function') {
@@ -148,19 +189,43 @@ class MDCComponent {
 }
 
 /**
- * Copyright 2016 Google Inc.
+ * Copyright 2016 Google Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *   http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ */
+
+/* eslint no-unused-vars: [2, {"args": "none"}] */
+
+/**
+ * Adapter for MDC Ripple. Provides an interface for managing
+ * - classes
+ * - dom
+ * - CSS variables
+ * - position
+ * - dimensions
+ * - scroll position
+ * - event handlers
+ * - unbounded, active and disabled states
+ *
+ * Additionally, provides type information for the adapter to the Closure
+ * compiler.
+ *
+ * Implement this adapter for your framework of choice to delegate updates to
+ * the component in your framework of choice. See architecture documentation
+ * for more details.
+ * https://github.com/material-components/material-components-web/blob/master/docs/architecture.md
+ *
+ * @record
  */
 
 /**
@@ -206,6 +271,7 @@ const numbers = {
   PADDING: 10,
   INITIAL_ORIGIN_SCALE: 0.6,
   DEACTIVATION_TIMEOUT_MS: 300,
+  FG_DEACTIVATION_MS: 83,
 };
 
 /**
@@ -224,7 +290,54 @@ const numbers = {
  * limitations under the License.
  */
 
-function supportsCssVariables(windowObj) {
+/**
+ * Stores result from supportsCssVariables to avoid redundant processing to detect CSS custom variable support.
+ * @private {boolean|undefined}
+ */
+let supportsCssVariables_;
+
+/**
+ * Stores result from applyPassive to avoid redundant processing to detect passive event listener support.
+ * @private {boolean|undefined}
+ */
+let supportsPassive_;
+
+/**
+ * @param {!Window} windowObj
+ * @return {boolean}
+ */
+function detectEdgePseudoVarBug(windowObj) {
+  // Detect versions of Edge with buggy var() support
+  // See: https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/11495448/
+  const document = windowObj.document;
+  const className = 'test-edge-css-var';
+  const styleNode = document.createElement('style');
+  document.head.appendChild(styleNode);
+  const sheet = styleNode.sheet;
+  // Internet Explorer 11 requires indices to always be specified to insertRule
+  sheet.insertRule(`:root { --${className}: 1px solid #000; }`, 0);
+  sheet.insertRule(`.${className} { visibility: hidden; }`, 1);
+  sheet.insertRule(`.${className}::before { border: var(--${className}); }`, 2);
+  const node = document.createElement('div');
+  node.className = className;
+  document.body.appendChild(node);
+  // Bug exists if ::before style ends up propagating to the parent element
+  const hasPseudoVarBug = windowObj.getComputedStyle(node).borderTopStyle === 'solid';
+  node.remove();
+  styleNode.remove();
+  return hasPseudoVarBug;
+}
+
+/**
+ * @param {!Window} windowObj
+ * @param {boolean=} forceRefresh
+ * @return {boolean|undefined}
+ */
+function supportsCssVariables(windowObj, forceRefresh = false) {
+  if (typeof supportsCssVariables_ === 'boolean' && !forceRefresh) {
+    return supportsCssVariables_;
+  }
+
   const supportsFunctionPresent = windowObj.CSS && typeof windowObj.CSS.supports === 'function';
   if (!supportsFunctionPresent) {
     return;
@@ -237,15 +350,53 @@ function supportsCssVariables(windowObj) {
     windowObj.CSS.supports('(--css-vars: yes)') &&
     windowObj.CSS.supports('color', '#00000000')
   );
-  return explicitlySupportsCssVars || weAreFeatureDetectingSafari10plus;
+
+  if (explicitlySupportsCssVars || weAreFeatureDetectingSafari10plus) {
+    supportsCssVariables_ = !detectEdgePseudoVarBug(windowObj);
+  } else {
+    supportsCssVariables_ = false;
+  }
+  return supportsCssVariables_;
 }
 
+//
+/**
+ * Determine whether the current browser supports passive event listeners, and if so, use them.
+ * @param {!Window=} globalObj
+ * @param {boolean=} forceRefresh
+ * @return {boolean|{passive: boolean}}
+ */
+function applyPassive(globalObj = window, forceRefresh = false) {
+  if (supportsPassive_ === undefined || forceRefresh) {
+    let isSupported = false;
+    try {
+      globalObj.document.addEventListener('test', null, {get passive() {
+        isSupported = true;
+      }});
+    } catch (e) { }
+
+    supportsPassive_ = isSupported;
+  }
+
+  return supportsPassive_ ? {passive: true} : false;
+}
+
+/**
+ * @param {!Object} HTMLElementPrototype
+ * @return {!Array<string>}
+ */
 function getMatchesProperty(HTMLElementPrototype) {
   return [
     'webkitMatchesSelector', 'msMatchesSelector', 'matches',
   ].filter((p) => p in HTMLElementPrototype).pop();
 }
 
+/**
+ * @param {!Event} ev
+ * @param {!{x: number, y: number}} pageOffset
+ * @param {!ClientRect} clientRect
+ * @return {!{x: number, y: number}}
+ */
 function getNormalizedEventCoords(ev, pageOffset, clientRect) {
   const {x, y} = pageOffset;
   const documentX = x + clientRect.left;
@@ -281,6 +432,9 @@ function getNormalizedEventCoords(ev, pageOffset, clientRect) {
  * limitations under the License.
  */
 
+/**
+ * @enum {string}
+ */
 const DEACTIVATION_ACTIVATION_PAIRS = {
   mouseup: 'mousedown',
   pointerup: 'pointerdown',
@@ -289,6 +443,9 @@ const DEACTIVATION_ACTIVATION_PAIRS = {
   blur: 'focus',
 };
 
+/**
+ * @extends {MDCFoundation<!MDCRippleAdapter>}
+ */
 class MDCRippleFoundation extends MDCFoundation {
   static get cssClasses() {
     return cssClasses;
@@ -320,10 +477,13 @@ class MDCRippleFoundation extends MDCFoundation {
     };
   }
 
-  // We compute this property so that we are not querying information about the client
-  // until the point in time where the foundation requests it. This prevents scenarios where
-  // client-side feature-detection may happen too early, such as when components are rendered on the server
-  // and then initialized at mount time on the client.
+  /**
+   * We compute this property so that we are not querying information about the client
+   * until the point in time where the foundation requests it. This prevents scenarios where
+   * client-side feature-detection may happen too early, such as when components are rendered on the server
+   * and then initialized at mount time on the client.
+   * @return {boolean}
+   */
   get isSupported_() {
     return this.adapter_.browserSupportsCssVars();
   }
@@ -331,12 +491,25 @@ class MDCRippleFoundation extends MDCFoundation {
   constructor(adapter) {
     super(Object.assign(MDCRippleFoundation.defaultAdapter, adapter));
 
+    /** @private {number} */
     this.layoutFrame_ = 0;
-    this.frame_ = {width: 0, height: 0};
+
+    /** @private {!ClientRect} */
+    this.frame_ = /** @type {!ClientRect} */ ({width: 0, height: 0});
+
+    /** @private {!ActivationStateType} */
     this.activationState_ = this.defaultActivationState_();
+
+    /** @private {number} */
     this.xfDuration_ = 0;
+
+    /** @private {number} */
     this.initialSize_ = 0;
+
+    /** @private {number} */
     this.maxRadius_ = 0;
+
+    /** @private {!Array<{ListenerInfoType}>} */
     this.listenerInfos_ = [
       {activate: 'touchstart', deactivate: 'touchend'},
       {activate: 'pointerdown', deactivate: 'pointerup'},
@@ -344,6 +517,8 @@ class MDCRippleFoundation extends MDCFoundation {
       {activate: 'keydown', deactivate: 'keyup'},
       {focus: 'focus', blur: 'blur'},
     ];
+
+    /** @private {!ListenersType} */
     this.listeners_ = {
       activate: (e) => this.activate_(e),
       deactivate: (e) => this.deactivate_(e),
@@ -354,20 +529,38 @@ class MDCRippleFoundation extends MDCFoundation {
         () => this.adapter_.removeClass(MDCRippleFoundation.cssClasses.BG_FOCUSED)
       ),
     };
+
+    /** @private {!Function} */
     this.resizeHandler_ = () => this.layout();
+
+    /** @private {!{left: number, top:number}} */
     this.unboundedCoords_ = {
       left: 0,
       top: 0,
     };
+
+    /** @private {number} */
     this.fgScale_ = 0;
+
+    /** @private {number} */
     this.activationTimer_ = 0;
+
+    /** @private {number} */
+    this.fgDeactivationRemovalTimer_ = 0;
+
+    /** @private {boolean} */
     this.activationAnimationHasEnded_ = false;
+
+    /** @private {!Function} */
     this.activationTimerCallback_ = () => {
       this.activationAnimationHasEnded_ = true;
       this.runDeactivationUXLogicIfReady_();
     };
   }
 
+  /**
+   * @return {!ActivationStateType}
+   */
   defaultActivationState_() {
     return {
       isActivated: false,
@@ -396,6 +589,7 @@ class MDCRippleFoundation extends MDCFoundation {
     });
   }
 
+  /** @private */
   addEventListeners_() {
     this.listenerInfos_.forEach((info) => {
       Object.keys(info).forEach((k) => {
@@ -405,6 +599,10 @@ class MDCRippleFoundation extends MDCFoundation {
     this.adapter_.registerResizeHandler(this.resizeHandler_);
   }
 
+  /**
+   * @param {Event} e
+   * @private
+   */
   activate_(e) {
     if (this.adapter_.isSurfaceDisabled()) {
       return;
@@ -443,6 +641,7 @@ class MDCRippleFoundation extends MDCFoundation {
     this.activate_(null);
   }
 
+  /** @private */
   animateActivation_() {
     const {VAR_FG_TRANSLATE_START, VAR_FG_TRANSLATE_END} = MDCRippleFoundation.strings;
     const {
@@ -465,6 +664,7 @@ class MDCRippleFoundation extends MDCFoundation {
     this.adapter_.updateCssVariable(VAR_FG_TRANSLATE_END, translateEnd);
     // Cancel any ongoing activation/deactivation animations
     clearTimeout(this.activationTimer_);
+    clearTimeout(this.fgDeactivationRemovalTimer_);
     this.rmBoundedActivationClasses_();
     this.adapter_.removeClass(FG_DEACTIVATION);
 
@@ -475,6 +675,10 @@ class MDCRippleFoundation extends MDCFoundation {
     this.activationTimer_ = setTimeout(() => this.activationTimerCallback_(), DEACTIVATION_TIMEOUT_MS);
   }
 
+  /**
+   * @private
+   * @return {{startPoint: PointType, endPoint: PointType}}
+   */
   getFgTranslationCoordinates_() {
     const {activationState_: activationState} = this;
     const {activationEvent, wasActivatedByPointer} = activationState;
@@ -482,7 +686,8 @@ class MDCRippleFoundation extends MDCFoundation {
     let startPoint;
     if (wasActivatedByPointer) {
       startPoint = getNormalizedEventCoords(
-        activationEvent, this.adapter_.getWindowPageOffset(), this.adapter_.computeBoundingRect()
+        /** @type {!Event} */ (activationEvent),
+        this.adapter_.getWindowPageOffset(), this.adapter_.computeBoundingRect()
       );
     } else {
       startPoint = {
@@ -504,17 +709,21 @@ class MDCRippleFoundation extends MDCFoundation {
     return {startPoint, endPoint};
   }
 
+  /** @private */
   runDeactivationUXLogicIfReady_() {
     const {FG_DEACTIVATION} = MDCRippleFoundation.cssClasses;
     const {hasDeactivationUXRun, isActivated} = this.activationState_;
     const activationHasEnded = hasDeactivationUXRun || !isActivated;
     if (activationHasEnded && this.activationAnimationHasEnded_) {
       this.rmBoundedActivationClasses_();
-      // Note that we don't need to remove this here since it's removed on re-activation.
       this.adapter_.addClass(FG_DEACTIVATION);
+      this.fgDeactivationRemovalTimer_ = setTimeout(() => {
+        this.adapter_.removeClass(FG_DEACTIVATION);
+      }, numbers.FG_DEACTIVATION_MS);
     }
   }
 
+  /** @private */
   rmBoundedActivationClasses_() {
     const {BG_ACTIVE_FILL, FG_ACTIVATION} = MDCRippleFoundation.cssClasses;
     this.adapter_.removeClass(BG_ACTIVE_FILL);
@@ -523,6 +732,10 @@ class MDCRippleFoundation extends MDCFoundation {
     this.adapter_.computeBoundingRect();
   }
 
+  /**
+   * @param {Event} e
+   * @private
+   */
   deactivate_(e) {
     const {activationState_: activationState} = this;
     // This can happen in scenarios such as when you have a keyup event that blurs the element.
@@ -532,7 +745,8 @@ class MDCRippleFoundation extends MDCFoundation {
     // Programmatic deactivation.
     if (activationState.isProgrammatic) {
       const evtObject = null;
-      requestAnimationFrame(() => this.animateDeactivation_(evtObject, Object.assign({}, activationState)));
+      const state = /** @type {!ActivationStateType} */ (Object.assign({}, activationState));
+      requestAnimationFrame(() => this.animateDeactivation_(evtObject, state));
       this.activationState_ = this.defaultActivationState_();
       return;
     }
@@ -549,7 +763,7 @@ class MDCRippleFoundation extends MDCFoundation {
       needsActualDeactivation = e.type === 'mouseup';
     }
 
-    const state = Object.assign({}, activationState);
+    const state = /** @type {!ActivationStateType} */ (Object.assign({}, activationState));
     requestAnimationFrame(() => {
       if (needsDeactivationUX) {
         this.activationState_.hasDeactivationUXRun = true;
@@ -566,6 +780,11 @@ class MDCRippleFoundation extends MDCFoundation {
     this.deactivate_(null);
   }
 
+  /**
+   * @param {Event} e
+   * @param {!ActivationStateType} options
+   * @private
+   */
   animateDeactivation_(e, {wasActivatedByPointer, wasElementMadeActive}) {
     const {BG_FOCUSED} = MDCRippleFoundation.cssClasses;
     if (wasActivatedByPointer || wasElementMadeActive) {
@@ -589,6 +808,7 @@ class MDCRippleFoundation extends MDCFoundation {
     });
   }
 
+  /** @private */
   removeEventListeners_() {
     this.listenerInfos_.forEach((info) => {
       Object.keys(info).forEach((k) => {
@@ -598,6 +818,7 @@ class MDCRippleFoundation extends MDCFoundation {
     this.adapter_.deregisterResizeHandler(this.resizeHandler_);
   }
 
+  /** @private */
   removeCssVars_() {
     const {strings: strings$$1} = MDCRippleFoundation;
     Object.keys(strings$$1).forEach((k) => {
@@ -617,6 +838,7 @@ class MDCRippleFoundation extends MDCFoundation {
     });
   }
 
+  /** @private */
   layoutInternal_() {
     this.frame_ = this.adapter_.computeBoundingRect();
 
@@ -633,6 +855,7 @@ class MDCRippleFoundation extends MDCFoundation {
     this.updateLayoutCssVars_();
   }
 
+  /** @private */
   updateLayoutCssVars_() {
     const {
       VAR_SURFACE_WIDTH, VAR_SURFACE_HEIGHT, VAR_FG_SIZE,
@@ -672,16 +895,39 @@ class MDCRippleFoundation extends MDCFoundation {
  * limitations under the License.
  */
 
+/**
+ * @extends MDCComponent<!MDCRippleFoundation>
+ */
 class MDCRipple extends MDCComponent {
+  /** @param {...?} args */
+  constructor(...args) {
+    super(...args);
+
+    /** @type {boolean} */
+    this.disabled = false;
+
+    /** @private {boolean} */
+    this.unbounded_;
+  }
+
+  /**
+   * @param {!Element} root
+   * @param {{isUnbounded: (boolean|undefined)}=} options
+   * @return {!MDCRipple}
+   */
   static attachTo(root, {isUnbounded = undefined} = {}) {
     const ripple = new MDCRipple(root);
     // Only override unbounded behavior if option is explicitly specified
     if (isUnbounded !== undefined) {
-      ripple.unbounded = isUnbounded;
+      ripple.unbounded = /** @type {boolean} */ (isUnbounded);
     }
     return ripple;
   }
 
+  /**
+   * @param {!RippleCapableSurface} instance
+   * @return {!MDCRippleAdapter}
+   */
   static createAdapter(instance) {
     const MATCHES = getMatchesProperty(HTMLElement.prototype);
 
@@ -692,8 +938,10 @@ class MDCRipple extends MDCComponent {
       isSurfaceDisabled: () => instance.disabled,
       addClass: (className) => instance.root_.classList.add(className),
       removeClass: (className) => instance.root_.classList.remove(className),
-      registerInteractionHandler: (evtType, handler) => instance.root_.addEventListener(evtType, handler),
-      deregisterInteractionHandler: (evtType, handler) => instance.root_.removeEventListener(evtType, handler),
+      registerInteractionHandler: (evtType, handler) =>
+        instance.root_.addEventListener(evtType, handler, applyPassive()),
+      deregisterInteractionHandler: (evtType, handler) =>
+        instance.root_.removeEventListener(evtType, handler, applyPassive()),
       registerResizeHandler: (handler) => window.addEventListener('resize', handler),
       deregisterResizeHandler: (handler) => window.removeEventListener('resize', handler),
       updateCssVariable: (varName, value) => instance.root_.style.setProperty(varName, value),
@@ -702,10 +950,12 @@ class MDCRipple extends MDCComponent {
     };
   }
 
+  /** @return {boolean} */
   get unbounded() {
     return this.unbounded_;
   }
 
+  /** @param {boolean} unbounded */
   set unbounded(unbounded) {
     const {UNBOUNDED} = MDCRippleFoundation.cssClasses;
     this.unbounded_ = Boolean(unbounded);
@@ -724,6 +974,11 @@ class MDCRipple extends MDCComponent {
     this.foundation_.deactivate();
   }
 
+  layout() {
+    this.foundation_.layout();
+  }
+
+  /** @return {!MDCRippleFoundation} */
   getDefaultFoundation() {
     return new MDCRippleFoundation(MDCRipple.createAdapter(this));
   }
@@ -734,50 +989,26 @@ class MDCRipple extends MDCComponent {
 }
 
 /**
- * Copyright 2016 Google Inc. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * See Material Design spec for more details on when to use ripples.
+ * https://material.io/guidelines/motion/choreography.html#choreography-creation
+ * @record
  */
-const cssClasses$1 = {
-  ROOT: 'mdc-simple-menu',
-  OPEN: 'mdc-simple-menu--open',
-  ANIMATING: 'mdc-simple-menu--animating',
-  TOP_RIGHT: 'mdc-simple-menu--open-from-top-right',
-  BOTTOM_LEFT: 'mdc-simple-menu--open-from-bottom-left',
-  BOTTOM_RIGHT: 'mdc-simple-menu--open-from-bottom-right',
-};
+class RippleCapableSurface {}
 
-const strings$1 = {
-  ITEMS_SELECTOR: '.mdc-simple-menu__items',
-};
+/** @protected {!Element} */
+RippleCapableSurface.prototype.root_;
 
-const numbers$1 = {
-  // Amount of time to wait before triggering a selected event on the menu. Note that this time
-  // will most likely be bumped up once interactive lists are supported to allow for the ripple to
-  // animate before closing the menu
-  SELECTED_TRIGGER_DELAY: 50,
-  // Total duration of the menu animation.
-  TRANSITION_DURATION_MS: 300,
-  // The menu starts its open animation with the X axis at this time value (0 - 1).
-  TRANSITION_SCALE_ADJUSTMENT_X: 0.5,
-  // The time value the menu waits until the animation starts on the Y axis (0 - 1).
-  TRANSITION_SCALE_ADJUSTMENT_Y: 0.2,
-  // The cubic bezier control points for the animation (cubic-bezier(0, 0, 0.2, 1)).
-  TRANSITION_X1: 0,
-  TRANSITION_Y1: 0,
-  TRANSITION_X2: 0.2,
-  TRANSITION_Y2: 1,
-};
+/**
+ * Whether or not the ripple bleeds out of the bounds of the element.
+ * @type {boolean|undefined}
+ */
+RippleCapableSurface.prototype.unbounded;
+
+/**
+ * Whether or not the ripple is attached to a disabled component.
+ * @type {boolean|undefined}
+ */
+RippleCapableSurface.prototype.disabled;
 
 /**
  * Copyright 2016 Google Inc. All Rights Reserved.
@@ -795,9 +1026,15 @@ const numbers$1 = {
  * limitations under the License.
  */
 
+/** @type {string|undefined} */
 let storedTransformPropertyName_;
 
-// Returns the name of the correct transform property to use on the current browser.
+/**
+ * Returns the name of the correct transform property to use on the current browser.
+ * @param {!Window} globalObj
+ * @param {boolean=} forceRefresh
+ * @return {string}
+ */
 function getTransformPropertyName(globalObj, forceRefresh = false) {
   if (storedTransformPropertyName_ === undefined || forceRefresh) {
     const el = globalObj.document.createElement('div');
@@ -808,27 +1045,48 @@ function getTransformPropertyName(globalObj, forceRefresh = false) {
   return storedTransformPropertyName_;
 }
 
-// Clamps a value between the minimum and the maximum, returning the clamped value.
+/**
+ * Clamps a value between the minimum and the maximum, returning the clamped value.
+ * @param {number} value
+ * @param {number} min
+ * @param {number} max
+ * @return {number}
+ */
 function clamp(value, min = 0, max = 1) {
   return Math.min(max, Math.max(min, value));
 }
 
-// Returns the easing value to apply at time t, for a given cubic bezier curve.
-// Control points P0 and P3 are assumed to be (0,0) and (1,1), respectively.
-// Paramters are as follows:
-// - time: The current time in the animation, scaled between 0 and 1.
-// - x1: The x value of control point P1.
-// - y1: The y value of control point P1.
-// - x2: The x value of control point P2.
-// - y2: The y value of control point P2.
+
+/**
+ * Returns the easing value to apply at time t, for a given cubic bezier curve.
+ * Control points P0 and P3 are assumed to be (0,0) and (1,1), respectively.
+ * Parameters are as follows:
+ * - time: The current time in the animation, scaled between 0 and 1.
+ * - x1: The x value of control point P1.
+ * - y1: The y value of control point P1.
+ * - x2: The x value of control point P2.
+ * - y2: The y value of control point P2.
+ * @param {number} time
+ * @param {number} x1
+ * @param {number} y1
+ * @param {number} x2
+ * @param {number} y2
+ * @return {number}
+ */
 function bezierProgress(time, x1, y1, x2, y2) {
   return getBezierCoordinate_(solvePositionFromXValue_(time, x1, x2), y1, y2);
 }
 
-// Compute a single coordinate at a position point between 0 and 1.
-// c1 and c2 are the matching coordinate on control points P1 and P2, respectively.
-// Control points P0 and P3 are assumed to be (0,0) and (1,1), respectively.
-// Adapted from https://github.com/google/closure-library/blob/master/closure/goog/math/bezier.js.
+/**
+ * Compute a single coordinate at a position point between 0 and 1.
+ * c1 and c2 are the matching coordinate on control points P1 and P2, respectively.
+ * Control points P0 and P3 are assumed to be (0,0) and (1,1), respectively.
+ * Adapted from https://github.com/google/closure-library/blob/master/closure/goog/math/bezier.js.
+ * @param {number} t
+ * @param {number} c1
+ * @param {number} c2
+ * @return {number}
+ */
 function getBezierCoordinate_(t, c1, c2) {
   // Special case start and end.
   if (t === 0 || t === 1) {
@@ -848,8 +1106,14 @@ function getBezierCoordinate_(t, c1, c2) {
   return ic0 + t * (ic1 - ic0);
 }
 
-// Project a point onto the Bezier curve, from a given X. Calculates the position t along the curve.
-// Adapted from https://github.com/google/closure-library/blob/master/closure/goog/math/bezier.js.
+/**
+ * Project a point onto the Bezier curve, from a given X. Calculates the position t along the curve.
+ * Adapted from https://github.com/google/closure-library/blob/master/closure/goog/math/bezier.js.
+ * @param {number} xVal
+ * @param {number} x1
+ * @param {number} x2
+ * @return {number}
+ */
 function solvePositionFromXValue_(xVal, x1, x2) {
   const EPSILON = 1e-6;
   const MAX_ITERATIONS = 8;
@@ -916,73 +1180,196 @@ function solvePositionFromXValue_(xVal, x1, x2) {
  * limitations under the License.
  */
 
+/* eslint no-unused-vars: [2, {"args": "none"}] */
+
+/**
+ * Adapter for MDC Simple Menu. Provides an interface for managing
+ * - classes
+ * - dom
+ * - focus
+ * - position
+ * - dimensions
+ * - event handlers
+ *
+ * Additionally, provides type information for the adapter to the Closure
+ * compiler.
+ *
+ * Implement this adapter for your framework of choice to delegate updates to
+ * the component in your framework of choice. See architecture documentation
+ * for more details.
+ * https://github.com/material-components/material-components-web/blob/master/docs/architecture.md
+ *
+ * @record
+ */
+
+/**
+ * Copyright 2016 Google Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/** @enum {string} */
+const cssClasses$1 = {
+  ROOT: 'mdc-simple-menu',
+  OPEN: 'mdc-simple-menu--open',
+  ANIMATING: 'mdc-simple-menu--animating',
+  TOP_RIGHT: 'mdc-simple-menu--open-from-top-right',
+  BOTTOM_LEFT: 'mdc-simple-menu--open-from-bottom-left',
+  BOTTOM_RIGHT: 'mdc-simple-menu--open-from-bottom-right',
+};
+
+/** @enum {string} */
+const strings$1 = {
+  ITEMS_SELECTOR: '.mdc-simple-menu__items',
+  SELECTED_EVENT: 'MDCSimpleMenu:selected',
+  CANCEL_EVENT: 'MDCSimpleMenu:cancel',
+  ARIA_DISABLED_ATTR: 'aria-disabled',
+};
+
+/** @enum {number} */
+const numbers$1 = {
+  // Amount of time to wait before triggering a selected event on the menu. Note that this time
+  // will most likely be bumped up once interactive lists are supported to allow for the ripple to
+  // animate before closing the menu
+  SELECTED_TRIGGER_DELAY: 50,
+  // Total duration of the menu animation.
+  TRANSITION_DURATION_MS: 300,
+  // The menu starts its open animation with the X axis at this time value (0 - 1).
+  TRANSITION_SCALE_ADJUSTMENT_X: 0.5,
+  // The time value the menu waits until the animation starts on the Y axis (0 - 1).
+  TRANSITION_SCALE_ADJUSTMENT_Y: 0.2,
+  // The cubic bezier control points for the animation (cubic-bezier(0, 0, 0.2, 1)).
+  TRANSITION_X1: 0,
+  TRANSITION_Y1: 0,
+  TRANSITION_X2: 0.2,
+  TRANSITION_Y2: 1,
+};
+
+/**
+ * Copyright 2016 Google Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @extends {MDCFoundation<!MDCSimpleMenuAdapter>}
+ */
 class MDCSimpleMenuFoundation extends MDCFoundation {
+  /** @return enum{cssClasses} */
   static get cssClasses() {
     return cssClasses$1;
   }
 
+  /** @return enum{strings} */
   static get strings() {
     return strings$1;
   }
 
+  /** @return enum{numbers} */
   static get numbers() {
     return numbers$1;
   }
 
+  /**
+   * {@see MDCSimpleMenuAdapter} for typing information on parameters and return
+   * types.
+   * @return {!MDCSimpleMenuAdapter}
+   */
   static get defaultAdapter() {
-    return {
-      addClass: (/* className: string */) => {},
-      removeClass: (/* className: string */) => {},
-      hasClass: (/* className: string */) => {},
-      hasNecessaryDom: () => /* boolean */ false,
-      getInnerDimensions: () => /* { width: number, height: number } */ ({}),
-      hasAnchor: () => /* boolean */ false,
-      getAnchorDimensions: () =>
-          /* { width: number, height: number, top: number, right: number, bottom: number, left: number } */ ({}),
-      getWindowDimensions: () => /* { width: number, height: number } */ ({}),
-      setScale: (/* x: number, y: number */) => {},
-      setInnerScale: (/* x: number, y: number */) => {},
-      getNumberOfItems: () => /* number */ 0,
-      registerInteractionHandler: (/* type: string, handler: EventListener */) => {},
-      deregisterInteractionHandler: (/* type: string, handler: EventListener */) => {},
-      registerDocumentClickHandler: (/* handler: EventListener */) => {},
-      deregisterDocumentClickHandler: (/* handler: EventListener */) => {},
-      getYParamsForItemAtIndex: (/* index: number */) => /* {top: number, height: number} */ ({}),
-      setTransitionDelayForItemAtIndex: (/* index: number, value: string */) => {},
-      getIndexForEventTarget: (/* target: EventTarget */) => /* number */ 0,
-      notifySelected: (/* evtData: {index: number} */) => {},
+    return /** @type {!MDCSimpleMenuAdapter} */ ({
+      addClass: () => {},
+      removeClass: () => {},
+      hasClass: () => false,
+      hasNecessaryDom: () => false,
+      getAttributeForEventTarget: () => {},
+      getInnerDimensions: () => ({}),
+      hasAnchor: () => false,
+      getAnchorDimensions: () => ({}),
+      getWindowDimensions: () => ({}),
+      setScale: () => {},
+      setInnerScale: () => {},
+      getNumberOfItems: () => 0,
+      registerInteractionHandler: () => {},
+      deregisterInteractionHandler: () => {},
+      registerBodyClickHandler: () => {},
+      deregisterBodyClickHandler: () => {},
+      getYParamsForItemAtIndex: () => ({}),
+      setTransitionDelayForItemAtIndex: () => {},
+      getIndexForEventTarget: () => 0,
+      notifySelected: () => {},
       notifyCancel: () => {},
       saveFocus: () => {},
       restoreFocus: () => {},
-      isFocused: () => /* boolean */ false,
+      isFocused: () => false,
       focus: () => {},
-      getFocusedItemIndex: () => /* number */ -1,
-      focusItemAtIndex: (/* index: number */) => {},
-      isRtl: () => /* boolean */ false,
-      setTransformOrigin: (/* origin: string */) => {},
-      setPosition: (/* position: { top: string, right: string, bottom: string, left: string } */) => {},
-      getAccurateTime: () => /* number */ 0,
-    };
+      getFocusedItemIndex: () => -1,
+      focusItemAtIndex: () => {},
+      isRtl: () => false,
+      setTransformOrigin: () => {},
+      setPosition: () => {},
+      getAccurateTime: () => 0,
+    });
   }
 
+  /** @param {!MDCSimpleMenuAdapter} adapter */
   constructor(adapter) {
     super(Object.assign(MDCSimpleMenuFoundation.defaultAdapter, adapter));
+
+    /** @private {function(!Event)} */
     this.clickHandler_ = (evt) => this.handlePossibleSelected_(evt);
+    /** @private {function(!Event)} */
     this.keydownHandler_ = (evt) => this.handleKeyboardDown_(evt);
+    /** @private {function(!Event)} */
     this.keyupHandler_ = (evt) => this.handleKeyboardUp_(evt);
-    this.documentClickHandler_ = () => {
+    /** @private {function(!Event)} */
+    this.documentClickHandler_ = (evt) => {
       this.adapter_.notifyCancel();
-      this.close();
+      this.close(evt);
     };
+    /** @private {boolean} */
     this.isOpen_ = false;
+    /** @private {number} */
     this.startScaleX_ = 0;
+    /** @private {number} */
     this.startScaleY_ = 0;
+    /** @private {number} */
     this.targetScale_ = 1;
+    /** @private {number} */
     this.scaleX_ = 0;
+    /** @private {number} */
     this.scaleY_ = 0;
+    /** @private {boolean} */
     this.running_ = false;
+    /** @private {number} */
     this.selectedTriggerTimerId_ = 0;
+    /** @private {number} */
     this.animationRequestId_ = 0;
+    /** @private {!{ width: number, height: number }} */
+    this.dimensions_;
+    /** @private {number} */
+    this.startTime_;
+    /** @private {number} */
+    this.itemHeight_;
   }
 
   init() {
@@ -1012,10 +1399,13 @@ class MDCSimpleMenuFoundation extends MDCFoundation {
     this.adapter_.deregisterInteractionHandler('click', this.clickHandler_);
     this.adapter_.deregisterInteractionHandler('keyup', this.keyupHandler_);
     this.adapter_.deregisterInteractionHandler('keydown', this.keydownHandler_);
-    this.adapter_.deregisterDocumentClickHandler(this.documentClickHandler_);
+    this.adapter_.deregisterBodyClickHandler(this.documentClickHandler_);
   }
 
-  // Calculate transition delays for individual menu items, so that they fade in one at a time.
+  /**
+   * Calculates transition delays for individual menu items, so that they fade in one at a time.
+   * @private
+   */
   applyTransitionDelays_() {
     const {BOTTOM_LEFT, BOTTOM_RIGHT} = MDCSimpleMenuFoundation.cssClasses;
     const numItems = this.adapter_.getNumberOfItems();
@@ -1036,7 +1426,10 @@ class MDCSimpleMenuFoundation extends MDCFoundation {
     }
   }
 
-  // Remove transition delays from menu items.
+  /**
+   * Removes transition delays from menu items.
+   * @private
+   */
   removeTransitionDelays_() {
     const numItems = this.adapter_.getNumberOfItems();
     for (let i = 0; i < numItems; i++) {
@@ -1044,11 +1437,14 @@ class MDCSimpleMenuFoundation extends MDCFoundation {
     }
   }
 
-  // Animate menu opening or closing.
+  /**
+   * Animates menu opening or closing.
+   * @private
+   */
   animationLoop_() {
     const time = this.adapter_.getAccurateTime();
     const {TRANSITION_DURATION_MS, TRANSITION_X1, TRANSITION_Y1, TRANSITION_X2, TRANSITION_Y2,
-        TRANSITION_SCALE_ADJUSTMENT_X, TRANSITION_SCALE_ADJUSTMENT_Y} = MDCSimpleMenuFoundation.numbers;
+      TRANSITION_SCALE_ADJUSTMENT_X, TRANSITION_SCALE_ADJUSTMENT_Y} = MDCSimpleMenuFoundation.numbers;
     const currentTime = clamp((time - this.startTime_) / TRANSITION_DURATION_MS);
 
     // Animate X axis very slowly, so that only the Y axis animation is visible during fade-out.
@@ -1096,7 +1492,10 @@ class MDCSimpleMenuFoundation extends MDCFoundation {
     }
   }
 
-  // Starts the open or close animation.
+  /**
+   * Starts the open or close animation.
+   * @private
+   */
   animateMenu_() {
     this.startTime_ = this.adapter_.getAccurateTime();
     this.startScaleX_ = this.scaleX_;
@@ -1110,6 +1509,10 @@ class MDCSimpleMenuFoundation extends MDCFoundation {
     }
   }
 
+  /**
+   * @param {?number} focusIndex
+   * @private
+   */
   focusOnOpen_(focusIndex) {
     if (focusIndex === null) {
       // First, try focusing the menu.
@@ -1123,7 +1526,12 @@ class MDCSimpleMenuFoundation extends MDCFoundation {
     }
   }
 
-  // Handle keys that we want to repeat on hold (tab and arrows).
+  /**
+   * Handle keys that we want to repeat on hold (tab and arrows).
+   * @param {!Event} evt
+   * @return {boolean}
+   * @private
+   */
   handleKeyboardDown_(evt) {
     // Do nothing if Alt, Ctrl or Meta are pressed.
     if (evt.altKey || evt.ctrlKey || evt.metaKey) {
@@ -1173,7 +1581,12 @@ class MDCSimpleMenuFoundation extends MDCFoundation {
     return true;
   }
 
-  // Handle keys that we don't want to repeat on hold (Enter, Space, Escape).
+  /**
+   * Handle keys that we don't want to repeat on hold (Enter, Space, Escape).
+   * @param {!Event} evt
+   * @return {boolean}
+   * @private
+   */
   handleKeyboardUp_(evt) {
     // Do nothing if Alt, Ctrl or Meta are pressed.
     if (evt.altKey || evt.ctrlKey || evt.metaKey) {
@@ -1197,7 +1610,14 @@ class MDCSimpleMenuFoundation extends MDCFoundation {
     return true;
   }
 
+  /**
+   * @param {!Event} evt
+   * @private
+   */
   handlePossibleSelected_(evt) {
+    if (this.adapter_.getAttributeForEventTarget(evt.target, strings$1.ARIA_DISABLED_ATTR) === 'true') {
+      return;
+    }
     const targetIndex = this.adapter_.getIndexForEventTarget(evt.target);
     if (targetIndex < 0) {
       return;
@@ -1213,6 +1633,7 @@ class MDCSimpleMenuFoundation extends MDCFoundation {
     }, numbers$1.SELECTED_TRIGGER_DELAY);
   }
 
+  /** @private */
   autoPosition_() {
     if (!this.adapter_.hasAnchor()) {
       return;
@@ -1259,7 +1680,11 @@ class MDCSimpleMenuFoundation extends MDCFoundation {
     this.adapter_.setPosition(position);
   }
 
-  // Open the menu.
+
+  /**
+   * Open the menu.
+   * @param {{focusIndex: ?number}=} options
+   */
   open({focusIndex = null} = {}) {
     this.adapter_.saveFocus();
     this.adapter_.addClass(MDCSimpleMenuFoundation.cssClasses.ANIMATING);
@@ -1270,14 +1695,25 @@ class MDCSimpleMenuFoundation extends MDCFoundation {
       this.animateMenu_();
       this.adapter_.addClass(MDCSimpleMenuFoundation.cssClasses.OPEN);
       this.focusOnOpen_(focusIndex);
-      this.adapter_.registerDocumentClickHandler(this.documentClickHandler_);
+      this.adapter_.registerBodyClickHandler(this.documentClickHandler_);
     });
     this.isOpen_ = true;
   }
 
-  // Close the menu.
-  close() {
-    this.adapter_.deregisterDocumentClickHandler(this.documentClickHandler_);
+  /**
+   * Closes the menu.
+   * @param {Event=} evt
+   */
+  close(evt = null) {
+    const targetIsDisabled = evt ?
+      this.adapter_.getAttributeForEventTarget(evt.target, strings$1.ARIA_DISABLED_ATTR) === 'true' :
+      false;
+
+    if (targetIsDisabled) {
+      return;
+    }
+
+    this.adapter_.deregisterBodyClickHandler(this.documentClickHandler_);
     this.adapter_.addClass(MDCSimpleMenuFoundation.cssClasses.ANIMATING);
     requestAnimationFrame(() => {
       this.removeTransitionDelays_();
@@ -1288,6 +1724,7 @@ class MDCSimpleMenuFoundation extends MDCFoundation {
     this.adapter_.restoreFocus();
   }
 
+  /** @return {boolean} */
   isOpen() {
     return this.isOpen_;
   }
@@ -1309,15 +1746,31 @@ class MDCSimpleMenuFoundation extends MDCFoundation {
  * limitations under the License.
  */
 
+/**
+ * @extends MDCComponent<!MDCSimpleMenuFoundation>
+ */
 class MDCSimpleMenu extends MDCComponent {
+  /** @param {...?} args */
+  constructor(...args) {
+    super(...args);
+    /** @private {!Element} */
+    this.previousFocus_;
+  }
+
+  /**
+   * @param {!Element} root
+   * @return {!MDCSimpleMenu}
+   */
   static attachTo(root) {
     return new MDCSimpleMenu(root);
   }
 
+  /** @return {boolean} */
   get open() {
     return this.foundation_.isOpen();
   }
 
+  /** @param {boolean} value */
   set open(value) {
     if (value) {
       this.foundation_.open();
@@ -1326,6 +1779,7 @@ class MDCSimpleMenu extends MDCComponent {
     }
   }
 
+  /** @param {{focusIndex: ?number}=} options */
   show({focusIndex = null} = {}) {
     this.foundation_.open({focusIndex: focusIndex});
   }
@@ -1334,26 +1788,33 @@ class MDCSimpleMenu extends MDCComponent {
     this.foundation_.close();
   }
 
-  /* Return the item container element inside the component. */
+  /**
+   * Return the item container element inside the component.
+   * @return {?Element}
+   */
   get itemsContainer_() {
     return this.root_.querySelector(MDCSimpleMenuFoundation.strings.ITEMS_SELECTOR);
   }
 
-  /* Return the items within the menu. Note that this only contains the set of elements within
+  /**
+   * Return the items within the menu. Note that this only contains the set of elements within
    * the items container that are proper list items, and not supplemental / presentational DOM
    * elements.
+   * @return {!Array<!Element>}
    */
   get items() {
     const {itemsContainer_: itemsContainer} = this;
     return [].slice.call(itemsContainer.querySelectorAll('.mdc-list-item[role]'));
   }
 
+  /** @return {!MDCSimpleMenuFoundation} */
   getDefaultFoundation() {
     return new MDCSimpleMenuFoundation({
       addClass: (className) => this.root_.classList.add(className),
       removeClass: (className) => this.root_.classList.remove(className),
       hasClass: (className) => this.root_.classList.contains(className),
       hasNecessaryDom: () => Boolean(this.itemsContainer_),
+      getAttributeForEventTarget: (target, attributeName) => target.getAttribute(attributeName),
       getInnerDimensions: () => {
         const {itemsContainer_: itemsContainer} = this;
         return {width: itemsContainer.offsetWidth, height: itemsContainer.offsetHeight};
@@ -1372,8 +1833,8 @@ class MDCSimpleMenu extends MDCComponent {
       getNumberOfItems: () => this.items.length,
       registerInteractionHandler: (type, handler) => this.root_.addEventListener(type, handler),
       deregisterInteractionHandler: (type, handler) => this.root_.removeEventListener(type, handler),
-      registerDocumentClickHandler: (handler) => document.addEventListener('click', handler),
-      deregisterDocumentClickHandler: (handler) => document.removeEventListener('click', handler),
+      registerBodyClickHandler: (handler) => document.body.addEventListener('click', handler),
+      deregisterBodyClickHandler: (handler) => document.body.removeEventListener('click', handler),
       getYParamsForItemAtIndex: (index) => {
         const {offsetTop: top, offsetHeight: height} = this.items[index];
         return {top, height};
@@ -1381,11 +1842,11 @@ class MDCSimpleMenu extends MDCComponent {
       setTransitionDelayForItemAtIndex: (index, value) =>
         this.items[index].style.setProperty('transition-delay', value),
       getIndexForEventTarget: (target) => this.items.indexOf(target),
-      notifySelected: (evtData) => this.emit('MDCSimpleMenu:selected', {
+      notifySelected: (evtData) => this.emit(MDCSimpleMenuFoundation.strings.SELECTED_EVENT, {
         index: evtData.index,
         item: this.items[evtData.index],
       }),
-      notifyCancel: () => this.emit('MDCSimpleMenu:cancel'),
+      notifyCancel: () => this.emit(MDCSimpleMenuFoundation.strings.CANCEL_EVENT, {}),
       saveFocus: () => {
         this.previousFocus_ = document.activeElement;
       },
@@ -1464,7 +1925,7 @@ var ready = createCommonjsModule(function (module) {
 });
 });
 
-var index$2 = (function() {
+var domSupport = (function() {
 
 	var support,
 		all,
@@ -1735,7 +2196,7 @@ var index$2 = (function() {
  * Module exports.
  */
 
-var index$4 = getDocument;
+var getDocument_1 = getDocument;
 
 // defined by w3c
 var DOCUMENT_NODE = 9;
@@ -1797,7 +2258,7 @@ function getDocument(node) {
  * @public
  */
 
-var index$6 = function within (child, parent) {
+var withinElement = function within (child, parent) {
   // don't throw if `child` is null
   if (!child) return false;
 
@@ -1822,12 +2283,12 @@ var index$6 = function within (child, parent) {
  * @public
  */
 
-var index$1 = function offset(el) {
-  var doc = index$4(el);
+var documentOffset = function offset(el) {
+  var doc = getDocument_1(el);
   if (!doc) return
 
   // Make sure it's not a disconnected DOM node
-  if (!index$6(el, doc)) return
+  if (!withinElement(el, doc)) return
 
   var body = doc.body;
   if (body === el) {
@@ -1874,7 +2335,7 @@ function bodyOffset(body) {
   var top = body.offsetTop;
   var left = body.offsetLeft;
 
-  if (index$2.doesNotIncludeMarginInBodyOffset) {
+  if (domSupport.doesNotIncludeMarginInBodyOffset) {
     top  += parseFloat(body.style.marginTop || 0);
     left += parseFloat(body.style.marginLeft || 0);
   }
@@ -1886,7 +2347,7 @@ function bodyOffset(body) {
 }
 
 var mainContentDOM = document.querySelector('.main-container');
-var mainContentTop = index$1(mainContentDOM).top;
+var mainContentTop = documentOffset(mainContentDOM).top;
 
 var appBarDOM = document.querySelector('.app-bar');
 var appBarHeight = appBarDOM.clientHeight;
@@ -2169,7 +2630,7 @@ var lazysizes = createCommonjsModule(function (module) {
 
 
 	var loader = (function(){
-		var lazyloadElems, preloadElems, isCompleted, resetPreloadingTimer, loadMode, started;
+		var preloadElems, isCompleted, resetPreloadingTimer, loadMode, started;
 
 		var eLvW, elvH, eLtop, eLleft, eLright, eLbottom;
 
@@ -2225,6 +2686,8 @@ var lazysizes = createCommonjsModule(function (module) {
 
 		var checkElements = function() {
 			var eLlen, i, rect, autoLoadElem, loadedSomething, elemExpand, elemNegativeExpand, elemExpandVal, beforeExpandVal;
+
+			var lazyloadElems = lazysizes.elements;
 
 			if((loadMode = lazySizesConfig.loadMode) && isLoading < 8 && (eLlen = lazyloadElems.length)){
 
@@ -2299,6 +2762,7 @@ var lazysizes = createCommonjsModule(function (module) {
 			addClass(e.target, lazySizesConfig.loadedClass);
 			removeClass(e.target, lazySizesConfig.loadingClass);
 			addRemoveLoadEvents(e.target, rafSwitchLoadingClass);
+			triggerEvent(e.target, 'lazyloaded');
 		};
 		var rafedSwitchLoadingClass = rAFIt(switchLoadingClass);
 		var rafSwitchLoadingClass = function(e){
@@ -2406,7 +2870,7 @@ var lazysizes = createCommonjsModule(function (module) {
 			var sizes = isImg && (elem[_getAttribute](lazySizesConfig.sizesAttr) || elem[_getAttribute]('sizes'));
 			var isAuto = sizes == 'auto';
 
-			if( (isAuto || !isCompleted) && isImg && (elem.src || elem.srcset) && !elem.complete && !hasClass(elem, lazySizesConfig.errorClass)){return;}
+			if( (isAuto || !isCompleted) && isImg && (elem[_getAttribute]('src') || elem.srcset) && !elem.complete && !hasClass(elem, lazySizesConfig.errorClass)){return;}
 
 			detail = triggerEvent(elem, 'lazyunveilread').detail;
 
@@ -2449,7 +2913,7 @@ var lazysizes = createCommonjsModule(function (module) {
 			_: function(){
 				started = Date.now();
 
-				lazyloadElems = document.getElementsByClassName(lazySizesConfig.lazyClass);
+				lazysizes.elements = document.getElementsByClassName(lazySizesConfig.lazyClass);
 				preloadElems = document.getElementsByClassName(lazySizesConfig.lazyClass + ' ' + lazySizesConfig.preloadClass);
 				hFac = lazySizesConfig.hFac;
 
@@ -2480,7 +2944,7 @@ var lazysizes = createCommonjsModule(function (module) {
 					setTimeout(onload, 20000);
 				}
 
-				if(lazyloadElems.length){
+				if(lazysizes.elements.length){
 					checkElements();
 					rAF._lsFlush();
 				} else {
